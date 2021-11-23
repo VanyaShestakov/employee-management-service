@@ -9,21 +9,27 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.leverx.employeestat.rest")
-@EnableTransactionManagement
 @EnableWebMvc
+@EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "com.leverx.employeestat.rest.repository*")
 @PropertySource({
         "classpath:properties/db.properties",
         "classpath:properties/session-factory.properties"})
@@ -51,21 +57,27 @@ public class Config {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource());
+        factory.setJpaVendorAdapter(hibernateJpaVendorAdapter());
         factory.setPackagesToScan(env.getRequiredProperty("packagesToScan"));
         Properties props = new Properties();
         props.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
         props.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
-        factory.setHibernateProperties(props);
+        factory.setJpaProperties(props);
         return factory;
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public HibernateJpaVendorAdapter hibernateJpaVendorAdapter() {
+        return new HibernateJpaVendorAdapter();
     }
 }

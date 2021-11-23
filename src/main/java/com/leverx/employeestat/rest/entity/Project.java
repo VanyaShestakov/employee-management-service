@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "project")
@@ -13,7 +14,7 @@ public class Project {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id")
-    private int id;
+    private UUID id;
 
     @Column(name = "name")
     private String name;
@@ -30,11 +31,11 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private List<Employee> employees;
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

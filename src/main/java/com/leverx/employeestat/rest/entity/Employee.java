@@ -1,10 +1,10 @@
 package com.leverx.employeestat.rest.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "employee")
@@ -14,7 +14,7 @@ public class Employee {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id")
-    private int id;
+    private UUID id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -45,11 +45,11 @@ public class Employee {
                inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
