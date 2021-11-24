@@ -17,6 +17,8 @@ public interface ProjectService {
 
     Project update(Project project);
 
+    void deleteById(UUID id);
+
     boolean existsById(UUID id);
 
     boolean existsByName(String name);

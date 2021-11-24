@@ -67,6 +67,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
+    public void deleteById(UUID id) {
+        if (!projectRepository.existsById(id)) {
+            throw new NoSuchRecordException("Project with id=" + id + " not found for deleting");
+        }
+        projectRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
     public boolean existsById(UUID id) {
         return projectRepository.existsById(id);
     }
