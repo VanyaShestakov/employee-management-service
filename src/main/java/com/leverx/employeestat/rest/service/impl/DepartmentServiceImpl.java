@@ -7,7 +7,8 @@ import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -52,13 +53,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Department> getAll() {
         return departmentRepository.findAll();
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Department getById(UUID id) {
         return departmentRepository.findById(id)
                 .orElseThrow(() -> {
@@ -67,13 +68,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean existsById(UUID id) {
         return departmentRepository.existsById(id);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean existsByName(String name) {
         return departmentRepository.existsByName(name);
     }

@@ -7,7 +7,8 @@ import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -22,13 +23,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Employee getById(UUID id) {
         return employeeRepository.findEmployeeById(id)
                 .orElseThrow(() -> {
@@ -37,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Employee getByUsername(String username) {
         return employeeRepository.findEmployeeByUsername(username)
                 .orElseThrow(() -> {
@@ -76,7 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean existsById(UUID id) {
         return employeeRepository.existsById(id);
     }

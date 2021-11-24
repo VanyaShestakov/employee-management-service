@@ -7,7 +7,8 @@ import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Project getById(UUID id) {
         return projectRepository.findProjectById(id)
                 .orElseThrow(() -> {
@@ -31,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Project getByName(String name) {
         return projectRepository.findProjectByName(name).
                 orElseThrow(() -> {
@@ -40,7 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Project> getAll() {
         return projectRepository.findAll();
     }
@@ -75,13 +76,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean existsById(UUID id) {
         return projectRepository.existsById(id);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean existsByName(String name) {
         return projectRepository.existsByName(name);
     }
