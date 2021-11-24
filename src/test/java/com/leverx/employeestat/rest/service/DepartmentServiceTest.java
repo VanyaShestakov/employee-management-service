@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +28,7 @@ public class DepartmentServiceTest {
     private DepartmentServiceImpl departmentService;
 
     @Test
-    public void shouldReturnProjectIfItExistsById() {
+    public void shouldReturnDepartmentIfItExistsById() {
         UUID id = UUID.randomUUID();
         Mockito
                 .when(departmentRepository.findById(id))
@@ -39,7 +38,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfProjectDoesNotExistsById() {
+    public void shouldThrowExceptionIfDepartmentDoesNotExistsById() {
         UUID id = UUID.randomUUID();
         Mockito
                 .when(departmentRepository.findById(id))
@@ -65,7 +64,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnSavedProjectIfProjectDoesNotExists() {
+    public void shouldReturnSavedDepartmentIfProjectDoesNotExists() {
         String name = "Department name";
         Department department = new Department();
         department.setName(name);
@@ -79,7 +78,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfProjectExists() {
+    public void shouldThrowExceptionIfDepartmentExists() {
         String name = "Department name";
         Department department = new Department();
         department.setName(name);
@@ -90,7 +89,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnUpdatedProjectIfItExistsById() {
+    public void shouldReturnUpdatedDepartmentIfItExistsById() {
         UUID id = UUID.randomUUID();
         Department department = new Department();
         department.setId(id);
@@ -104,7 +103,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnSavedProjectIfItDoesNotExistsByName() {
+    public void shouldReturnSavedDepartmentIfItDoesNotExistsByName() {
         UUID id  = UUID.randomUUID();
         String name = "Department name";
         Department expected = new Department();
@@ -133,7 +132,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionIfProjectAlreadyExists() {
+    public void shouldThrowExceptionIfDepartmentAlreadyExists() {
         Mockito
                 .when(departmentRepository.existsById(any()))
                 .thenReturn(false);
@@ -145,7 +144,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnTrueIfProjectExistsById() {
+    public void shouldReturnTrueIfDepartmentExistsById() {
         Mockito
                 .when(departmentRepository.existsById(any()))
                 .thenReturn(true);
@@ -154,7 +153,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnFalseIfProjectExistsById() {
+    public void shouldReturnFalseIfDepartmentExistsById() {
         Mockito
                 .when(departmentRepository.existsById(any()))
                 .thenReturn(false);
@@ -163,7 +162,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnTrueIfProjectExistsByName() {
+    public void shouldReturnTrueIfDepartmentExistsByName() {
         String name = "Department name";
         Mockito
                 .when(departmentRepository.existsByName(any()))
@@ -173,7 +172,7 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void shouldReturnFalseIfProjectExistsByName() {
+    public void shouldReturnFalseIfDepartmentExistsByName() {
         String name = "Department name";
         Mockito
                 .when(departmentRepository.existsByName(any()))
