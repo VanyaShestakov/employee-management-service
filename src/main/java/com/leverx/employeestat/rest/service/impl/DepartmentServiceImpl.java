@@ -2,7 +2,7 @@ package com.leverx.employeestat.rest.service.impl;
 
 import com.leverx.employeestat.rest.entity.Department;
 import com.leverx.employeestat.rest.exception.DuplicateDepartmentException;
-import com.leverx.employeestat.rest.exception.RecordNotFoundException;
+import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public void deleteById(UUID id) {
         if (!departmentRepository.existsById(id)) {
-            throw new RecordNotFoundException("Department with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException("Department with id=" + id + " not found for deleting");
         }
         departmentRepository.deleteById(id);
     }
@@ -62,7 +62,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department getById(UUID id) {
         return departmentRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new RecordNotFoundException("Department with id=" + id + " not found");
+                    throw new NoSuchRecordException("Department with id=" + id + " not found");
                 });
     }
 
