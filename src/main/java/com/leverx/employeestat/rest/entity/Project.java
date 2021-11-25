@@ -1,12 +1,10 @@
 package com.leverx.employeestat.rest.entity;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "project")
@@ -20,13 +18,14 @@ public class Project {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "begin")
+    @Column(name = "begin_date")
     private Date begin;
 
-    @Column(name = "end")
+    @Column(name = "end_date")
     private Date end;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinTable(name = "project_employee",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
@@ -70,6 +69,13 @@ public class Project {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public void addEmployee(Employee employee) {
+        if (employees == null) {
+            employees = new ArrayList<>();
+        }
+        employees.add(employee);
     }
 
     @Override

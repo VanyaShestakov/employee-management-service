@@ -1,27 +1,14 @@
 package com.leverx.employeestat.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class ProjectDTO {
+public class DepartmentDTO {
 
     private UUID id;
 
     private String name;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date begin;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date end;
 
     private List<UUID> employeeIds;
 
@@ -39,22 +26,6 @@ public class ProjectDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getBegin() {
-        return begin;
-    }
-
-    public void setBegin(Date begin) {
-        this.begin = begin;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
     }
 
     public List<UUID> getEmployeeIds() {

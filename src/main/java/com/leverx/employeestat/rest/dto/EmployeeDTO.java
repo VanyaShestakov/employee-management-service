@@ -1,22 +1,28 @@
 package com.leverx.employeestat.rest.dto;
 
-import com.leverx.employeestat.rest.entity.Department;
-import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.entity.Role;
-
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EmployeeDTO {
 
+    private UUID id;
     private String firstName;
     private String lastName;
     private String username;
     private String password;
     private String position;
     private String role;
-    private String departmentId;
-    private List<String> projectsIds;
+    private UUID departmentId;
+    private List<UUID> projectIds;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -66,19 +72,41 @@ public class EmployeeDTO {
         this.role = role;
     }
 
-    public String getDepartmentId() {
+    public UUID getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(String departmentId) {
+    public void setDepartmentId(UUID departmentId) {
         this.departmentId = departmentId;
     }
 
-    public List<String> getProjectsIds() {
-        return projectsIds;
+    public List<UUID> getProjectIds() {
+        return projectIds;
     }
 
-    public void setProjectsIds(List<String> projectsIds) {
-        this.projectsIds = projectsIds;
+    public void setProjectIds(List<UUID> projectIds) {
+        this.projectIds = projectIds;
+    }
+
+    public void addProjectId(UUID id) {
+        if (projectIds == null) {
+            projectIds = new ArrayList<>();
+        }
+        projectIds.add(id);
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeDTO{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", position='" + position + '\'' +
+                ", role='" + role + '\'' +
+                ", departmentId=" + departmentId +
+                ", projectsIds=" + projectIds +
+                '}';
     }
 }
