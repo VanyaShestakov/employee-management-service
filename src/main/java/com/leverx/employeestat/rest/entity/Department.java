@@ -56,5 +56,6 @@ public class Department {
             employees = new ArrayList<>();
         }
         employees.add(employee);
+        employee.setDepartment(this);
     }
 }

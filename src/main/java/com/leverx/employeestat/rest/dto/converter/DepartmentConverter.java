@@ -7,6 +7,7 @@ import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
+import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,11 @@ import java.util.UUID;
 @Component
 public class DepartmentConverter {
 
-    private final EmployeeService employeeService;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public DepartmentConverter(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public DepartmentConverter(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     public Department toEntity(DepartmentDTO departmentDTO) {
@@ -30,11 +31,10 @@ public class DepartmentConverter {
         department.setId(departmentDTO.getId());
         if (departmentDTO.getEmployeeIds() != null) {
             for (UUID id : departmentDTO.getEmployeeIds()) {
-                try {
-                    department.addEmployee(employeeService.getById(id));
-                } catch (NoSuchRecordException e) {
-                    throw new EntityConversionException(e.getMessage(), e);
-                }
+                department.addEmployee(employeeRepository.findEmployeeById(id)
+                        .orElseThrow(() -> {
+                            throw new NoSuchRecordException("Employee with id=" + id + " not found");
+                        }));
             }
         }
         return department;
@@ -47,11 +47,7 @@ public class DepartmentConverter {
         List<Employee> employees = department.getEmployees();
         if (employees != null) {
             for (Employee employee : employees) {
-                try {
-                    departmentDTO.addEmployeeId(employee.getId());
-                } catch (NoSuchRecordException e) {
-                    throw new EntityConversionException(e.getMessage(), e);
-                }
+                departmentDTO.addEmployeeId(employee.getId());
             }
         }
         return departmentDTO;

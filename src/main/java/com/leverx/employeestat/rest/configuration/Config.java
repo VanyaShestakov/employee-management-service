@@ -18,7 +18,7 @@ import java.beans.PropertyVetoException;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("com.leverx.employeestat.rest")
+@ComponentScan("com.leverx.employeestat.rest*")
 @EnableWebMvc
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.leverx.employeestat.rest.repository*")

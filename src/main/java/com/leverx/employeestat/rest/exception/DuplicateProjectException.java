@@ -1,6 +1,6 @@
 package com.leverx.employeestat.rest.exception;
 
-public class DuplicateProjectException extends RuntimeException {
+public class DuplicateProjectException extends DuplicateRecordException {
 
     public DuplicateProjectException() {
         super();

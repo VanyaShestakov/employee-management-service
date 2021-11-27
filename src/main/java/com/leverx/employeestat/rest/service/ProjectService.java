@@ -1,20 +1,21 @@
 package com.leverx.employeestat.rest.service;
 
+import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.entity.Project;
 import java.util.List;
 import java.util.UUID;
 
 public interface ProjectService {
 
-    Project getById(UUID id);
+    ProjectDTO getById(UUID id);
 
-    Project getByName(String name);
+    ProjectDTO getByName(String name);
 
-    List<Project> getAll();
+    List<ProjectDTO> getAll();
 
-    Project save(Project project);
+    ProjectDTO save(ProjectDTO projectDTO);
 
-    Project update(Project project);
+    ProjectDTO update(ProjectDTO projectDTO);
 
     void deleteById(UUID id);
 

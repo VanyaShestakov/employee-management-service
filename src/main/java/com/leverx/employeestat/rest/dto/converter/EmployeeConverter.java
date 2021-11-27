@@ -6,7 +6,8 @@ import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
-import com.leverx.employeestat.rest.service.DepartmentService;
+import com.leverx.employeestat.rest.repository.DepartmentRepository;
+import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,13 +18,13 @@ import java.util.UUID;
 @Component
 public class EmployeeConverter {
 
-    private final DepartmentService departmentService;
-    private final ProjectService projectService;
+    private final DepartmentRepository departmentRepository;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public EmployeeConverter(DepartmentService departmentService, ProjectService projectService) {
-        this.departmentService = departmentService;
-        this.projectService = projectService;
+    public EmployeeConverter(DepartmentRepository departmentRepository, ProjectRepository projectRepository) {
+        this.departmentRepository = departmentRepository;
+        this.projectRepository = projectRepository;
     }
 
     public Employee toEntity(EmployeeDTO employeeDTO) {
@@ -35,20 +36,18 @@ public class EmployeeConverter {
         employee.setPassword(employeeDTO.getPassword());
         employee.setPosition(employeeDTO.getPosition());
         if (employeeDTO.getDepartmentId() != null) {
-            try {
-                Department department = departmentService.getById(employeeDTO.getDepartmentId());
-                employee.setDepartment(department);
-            } catch (NoSuchRecordException e) {
-                throw new EntityConversionException(e.getMessage(), e);
-            }
+            Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
+                    .orElseThrow(() -> {
+                        throw new NoSuchRecordException("Department with id=" + employeeDTO.getDepartmentId() + " not found");
+                    });
+            employee.setDepartment(department);
         }
         if (employeeDTO.getProjectIds() != null) {
             for (UUID id : employeeDTO.getProjectIds()) {
-                try {
-                    employee.addProject(projectService.getById(id));
-                } catch (NoSuchRecordException e) {
-                    throw new EntityConversionException(e.getMessage(), e);
-                }
+                Project project = projectRepository.findProjectById(id)
+                        .orElseThrow(() -> {
+                            throw new NoSuchRecordException("Project with id=" + id + " not found");
+                        });
             }
         }
         return employee;

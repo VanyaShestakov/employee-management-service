@@ -17,41 +17,34 @@ import java.util.stream.Collectors;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-    private final EmployeeConverter employeeConverter;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, EmployeeConverter employeeConverter) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.employeeConverter = employeeConverter;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EmployeeDTO> getAllEmployees() {
-        return employeeService.getAll()
-                .stream()
-                .map(employeeConverter::toDTO)
-                .collect(Collectors.toList());
+        return employeeService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDTO getEmployee(@PathVariable UUID id) {
-        return employeeConverter.toDTO(employeeService.getById(id));
+        return employeeService.getById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDTO postEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = employeeConverter.toEntity(employeeDTO);
-        return employeeConverter.toDTO(employeeService.save(employee));
+        return employeeService.save(employeeDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDTO putEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = employeeConverter.toEntity(employeeDTO);
-        return employeeConverter.toDTO(employeeService.update(employee));
+        return employeeService.update(employeeDTO);
     }
 
     @DeleteMapping("/{id}")

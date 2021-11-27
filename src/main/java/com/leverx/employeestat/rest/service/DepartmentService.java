@@ -1,20 +1,21 @@
 package com.leverx.employeestat.rest.service;
 
+import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.entity.Department;
 import java.util.List;
 import java.util.UUID;
 
 public interface DepartmentService {
 
-    Department save(Department department);
+    DepartmentDTO save(DepartmentDTO departmentDTO);
 
     void deleteById(UUID id);
 
-    Department update(Department department);
+    DepartmentDTO update(DepartmentDTO departmentDTO);
 
-    List<Department> getAll();
+    List<DepartmentDTO> getAll();
 
-    Department getById(UUID id);
+    DepartmentDTO getById(UUID id);
 
     boolean existsById(UUID id);
 

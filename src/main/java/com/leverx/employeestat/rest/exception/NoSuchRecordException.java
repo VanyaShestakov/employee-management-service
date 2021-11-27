@@ -1,6 +1,6 @@
 package com.leverx.employeestat.rest.exception;
 
-public class NoSuchRecordException extends RuntimeException{
+public class NoSuchRecordException extends RuntimeException {
 
     public NoSuchRecordException() {
         super();
@@ -18,7 +18,4 @@ public class NoSuchRecordException extends RuntimeException{
         super(cause);
     }
 
-    protected NoSuchRecordException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

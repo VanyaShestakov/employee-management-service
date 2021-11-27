@@ -5,6 +5,7 @@ import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
+import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,11 +16,11 @@ import java.util.UUID;
 @Component
 public class ProjectConverter {
 
-    private final EmployeeService employeeService;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public ProjectConverter(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public ProjectConverter(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     public Project toEntity(ProjectDTO projectDTO) {
@@ -30,11 +31,10 @@ public class ProjectConverter {
         project.setEnd(projectDTO.getEnd());
         if (projectDTO.getEmployeeIds() != null) {
             for (UUID id : projectDTO.getEmployeeIds()) {
-                try {
-                    project.addEmployee(employeeService.getById(id));
-                } catch (NoSuchRecordException e) {
-                    throw new EntityConversionException(e.getMessage(), e);
-                }
+                project.addEmployee(employeeRepository.findEmployeeById(id)
+                        .orElseThrow(() -> {
+                            throw new NoSuchRecordException("Employee with id=" + id + " not found");
+                        }));
             }
         }
         return project;

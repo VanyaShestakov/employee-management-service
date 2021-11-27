@@ -1,6 +1,6 @@
 package com.leverx.employeestat.rest.exception;
 
-public class DuplicateEmployeeException extends RuntimeException {
+public class DuplicateEmployeeException extends DuplicateRecordException {
 
     public DuplicateEmployeeException() {
         super();
