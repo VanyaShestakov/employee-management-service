@@ -1,10 +1,9 @@
 package com.leverx.employeestat.rest.service;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.dto.converter.EmployeeConverter;
 import com.leverx.employeestat.rest.entity.Employee;
-import com.leverx.employeestat.rest.exception.DuplicateEmployeeException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.impl.EmployeeServiceImpl;
@@ -135,7 +134,7 @@ public class EmployeeServiceTest {
         Mockito
                 .when(employeeRepository.existsByUsername(name))
                 .thenReturn(true);
-        Assertions.assertThrows(DuplicateEmployeeException.class, () -> employeeService.save(employeeDTO));
+        Assertions.assertThrows(DuplicateRecordException.class, () -> employeeService.save(employeeDTO));
     }
 
     @Test
@@ -203,7 +202,7 @@ public class EmployeeServiceTest {
         Mockito
                 .when(employeeRepository.existsByUsername(employeeDTO.getUsername()))
                 .thenReturn(true);
-        Assertions.assertThrows(DuplicateEmployeeException.class,
+        Assertions.assertThrows(DuplicateRecordException.class,
                 () -> employeeService.update(employeeDTO));
     }
 

@@ -3,7 +3,7 @@ package com.leverx.employeestat.rest.service;
 import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.dto.converter.ProjectConverter;
 import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.DuplicateProjectException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.service.impl.ProjectServiceImpl;
@@ -130,7 +130,7 @@ public class ProjectServiceTest {
         Mockito
                 .when(projectRepository.existsByName(name))
                 .thenReturn(true);
-        Assertions.assertThrows(DuplicateProjectException.class, () -> projectService.save(projectDTO));
+        Assertions.assertThrows(DuplicateRecordException.class, () -> projectService.save(projectDTO));
     }
 
     @Test
@@ -195,7 +195,7 @@ public class ProjectServiceTest {
         Mockito
                 .when(projectRepository.existsByName(projectDTO.getName()))
                 .thenReturn(true);
-        Assertions.assertThrows(DuplicateProjectException.class,
+        Assertions.assertThrows(DuplicateRecordException.class,
                 () -> projectService.update(projectDTO));
     }
 

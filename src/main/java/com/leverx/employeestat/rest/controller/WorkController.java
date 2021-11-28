@@ -1,6 +1,7 @@
 package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.dto.WorkDTO;
+import com.leverx.employeestat.rest.exception.NotValidUUIDException;
 import com.leverx.employeestat.rest.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,17 @@ public class WorkController {
 
     @DeleteMapping("/empId={empId}/projId={projId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteWork(@PathVariable("empId") UUID employeeId, @PathVariable("projId") UUID projectId) {
-        workService.deleteByIds(employeeId, projectId);
+    public void deleteWork(@PathVariable("empId") String employeeId, @PathVariable("projId") String projectId) {
+        workService.deleteByIds(getUUIDFromString(employeeId), getUUIDFromString(projectId));
+    }
+
+    private UUID getUUIDFromString(String id) {
+        UUID uuid = null;
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            throw new NotValidUUIDException("Value =" + id + " is not UUID", e);
+        }
+        return uuid;
     }
 }

@@ -1,5 +1,9 @@
 package com.leverx.employeestat.rest.dto;
 
+import com.leverx.employeestat.rest.dto.validation.annotation.UUIDList;
+import com.leverx.employeestat.rest.dto.validation.annotation.UUIDValue;
+
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +12,7 @@ public class DepartmentDTO {
 
     private UUID id;
 
+    @NotBlank
     private String name;
 
     private List<UUID> employeeIds;

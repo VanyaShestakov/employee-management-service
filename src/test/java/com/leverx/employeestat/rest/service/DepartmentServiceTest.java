@@ -3,7 +3,7 @@ package com.leverx.employeestat.rest.service;
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.dto.converter.DepartmentConverter;
 import com.leverx.employeestat.rest.entity.Department;
-import com.leverx.employeestat.rest.exception.DuplicateDepartmentException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.service.impl.DepartmentServiceImpl;
@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +105,7 @@ public class DepartmentServiceTest {
         Mockito
                 .when(departmentRepository.existsByName(name))
                 .thenReturn(true);
-        Assertions.assertThrows(DuplicateDepartmentException.class, () -> departmentService.save(departmentDTO));
+        Assertions.assertThrows(DuplicateRecordException.class, () -> departmentService.save(departmentDTO));
     }
 
     @Test
@@ -190,7 +189,7 @@ public class DepartmentServiceTest {
         Mockito
                 .when(departmentRepository.existsByName(departmentDTO.getName()))
                 .thenReturn(true);
-        Assertions.assertThrows(DuplicateDepartmentException.class,
+        Assertions.assertThrows(DuplicateRecordException.class,
                 () -> departmentService.update(departmentDTO));
     }
 

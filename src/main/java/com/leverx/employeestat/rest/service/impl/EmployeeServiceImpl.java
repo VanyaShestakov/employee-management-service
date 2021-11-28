@@ -3,7 +3,7 @@ package com.leverx.employeestat.rest.service.impl;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.dto.converter.EmployeeConverter;
 import com.leverx.employeestat.rest.entity.Employee;
-import com.leverx.employeestat.rest.exception.DuplicateEmployeeException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.EmployeeService;
@@ -60,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeDTO save(EmployeeDTO employeeDTO) {
         if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
-            throw new DuplicateEmployeeException("Employee with username=" + employeeDTO.getUsername() + " already exists");
+            throw new DuplicateRecordException("Employee with username=" + employeeDTO.getUsername() + " already exists");
         }
         return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
     }
@@ -73,7 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else if (!employeeRepository.existsByUsername(employeeDTO.getUsername())) {
             return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
         } else {
-            throw new DuplicateEmployeeException("Employee with username=" + employeeDTO.getUsername() + " already exists");
+            throw new DuplicateRecordException("Employee with username=" + employeeDTO.getUsername() + " already exists");
         }
     }
 

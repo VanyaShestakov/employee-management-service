@@ -3,7 +3,7 @@ package com.leverx.employeestat.rest.service.impl;
 import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.dto.converter.ProjectConverter;
 import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.DuplicateProjectException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.service.ProjectService;
@@ -59,7 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO save(ProjectDTO projectDTO) {
         if (projectRepository.existsByName(projectDTO.getName())) {
-            throw new DuplicateProjectException("Project with name=" + projectDTO.getName() + " already exists");
+            throw new DuplicateRecordException("Project with name=" + projectDTO.getName() + " already exists");
         }
         return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
     }
@@ -72,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
         } else if (!projectRepository.existsByName(projectDTO.getName())) {
             return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
         } else {
-            throw new DuplicateProjectException("Project with name=" + projectDTO.getName() + " already exists");
+            throw new DuplicateRecordException("Project with name=" + projectDTO.getName() + " already exists");
         }
     }
 

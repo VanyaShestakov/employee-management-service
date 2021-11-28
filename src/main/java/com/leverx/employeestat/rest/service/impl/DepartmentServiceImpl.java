@@ -3,17 +3,13 @@ package com.leverx.employeestat.rest.service.impl;
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.dto.converter.DepartmentConverter;
 import com.leverx.employeestat.rest.entity.Department;
-import com.leverx.employeestat.rest.exception.DuplicateDepartmentException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
-import com.leverx.employeestat.rest.exceptionhandler.ExceptionInfo;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +31,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public DepartmentDTO save(DepartmentDTO departmentDTO) {
         if (departmentRepository.existsByName(departmentDTO.getName())) {
-            throw new DuplicateDepartmentException("Department with name=" + departmentDTO.getName() + " already exists");
+            throw new DuplicateRecordException("Department with name=" + departmentDTO.getName() + " already exists");
         }
         return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
     }
@@ -57,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         } else if (!departmentRepository.existsByName(departmentDTO.getName())) {
             return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
         } else {
-            throw new DuplicateDepartmentException("Department with name=" + departmentDTO.getName() + " already exists");
+            throw new DuplicateRecordException("Department with name=" + departmentDTO.getName() + " already exists");
         }
     }
 
