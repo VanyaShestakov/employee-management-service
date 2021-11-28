@@ -17,7 +17,7 @@ public class Work {
     private Date positionEndDate;
 
     @Column(name = "working_hours")
-    private int workingHours;
+    private Integer workingHours;
 
     public WorkId getId() {
         return id;
@@ -43,11 +43,11 @@ public class Work {
         this.positionEndDate = positionEndDate;
     }
 
-    public int getWorkingHours() {
+    public Integer getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(int workingHours) {
+    public void setWorkingHours(Integer workingHours) {
         this.workingHours = workingHours;
     }
 }

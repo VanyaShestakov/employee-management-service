@@ -1,15 +1,23 @@
 package com.leverx.employeestat.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.UUID;
 
 public class WorkDTO {
 
     private UUID employeeId;
+
     private UUID projectId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date positionStartDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date positionEndDate;
-    private int workingHours;
+
+    private Integer workingHours;
 
     public UUID getEmployeeId() {
         return employeeId;
@@ -43,11 +51,11 @@ public class WorkDTO {
         this.positionEndDate = positionEndDate;
     }
 
-    public int getWorkingHours() {
+    public Integer getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(int workingHours) {
+    public void setWorkingHours(Integer workingHours) {
         this.workingHours = workingHours;
     }
 }

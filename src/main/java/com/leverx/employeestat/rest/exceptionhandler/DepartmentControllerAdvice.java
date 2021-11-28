@@ -19,7 +19,7 @@ public class DepartmentControllerAdvice extends ResponseEntityExceptionHandler {
         ExceptionInfo info = new ExceptionInfo();
         info.setStatus(HttpStatus.NOT_FOUND);
         info.setCode(HttpStatus.NOT_FOUND.value());
-      //  info.setMessage(exception.getMessage());
+        info.setMessage(exception.getMessage());
         return new ResponseEntity<>(info, HttpStatus.NOT_FOUND);
     }
 

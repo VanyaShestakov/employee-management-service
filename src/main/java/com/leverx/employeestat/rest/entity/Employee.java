@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -126,5 +127,18 @@ public class Employee {
             projects = new ArrayList<>();
         }
         projects.add(project);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id.equals(employee.id) && firstName.equals(employee.firstName) && lastName.equals(employee.lastName) && username.equals(employee.username) && password.equals(employee.password) && position.equals(employee.position) && Objects.equals(role, employee.role) && Objects.equals(department, employee.department) && Objects.equals(projects, employee.projects);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, username, password, position, role, department, projects);
     }
 }
