@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.util.NestedServletException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice("com.leverx.employeestat.rest.controller")

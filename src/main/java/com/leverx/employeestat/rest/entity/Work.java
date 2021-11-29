@@ -1,6 +1,7 @@
 package com.leverx.employeestat.rest.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -11,10 +12,10 @@ public class Work {
     private WorkId id;
 
     @Column(name = "position_start_date")
-    private Date positionStartDate;
+    private LocalDate positionStartDate;
 
     @Column(name = "position_end_date")
-    private Date positionEndDate;
+    private LocalDate positionEndDate;
 
     @Column(name = "working_hours")
     private Integer workingHours;
@@ -27,19 +28,19 @@ public class Work {
         this.id = id;
     }
 
-    public Date getPositionStartDate() {
+    public LocalDate getPositionStartDate() {
         return positionStartDate;
     }
 
-    public void setPositionStartDate(Date positionStartDate) {
+    public void setPositionStartDate(LocalDate positionStartDate) {
         this.positionStartDate = positionStartDate;
     }
 
-    public Date getPositionEndDate() {
+    public LocalDate getPositionEndDate() {
         return positionEndDate;
     }
 
-    public void setPositionEndDate(Date positionEndDate) {
+    public void setPositionEndDate(LocalDate positionEndDate) {
         this.positionEndDate = positionEndDate;
     }
 

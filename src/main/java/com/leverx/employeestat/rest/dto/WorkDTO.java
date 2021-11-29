@@ -1,7 +1,10 @@
 package com.leverx.employeestat.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,11 +14,11 @@ public class WorkDTO {
 
     private UUID projectId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date positionStartDate;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDate positionStartDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date positionEndDate;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDate positionEndDate;
 
     private Integer workingHours;
 
@@ -35,19 +38,19 @@ public class WorkDTO {
         this.projectId = projectId;
     }
 
-    public Date getPositionStartDate() {
+    public LocalDate getPositionStartDate() {
         return positionStartDate;
     }
 
-    public void setPositionStartDate(Date positionStartDate) {
+    public void setPositionStartDate(LocalDate positionStartDate) {
         this.positionStartDate = positionStartDate;
     }
 
-    public Date getPositionEndDate() {
+    public LocalDate getPositionEndDate() {
         return positionEndDate;
     }
 
-    public void setPositionEndDate(Date positionEndDate) {
+    public void setPositionEndDate(LocalDate positionEndDate) {
         this.positionEndDate = positionEndDate;
     }
 

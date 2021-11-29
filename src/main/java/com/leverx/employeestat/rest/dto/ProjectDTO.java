@@ -1,6 +1,8 @@
 package com.leverx.employeestat.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,12 +25,12 @@ public class ProjectDTO {
     private String name;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date begin;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDate begin;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date end;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDate end;
 
     private List<UUID> employeeIds;
 
@@ -47,19 +50,19 @@ public class ProjectDTO {
         this.name = name;
     }
 
-    public Date getBegin() {
+    public LocalDate getBegin() {
         return begin;
     }
 
-    public void setBegin(Date begin) {
+    public void setBegin(LocalDate begin) {
         this.begin = begin;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 
