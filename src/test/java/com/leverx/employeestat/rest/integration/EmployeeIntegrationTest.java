@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.leverx.employeestat.rest.configuration.WebInitializer;
-import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,15 +21,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
 import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfig.class, WebInitializer.class})
@@ -84,6 +78,7 @@ public class EmployeeIntegrationTest {
         String expectedLastName = "Shestakov";
         String expectedUsername = "anechka";
         String expectedPosition = "Java Developer";
+
         mvc.perform(get(EMPLOYEES_ENDPOINT + "/{id}", "ea66da14-8f15-434c-931f-6ff237429904"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.firstName").value(expectedFirstName))
@@ -93,9 +88,29 @@ public class EmployeeIntegrationTest {
     }
 
     @Test
+    public void shouldReturnBadRequestIfUUIDIsNotCorrectForGetRequestById() throws Exception {
+        mvc.perform(get(EMPLOYEES_ENDPOINT + "/{id}", "incorrect"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.code").value(400));
+    }
+
+    @Test
     public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPosting() throws Exception {
         mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturnBadRequestIfUsernameOfEmployeeAlreadyExistsForPosting() throws Exception {
+        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+                .andExpect(status().isOk());
+
+        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.code").value(400));
     }
 
     @Test
@@ -121,12 +136,24 @@ public class EmployeeIntegrationTest {
     }
 
     @Test
+    public void shouldReturnBadRequestIfUsernameOfEmployeeAlreadyExistsForPutting() throws Exception {
+        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+                .andExpect(status().isOk());
+
+        mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.code").value(400));
+    }
+
+    @Test
     public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPutting() throws Exception {
         String expectedFirstName = "Vova";
         String expectedLastName = "Vovanov";
         String expectedUsername = "Vovich";
         String expectedPosition = "Developer";
         String expectedPassword = "123";
+
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value(expectedFirstName))
@@ -135,6 +162,7 @@ public class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.position").value(expectedPosition))
                 .andExpect(jsonPath("$.password").value(expectedPassword))
                 .andExpect(jsonPath("$.id").isNotEmpty());
+
         assertNull(employeeDTO.getId());
     }
 
@@ -160,6 +188,7 @@ public class EmployeeIntegrationTest {
         MvcResult result = mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isOk())
                 .andReturn();
+
         employeeDTO = toObject(result.getResponse().getContentAsString());
         UUID id = employeeDTO.getId();
 
@@ -173,6 +202,14 @@ public class EmployeeIntegrationTest {
                 .andExpect(status().isMethodNotAllowed());
     }
 
+    @Test
+    public void shouldReturnBadRequestIfUUIDIsNotCorrectForDeleteRequestById() throws Exception {
+        mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", "incorrect"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.code").value(400));
+    }
 
     private String toJson(Object object) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();

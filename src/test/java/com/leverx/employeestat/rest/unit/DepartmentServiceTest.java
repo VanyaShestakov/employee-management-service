@@ -1,4 +1,4 @@
-package com.leverx.employeestat.rest.service;
+package com.leverx.employeestat.rest.unit;
 
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.dto.converter.DepartmentConverter;
