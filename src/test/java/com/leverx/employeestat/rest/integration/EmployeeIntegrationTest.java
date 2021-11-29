@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @Transactional
 public class EmployeeIntegrationTest {
+
     public static final String EMPLOYEES_ENDPOINT = "/api/employees";
 
     private final WebApplicationContext webAppContext;

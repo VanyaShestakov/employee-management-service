@@ -52,9 +52,7 @@ public class DepartmentIntegrationTest {
 
     @BeforeEach
     public void setup() {
-        this.mvc = MockMvcBuilders.standaloneSetup(new DepartmentController(departmentService, parser))
-                .setControllerAdvice(new GlobalControllerAdvice())
-                .build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
     }
 
     @Test
@@ -77,7 +75,6 @@ public class DepartmentIntegrationTest {
                 .andExpect(jsonPath("$.name").value("hr"));
     }
 
-    //new
     @Test
     public void shouldReturnBadRequestIfUUIDIsNotCorrectForGetRequestById() throws Exception {
         mvc.perform(get(DEPARTMENTS_ENDPOINT + "/{id}", "incorrect"))
@@ -104,7 +101,6 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    //new
     @Test
     public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPosting() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
@@ -132,7 +128,6 @@ public class DepartmentIntegrationTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
-    //new
     @Test
     public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPutting() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
@@ -209,7 +204,6 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isMethodNotAllowed());
     }
 
-    //new
     @Test
     public void shouldReturnBadRequestIfUUIDIsNotCorrectForDeleteRequestById() throws Exception {
         mvc.perform(delete(DEPARTMENTS_ENDPOINT + "/{id}", "incorrect"))
