@@ -4,7 +4,6 @@ import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.entity.Department;
 import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
@@ -47,7 +46,8 @@ public class EmployeeConverter {
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
                     .orElseThrow(() -> {
-                        throw new NoSuchRecordException("Department with id=" + employeeDTO.getDepartmentId() + " not found");
+                        throw new NoSuchRecordException
+                                (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()));
                     });
             employee.setDepartment(department);
         }
@@ -55,7 +55,7 @@ public class EmployeeConverter {
             for (UUID id : employeeDTO.getProjectIds()) {
                 Project project = projectRepository.findProjectById(id)
                         .orElseThrow(() -> {
-                            throw new NoSuchRecordException("Project with id=" + id + " not found");
+                            throw new NoSuchRecordException(String.format("Project with id=%s not found", id));
                         });
             }
         }

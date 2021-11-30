@@ -1,8 +1,5 @@
 package com.leverx.employeestat.rest.dto;
 
-import com.leverx.employeestat.rest.dto.validation.annotation.UUIDList;
-import com.leverx.employeestat.rest.dto.validation.annotation.UUIDValue;
-
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;

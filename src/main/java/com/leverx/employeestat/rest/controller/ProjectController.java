@@ -2,10 +2,7 @@ package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.ProjectDTO;
-import com.leverx.employeestat.rest.dto.converter.ProjectConverter;
-import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.exception.NotValidRecordException;
-import com.leverx.employeestat.rest.exception.NotValidUUIDException;
 import com.leverx.employeestat.rest.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFromString;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -46,8 +43,8 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     public ProjectDTO postProject(@RequestBody @Valid ProjectDTO projectDTO, BindingResult result) {
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Project have errors: " +
-                    bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Project have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return projectService.save(projectDTO);
     }
@@ -56,8 +53,8 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     public ProjectDTO putProject(@RequestBody @Valid ProjectDTO projectDTO, BindingResult result) {
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Project have errors: " +
-                    bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Project have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return projectService.update(projectDTO);
     }
@@ -68,13 +65,4 @@ public class ProjectController {
         projectService.deleteById(getUUIDFromString(id));
     }
 
-    private UUID getUUIDFromString(String id) {
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new NotValidUUIDException("Value =" + id + " is not UUID", e);
-        }
-        return uuid;
-    }
 }

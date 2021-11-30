@@ -2,11 +2,8 @@ package com.leverx.employeestat.rest.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 public class ExceptionInfo {

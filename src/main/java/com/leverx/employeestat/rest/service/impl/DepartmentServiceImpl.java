@@ -31,7 +31,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public DepartmentDTO save(DepartmentDTO departmentDTO) {
         if (departmentRepository.existsByName(departmentDTO.getName())) {
-            throw new DuplicateRecordException("Department with name=" + departmentDTO.getName() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Department with name=%s already exists", departmentDTO.getName()));
         }
         return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
     }
@@ -40,7 +41,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public void deleteById(UUID id) {
         if (!departmentRepository.existsById(id)) {
-            throw new NoSuchRecordException("Department with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException(String.format("Department with id=%s not found for deleting", id));
         }
         departmentRepository.deleteById(id);
     }
@@ -53,7 +54,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         } else if (!departmentRepository.existsByName(departmentDTO.getName())) {
             return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
         } else {
-            throw new DuplicateRecordException("Department with name=" + departmentDTO.getName() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Department with name=%s already exists", departmentDTO.getName()));
         }
     }
 
@@ -68,7 +70,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO getById(UUID id) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Department with id=" + id + " not found");
+                    throw new NoSuchRecordException(String.format("Department with id=%s not found", id));
                 });
         return converter.toDTO(department);
     }

@@ -1,14 +1,10 @@
 package com.leverx.employeestat.rest.dto.converter;
 
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
-import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.entity.Department;
 import com.leverx.employeestat.rest.entity.Employee;
-import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
-import com.leverx.employeestat.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +29,7 @@ public class DepartmentConverter {
             for (UUID id : departmentDTO.getEmployeeIds()) {
                 department.addEmployee(employeeRepository.findEmployeeById(id)
                         .orElseThrow(() -> {
-                            throw new NoSuchRecordException("Employee with id=" + id + " not found");
+                            throw new NoSuchRecordException(String.format("Employee with id=%s not found", id));
                         }));
             }
         }
