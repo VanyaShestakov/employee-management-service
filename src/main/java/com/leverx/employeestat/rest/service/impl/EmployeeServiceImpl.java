@@ -1,7 +1,9 @@
 package com.leverx.employeestat.rest.service.impl;
 
+import com.leverx.employeestat.rest.dto.EmployeeDTO;
+import com.leverx.employeestat.rest.dto.converter.EmployeeConverter;
 import com.leverx.employeestat.rest.entity.Employee;
-import com.leverx.employeestat.rest.exception.DuplicateEmployeeException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.EmployeeService;
@@ -11,59 +13,70 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeConverter converter;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeConverter converter) {
         this.employeeRepository = employeeRepository;
+        this.converter = converter;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Employee> getAll() {
-        return employeeRepository.findAll();
+    public List<EmployeeDTO> getAll() {
+        return employeeRepository.findAll()
+                .stream()
+                .map(converter::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Employee getById(UUID id) {
-        return employeeRepository.findEmployeeById(id)
+    public EmployeeDTO getById(UUID id) {
+        Employee employee = employeeRepository.findEmployeeById(id)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Employee with id=" + id + " not found");
+                    throw new NoSuchRecordException(String.format("Employee with id=%s not found", id));
                 });
+        return converter.toDTO(employee);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Employee getByUsername(String username) {
-        return employeeRepository.findEmployeeByUsername(username)
+    public EmployeeDTO getByUsername(String username) {
+        Employee employee = employeeRepository.findEmployeeByUsername(username)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Employee with username=" + username + " not found");
+                    throw new NoSuchRecordException
+                            (String.format("Employee with username=%s not found for deleting", username));
                 });
+        return converter.toDTO(employee);
     }
 
     @Override
     @Transactional
-    public Employee save(Employee employee) {
-        if (employeeRepository.existsByUsername(employee.getUsername())) {
-            throw new DuplicateEmployeeException("Employee with username=" + employee.getUsername() + " already exists");
+    public EmployeeDTO save(EmployeeDTO employeeDTO) {
+        if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
+            throw new DuplicateRecordException
+                    (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
         }
-        return employeeRepository.save(employee);
+        return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
     }
 
     @Override
     @Transactional
-    public Employee update(Employee employee) {
-        if (employeeRepository.existsById(employee.getId())) {
-            return employeeRepository.save(employee);
-        } else if (!employeeRepository.existsByUsername(employee.getUsername())) {
-            return employeeRepository.save(employee);
+    public EmployeeDTO update(EmployeeDTO employeeDTO) {
+        if (employeeDTO.getId() != null && employeeRepository.existsById(employeeDTO.getId())) {
+            return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
+        } else if (!employeeRepository.existsByUsername(employeeDTO.getUsername())) {
+            return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
         } else {
-            throw new DuplicateEmployeeException("Employee with username=" + employee.getUsername() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
         }
     }
 
@@ -71,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public void deleteById(UUID id) {
         if (!employeeRepository.existsById(id)) {
-            throw new NoSuchRecordException("Employee with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException(String.format("Department with id=%s not found for deleting", id));
         }
         employeeRepository.deleteById(id);
     }

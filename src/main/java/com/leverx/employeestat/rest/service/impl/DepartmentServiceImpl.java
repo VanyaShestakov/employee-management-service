@@ -1,7 +1,9 @@
 package com.leverx.employeestat.rest.service.impl;
 
+import com.leverx.employeestat.rest.dto.DepartmentDTO;
+import com.leverx.employeestat.rest.dto.converter.DepartmentConverter;
 import com.leverx.employeestat.rest.entity.Department;
-import com.leverx.employeestat.rest.exception.DuplicateDepartmentException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.service.DepartmentService;
@@ -11,60 +13,66 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+    private final DepartmentConverter converter;
 
     @Autowired
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository, DepartmentConverter converter) {
         this.departmentRepository = departmentRepository;
+        this.converter = converter;
     }
 
     @Override
     @Transactional
-    public Department save(Department department) {
-        if (departmentRepository.existsByName(department.getName())) {
-            throw new DuplicateDepartmentException("Department with name=" + department.getName() + " already exists");
+    public DepartmentDTO save(DepartmentDTO departmentDTO) {
+        if (departmentRepository.existsByName(departmentDTO.getName())) {
+            throw new DuplicateRecordException
+                    (String.format("Department with name=%s already exists", departmentDTO.getName()));
         }
-        return departmentRepository.save(department);
+        return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
     }
 
     @Override
     @Transactional
     public void deleteById(UUID id) {
         if (!departmentRepository.existsById(id)) {
-            throw new NoSuchRecordException("Department with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException(String.format("Department with id=%s not found for deleting", id));
         }
         departmentRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public Department update(Department department) {
-        if (departmentRepository.existsById(department.getId())) {
-            return departmentRepository.save(department);
-        } else if (!departmentRepository.existsByName(department.getName())) {
-            return departmentRepository.save(department);
+    public DepartmentDTO update(DepartmentDTO departmentDTO) {
+        if (departmentDTO.getId() != null && departmentRepository.existsById(departmentDTO.getId())) {
+            return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
+        } else if (!departmentRepository.existsByName(departmentDTO.getName())) {
+            return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
         } else {
-            throw new DuplicateDepartmentException("Department with name=" + department.getName() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Department with name=%s already exists", departmentDTO.getName()));
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Department> getAll() {
-        return departmentRepository.findAll();
+    public List<DepartmentDTO> getAll() {
+        return departmentRepository.findAll().stream().map(converter::toDTO).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Department getById(UUID id) {
-        return departmentRepository.findById(id)
+    public DepartmentDTO getById(UUID id) {
+        Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Department with id=" + id + " not found");
+                    throw new NoSuchRecordException(String.format("Department with id=%s not found", id));
                 });
+        return converter.toDTO(department);
     }
 
     @Override

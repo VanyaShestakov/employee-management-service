@@ -1,5 +1,6 @@
 package com.leverx.employeestat.rest.dto;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -7,13 +8,26 @@ import java.util.UUID;
 public class EmployeeDTO {
 
     private UUID id;
+
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
+
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String position;
+
     private String role;
+
     private UUID departmentId;
+
     private List<UUID> projectIds;
 
     public UUID getId() {

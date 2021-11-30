@@ -4,7 +4,11 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "project")
@@ -19,10 +23,12 @@ public class Project {
     private String name;
 
     @Column(name = "begin_date")
-    private Date begin;
+   //@Temporal(TemporalType.TIMESTAMP)
+    private LocalDate begin;
 
     @Column(name = "end_date")
-    private Date end;
+    //@Temporal(TemporalType.TIMESTAMP)
+    private LocalDate end;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
@@ -47,19 +53,19 @@ public class Project {
         this.name = name;
     }
 
-    public Date getBegin() {
+    public LocalDate getBegin() {
         return begin;
     }
 
-    public void setBegin(Date begin) {
+    public void setBegin(LocalDate begin) {
         this.begin = begin;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 

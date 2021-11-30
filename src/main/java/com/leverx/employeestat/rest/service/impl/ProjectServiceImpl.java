@@ -1,7 +1,9 @@
 package com.leverx.employeestat.rest.service.impl;
 
+import com.leverx.employeestat.rest.dto.ProjectDTO;
+import com.leverx.employeestat.rest.dto.converter.ProjectConverter;
 import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.DuplicateProjectException;
+import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.service.ProjectService;
@@ -11,58 +13,68 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ProjectConverter converter;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectConverter converter) {
         this.projectRepository = projectRepository;
+        this.converter = converter;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Project getById(UUID id) {
-        return projectRepository.findProjectById(id)
+    public ProjectDTO getById(UUID id) {
+        Project project = projectRepository.findProjectById(id)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Project with id=" + id + " not found");
+                    throw new NoSuchRecordException(String.format("Project with id=%s not found", id));
                 });
+        return converter.toDTO(project);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Project getByName(String name) {
-        return projectRepository.findProjectByName(name).
+    public ProjectDTO getByName(String name) {
+        Project project = projectRepository.findProjectByName(name).
                 orElseThrow(() -> {
-                    throw new NoSuchRecordException("Project with name=" + name + " not found");
+                    throw new NoSuchRecordException(String.format("Project with name=%s not found", name));
                 });
+        return converter.toDTO(project);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Project> getAll() {
-        return projectRepository.findAll();
+    public List<ProjectDTO> getAll() {
+        return projectRepository.findAll()
+                .stream()
+                .map(converter::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Project save(Project project) {
-        if (projectRepository.existsByName(project.getName())) {
-            throw new DuplicateProjectException("Project with name=" + project.getName() + " already exists");
+    public ProjectDTO save(ProjectDTO projectDTO) {
+        if (projectRepository.existsByName(projectDTO.getName())) {
+            throw new DuplicateRecordException
+                    (String.format("Project with name=%s already exists", projectDTO.getName()));
         }
-        return projectRepository.save(project);
+        return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
     }
 
     @Override
     @Transactional
-    public Project update(Project project) {
-        if (projectRepository.existsById(project.getId())) {
-            return projectRepository.save(project);
-        } else if (!projectRepository.existsByName(project.getName())) {
-            return projectRepository.save(project);
+    public ProjectDTO update(ProjectDTO projectDTO) {
+        if (projectDTO.getId() != null && projectRepository.existsById(projectDTO.getId())) {
+            return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
+        } else if (!projectRepository.existsByName(projectDTO.getName())) {
+            return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
         } else {
-            throw new DuplicateProjectException("Project with name=" + project.getName() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Project with name=%s already exists", projectDTO.getName()));
         }
     }
 
@@ -70,7 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void deleteById(UUID id) {
         if (!projectRepository.existsById(id)) {
-            throw new NoSuchRecordException("Project with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException(String.format("Department with id=%s not found for deleting", id));
         }
         projectRepository.deleteById(id);
     }

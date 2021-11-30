@@ -1,13 +1,12 @@
 package com.leverx.employeestat.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,13 +14,16 @@ public class ProjectDTO {
 
     private UUID id;
 
+    @NotBlank
     private String name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date begin;
+    @NotNull
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDate begin;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date end;
+    @NotNull
+    @JsonSerialize(using = ToStringSerializer.class)
+    private LocalDate end;
 
     private List<UUID> employeeIds;
 
@@ -41,19 +43,19 @@ public class ProjectDTO {
         this.name = name;
     }
 
-    public Date getBegin() {
+    public LocalDate getBegin() {
         return begin;
     }
 
-    public void setBegin(Date begin) {
+    public void setBegin(LocalDate begin) {
         this.begin = begin;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 
