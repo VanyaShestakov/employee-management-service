@@ -35,7 +35,7 @@ public class WorkController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public WorkDTO putWork(@RequestBody WorkDTO workDTO) {
         return workService.update(workDTO);
     }

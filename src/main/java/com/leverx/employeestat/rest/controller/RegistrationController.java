@@ -30,7 +30,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDTO postEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException("Fields of Employee have errors: " +

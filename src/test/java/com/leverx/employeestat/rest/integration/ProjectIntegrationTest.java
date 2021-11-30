@@ -110,7 +110,7 @@ public class ProjectIntegrationTest {
         String expectedEndDate = "2021-11-20";
 
         mvc.perform(post(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(expectedName))
                 .andExpect(jsonPath("$.begin").value(expectedBeginDate))
                 .andExpect((jsonPath("$.end").value(expectedEndDate)))
@@ -120,7 +120,7 @@ public class ProjectIntegrationTest {
     @Test
     public void shouldReturnBadRequestIfNameOfProjectAlreadyExistsForPosting() throws Exception {
         mvc.perform(post(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mvc.perform(post(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
                 .andExpect(status().isBadRequest())
@@ -141,7 +141,7 @@ public class ProjectIntegrationTest {
         departmentDTO.setName(expected);
 
         mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(expected))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
@@ -151,7 +151,7 @@ public class ProjectIntegrationTest {
     @Test
     public void shouldReturnBadRequestIfNameOfProjectAlreadyExistsForPutting() throws Exception {
         mvc.perform(post(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
                 .andExpect(status().isBadRequest())
@@ -162,7 +162,7 @@ public class ProjectIntegrationTest {
     @Test
     public void shouldReturnUpdatedProjectIfItExistsById() throws Exception {
         MvcResult result = mvc.perform(post(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String expectedName = "New";
@@ -171,7 +171,7 @@ public class ProjectIntegrationTest {
         UUID expectedId = projectDTO.getId();
 
         mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(expectedId.toString()))
                 .andExpect(jsonPath("$.name").value(expectedName));
     }
@@ -179,7 +179,7 @@ public class ProjectIntegrationTest {
     @Test
     public void shouldDeleteProjectIfIdIsCorrectAndExists() throws Exception {
         MvcResult result = mvc.perform(post(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         projectDTO = toObject(result.getResponse().getContentAsString());

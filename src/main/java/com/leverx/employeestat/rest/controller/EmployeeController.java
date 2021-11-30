@@ -40,7 +40,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDTO postEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
@@ -50,7 +50,7 @@ public class EmployeeController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDTO putEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
