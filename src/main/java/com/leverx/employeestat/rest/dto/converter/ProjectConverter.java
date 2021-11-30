@@ -33,7 +33,7 @@ public class ProjectConverter {
             for (UUID id : projectDTO.getEmployeeIds()) {
                 project.addEmployee(employeeRepository.findEmployeeById(id)
                         .orElseThrow(() -> {
-                            throw new NoSuchRecordException("Employee with id=" + id + " not found");
+                            throw new NoSuchRecordException(String.format("Employee with id=%s not found", id));
                         }));
             }
         }

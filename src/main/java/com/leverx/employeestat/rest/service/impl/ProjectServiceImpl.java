@@ -32,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getById(UUID id) {
         Project project = projectRepository.findProjectById(id)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Project with id=" + id + " not found");
+                    throw new NoSuchRecordException(String.format("Project with id=%s not found", id));
                 });
         return converter.toDTO(project);
     }
@@ -42,7 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getByName(String name) {
         Project project = projectRepository.findProjectByName(name).
                 orElseThrow(() -> {
-                    throw new NoSuchRecordException("Project with name=" + name + " not found");
+                    throw new NoSuchRecordException(String.format("Project with name=%s not found", name));
                 });
         return converter.toDTO(project);
     }
@@ -59,7 +59,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO save(ProjectDTO projectDTO) {
         if (projectRepository.existsByName(projectDTO.getName())) {
-            throw new DuplicateRecordException("Project with name=" + projectDTO.getName() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Project with name=%s already exists", projectDTO.getName()));
         }
         return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
     }
@@ -72,7 +73,8 @@ public class ProjectServiceImpl implements ProjectService {
         } else if (!projectRepository.existsByName(projectDTO.getName())) {
             return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
         } else {
-            throw new DuplicateRecordException("Project with name=" + projectDTO.getName() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Project with name=%s already exists", projectDTO.getName()));
         }
     }
 
@@ -80,7 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void deleteById(UUID id) {
         if (!projectRepository.existsById(id)) {
-            throw new NoSuchRecordException("Project with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException(String.format("Department with id=%s not found for deleting", id));
         }
         projectRepository.deleteById(id);
     }

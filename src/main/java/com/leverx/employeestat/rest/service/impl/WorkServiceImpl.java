@@ -53,7 +53,7 @@ public class WorkServiceImpl implements WorkService {
         WorkId workId = createWorkId(employeeId, projectId);
         Work work = workRepository.findWorkById(workId)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Work with id=" + workId + " not found");
+                    throw new NoSuchRecordException(String.format("Work with id=%s not found", workId));
                 });
         return converter.toDTO(work);
     }
@@ -64,7 +64,7 @@ public class WorkServiceImpl implements WorkService {
         WorkId workId = createWorkId(workDTO.getEmployeeId(), workDTO.getProjectId());
         Work work = workRepository.findWorkById(workId)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Work with id=" + workId + " not found");
+                    throw new NoSuchRecordException(String.format("Work with id=%s not found", workId));
                 });
 
         work.setPositionEndDate(workDTO.getPositionEndDate());
@@ -78,7 +78,7 @@ public class WorkServiceImpl implements WorkService {
     public void deleteByIds(UUID employeeId, UUID projectId) {
         WorkId workId = createWorkId(employeeId, projectId);
         if (!workRepository.existsById(workId)) {
-            throw new NoSuchRecordException("Work with id=" + workId + " not found");
+            throw new NoSuchRecordException(String.format("Work with id=%s not found", workId));
         }
         workRepository.deleteById(createWorkId(employeeId, projectId));
     }
@@ -87,11 +87,11 @@ public class WorkServiceImpl implements WorkService {
         WorkId workId = new WorkId();
         workId.setEmployee(employeeRepository.findEmployeeById(employeeId)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Employee with id=" + employeeId + " not found");
+                    throw new NoSuchRecordException(String.format("Employee with id=%s not found", employeeId));
                 }));
         workId.setProject(projectRepository.findProjectById(projectId)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Project with id=" + projectId + " not found");
+                    throw new NoSuchRecordException(String.format("Project with id=%s not found", projectId));
                 }));
         return workId;
     }

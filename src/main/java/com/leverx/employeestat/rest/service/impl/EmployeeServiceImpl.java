@@ -41,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO getById(UUID id) {
         Employee employee = employeeRepository.findEmployeeById(id)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Employee with id=" + id + " not found");
+                    throw new NoSuchRecordException(String.format("Employee with id=%s not found", id));
                 });
         return converter.toDTO(employee);
     }
@@ -51,7 +51,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO getByUsername(String username) {
         Employee employee = employeeRepository.findEmployeeByUsername(username)
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Employee with username=" + username + " not found");
+                    throw new NoSuchRecordException
+                            (String.format("Employee with username=%s not found for deleting", username));
                 });
         return converter.toDTO(employee);
     }
@@ -60,7 +61,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeDTO save(EmployeeDTO employeeDTO) {
         if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
-            throw new DuplicateRecordException("Employee with username=" + employeeDTO.getUsername() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
         }
         return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
     }
@@ -73,7 +75,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else if (!employeeRepository.existsByUsername(employeeDTO.getUsername())) {
             return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
         } else {
-            throw new DuplicateRecordException("Employee with username=" + employeeDTO.getUsername() + " already exists");
+            throw new DuplicateRecordException
+                    (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
         }
     }
 
@@ -81,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public void deleteById(UUID id) {
         if (!employeeRepository.existsById(id)) {
-            throw new NoSuchRecordException("Employee with id=" + id + " not found for deleting");
+            throw new NoSuchRecordException(String.format("Department with id=%s not found for deleting", id));
         }
         employeeRepository.deleteById(id);
     }

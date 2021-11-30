@@ -4,6 +4,7 @@ import com.leverx.employeestat.rest.dto.WorkDTO;
 import com.leverx.employeestat.rest.entity.Work;
 import com.leverx.employeestat.rest.entity.WorkId;
 import com.leverx.employeestat.rest.exception.EntityConversionException;
+import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,11 @@ public class WorkConverter {
         WorkId workId = new WorkId();
         workId.setEmployee(employeeRepository.findEmployeeById(employeeId)
                 .orElseThrow(() -> {
-                    throw new EntityConversionException("Employee with id=" + employeeId + " not found");
+                    throw new NoSuchRecordException(String.format("Employee with id=%s not found", employeeId));
                 }));
         workId.setProject(projectRepository.findProjectById(projectId)
                 .orElseThrow(() -> {
-                    throw new EntityConversionException("Project with id=" + employeeId + " not found");
+                    throw new NoSuchRecordException(String.format("Project with id=%s not found", projectId));
                 }));
         work.setId(workId);
         work.setPositionStartDate(workDTO.getPositionStartDate());

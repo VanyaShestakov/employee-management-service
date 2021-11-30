@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFromString;
+
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
@@ -46,8 +48,8 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDTO postEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Employee have errors: " +
-                    bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Employee have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return employeeService.save(employeeDTO);
     }
@@ -56,8 +58,8 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDTO putEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Employee have errors: " +
-                    bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Employee have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return employeeService.update(employeeDTO);
     }
@@ -68,13 +70,4 @@ public class EmployeeController {
         employeeService.deleteById(getUUIDFromString(id));
     }
 
-    private UUID getUUIDFromString(String id) {
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new NotValidUUIDException("Value =" + id + " is not UUID", e);
-        }
-        return uuid;
-    }
 }

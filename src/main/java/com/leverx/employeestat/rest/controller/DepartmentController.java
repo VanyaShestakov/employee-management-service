@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFromString;
+
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
@@ -49,8 +51,8 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.OK)
     public DepartmentDTO postDepartment(@RequestBody @Valid DepartmentDTO departmentDTO, BindingResult result) {
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Department have errors: " +
-                    bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Department have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return departmentService.save(departmentDTO);
     }
@@ -59,8 +61,8 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.OK)
     public DepartmentDTO putDepartment(@RequestBody @Valid DepartmentDTO departmentDTO, BindingResult result) {
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Department have errors: " +
-                    bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Department have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return departmentService.update(departmentDTO);
     }
@@ -69,15 +71,5 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteDepartment(@PathVariable("id") String id) {
         departmentService.deleteById(getUUIDFromString(id));
-    }
-
-    private UUID getUUIDFromString(String id) {
-        UUID uuid = null;
-        try {
-            uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new NotValidUUIDException("Value =" + id + " is not UUID", e);
-        }
-        return uuid;
     }
 }
