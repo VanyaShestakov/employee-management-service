@@ -24,6 +24,7 @@ public class EmployeeDTO {
     @NotBlank
     private String position;
 
+    @NotBlank
     private String role;
 
     private UUID departmentId;
