@@ -4,6 +4,7 @@ import com.leverx.employeestat.rest.security.employeedetails.EmployeeDetailsServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,9 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/employees").hasRole("ADMIN")
-                .antMatchers("/api/departments").hasRole("EMPLOYEE")
+                    .antMatchers("/api/register").permitAll()
+                    .antMatchers(HttpMethod.GET, "/api/*").hasRole("EMPLOYEE")
+                    .antMatchers(HttpMethod.POST, "/api/*").hasRole("MANAGER")
+                    .antMatchers(HttpMethod.PUT, "/api/*").hasRole("MANAGER")
+                    .antMatchers(HttpMethod.DELETE, "/api/*").hasRole("MANAGER")
                 .and().httpBasic()
                 .and().sessionManagement().disable();
     }
