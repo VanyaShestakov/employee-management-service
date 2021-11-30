@@ -1,7 +1,6 @@
 package com.leverx.employeestat.rest.service;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
-import com.leverx.employeestat.rest.entity.Employee;
 
 import java.util.List;
 import java.util.UUID;

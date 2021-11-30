@@ -1,11 +1,9 @@
 package com.leverx.employeestat.rest.entity;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 @Embeddable
 public class WorkId implements Serializable {

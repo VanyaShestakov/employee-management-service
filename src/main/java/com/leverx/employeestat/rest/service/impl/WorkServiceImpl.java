@@ -4,8 +4,6 @@ import com.leverx.employeestat.rest.dto.WorkDTO;
 import com.leverx.employeestat.rest.dto.converter.WorkConverter;
 import com.leverx.employeestat.rest.entity.Work;
 import com.leverx.employeestat.rest.entity.WorkId;
-import com.leverx.employeestat.rest.exception.DuplicateRecordException;
-import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;

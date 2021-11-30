@@ -4,11 +4,9 @@ import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.entity.Department;
 import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
-import com.leverx.employeestat.rest.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

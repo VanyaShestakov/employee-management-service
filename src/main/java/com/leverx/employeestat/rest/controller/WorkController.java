@@ -1,7 +1,6 @@
 package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.dto.WorkDTO;
-import com.leverx.employeestat.rest.exception.NotValidUUIDException;
 import com.leverx.employeestat.rest.service.WorkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,5 +45,4 @@ public class WorkController {
     public void deleteWork(@PathVariable("empId") String employeeId, @PathVariable("projId") String projectId) {
         workService.deleteByIds(getUUIDFromString(employeeId), getUUIDFromString(projectId));
     }
-
 }

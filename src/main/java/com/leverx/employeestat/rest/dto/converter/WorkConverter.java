@@ -3,14 +3,12 @@ package com.leverx.employeestat.rest.dto.converter;
 import com.leverx.employeestat.rest.dto.WorkDTO;
 import com.leverx.employeestat.rest.entity.Work;
 import com.leverx.employeestat.rest.entity.WorkId;
-import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
 import java.util.UUID;
 
 @Component
