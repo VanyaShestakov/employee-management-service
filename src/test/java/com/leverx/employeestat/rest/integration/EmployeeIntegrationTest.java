@@ -48,18 +48,18 @@ public class EmployeeIntegrationTest {
     public void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
         employeeDTO = new EmployeeDTO();
+        String id = "50c69208-76c4-4f5f-b617-677cda476b64";
         String expectedFirstName = "Vova";
         String expectedLastName = "Vovanov";
         String expectedUsername = "Vovich";
         String expectedPosition = "Developer";
-        String expectedPassword = "123";
         String role = "ROLE_MANAGER";
         employeeDTO.setFirstName(expectedFirstName);
         employeeDTO.setLastName(expectedLastName);
         employeeDTO.setUsername(expectedUsername);
         employeeDTO.setPosition(expectedPosition);
-        employeeDTO.setPassword(expectedPassword);
         employeeDTO.setRole(role);
+        employeeDTO.setId(UUID.fromString(id));
     }
 
     @Test
@@ -100,53 +100,31 @@ public class EmployeeIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPosting() throws Exception {
-        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
-                .andExpect(status().isBadRequest());
+    public void shouldReturnMethodNotAllowedForPosting() throws Exception {
+        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+                .andExpect(status().isMethodNotAllowed());
     }
 
-    @Test
-    public void shouldReturnBadRequestIfUsernameOfEmployeeAlreadyExistsForPosting() throws Exception {
-        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated());
-
-        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
-                .andExpect(jsonPath("$.code").value(400));
-    }
-
-    @Test
-    public void shouldReturnOkStatusIfJsonIsCorrectForPosting() throws Exception{
-        String expectedFirstName = "Vova";
-        String expectedLastName = "Vovanov";
-        String expectedUsername = "Vovich";
-        String expectedPosition = "Developer";
-        String expectedPassword = "123";
-        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.firstName").value(expectedFirstName))
-                .andExpect(jsonPath("$.lastName").value(expectedLastName))
-                .andExpect(jsonPath("$.username").value(expectedUsername))
-                .andExpect(jsonPath("$.position").value(expectedPosition))
-                .andExpect(jsonPath("$.password").value(expectedPassword));
-    }
+//    @Test
+//    public void shouldReturnOkStatusIfJsonIsCorrectForPosting() throws Exception{
+//        String expectedFirstName = "Vova";
+//        String expectedLastName = "Vovanov";
+//        String expectedUsername = "Vovich";
+//        String expectedPosition = "Developer";
+//        String expectedPassword = "123";
+//        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.firstName").value(expectedFirstName))
+//                .andExpect(jsonPath("$.lastName").value(expectedLastName))
+//                .andExpect(jsonPath("$.username").value(expectedUsername))
+//                .andExpect(jsonPath("$.position").value(expectedPosition))
+//                .andExpect(jsonPath("$.password").value(expectedPassword));
+//    }
 
     @Test
     public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPutting() throws Exception {
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void shouldReturnBadRequestIfUsernameOfEmployeeAlreadyExistsForPutting() throws Exception {
-        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated());
-
-        mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
-                .andExpect(jsonPath("$.code").value(400));
     }
 
     @Test
@@ -163,39 +141,20 @@ public class EmployeeIntegrationTest {
                 .andExpect(jsonPath("$.lastName").value(expectedLastName))
                 .andExpect(jsonPath("$.username").value(expectedUsername))
                 .andExpect(jsonPath("$.position").value(expectedPosition))
-                .andExpect(jsonPath("$.password").value(expectedPassword))
                 .andExpect(jsonPath("$.id").isNotEmpty());
-
-        assertNull(employeeDTO.getId());
     }
 
     @Test
     public void shouldReturnUpdatedEmployeeIfItExistsById() throws Exception {
-        MvcResult result = mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated())
-                .andReturn();
-
-        employeeDTO = toObject(result.getResponse().getContentAsString());
-        String expectedFirstName = "Sasha";
-        employeeDTO.setFirstName(expectedFirstName);
-        UUID expectedId = employeeDTO.getId();
-
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(expectedId.toString()))
-                .andExpect(jsonPath("$.firstName").value(expectedFirstName));
+                .andExpect(jsonPath("$.id").value(employeeDTO.getId().toString()))
+                .andExpect(jsonPath("$.firstName").value(employeeDTO.getFirstName()));
     }
 
     @Test
     public void shouldDeleteEmployeeIfIdIsCorrectAndExists() throws Exception{
-        MvcResult result = mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated())
-                .andReturn();
-
-        employeeDTO = toObject(result.getResponse().getContentAsString());
-        UUID id = employeeDTO.getId();
-
-        mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", id.toString()))
+        mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", "ea66da14-8f15-434c-931f-6ff237429904"))
                 .andExpect(status().isOk());
     }
 
