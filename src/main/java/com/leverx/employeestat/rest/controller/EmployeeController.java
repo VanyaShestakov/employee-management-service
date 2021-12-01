@@ -39,16 +39,6 @@ public class EmployeeController {
         return employeeService.getById(getUUIDFromString(id));
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public EmployeeDTO postEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new NotValidRecordException
-                    (String.format("Fields of Employee have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
-        }
-        return employeeService.save(employeeDTO);
-    }
-
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public EmployeeDTO putEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {

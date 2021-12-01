@@ -1,5 +1,7 @@
 package com.leverx.employeestat.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +20,13 @@ public class EmployeeDTO {
     @NotBlank
     private String username;
 
-    @NotBlank
+    @JsonIgnore
     private String password;
 
     @NotBlank
     private String position;
 
+    @NotBlank
     private String role;
 
     private UUID departmentId;

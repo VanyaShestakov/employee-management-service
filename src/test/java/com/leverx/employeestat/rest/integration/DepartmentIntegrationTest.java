@@ -108,7 +108,7 @@ public class DepartmentIntegrationTest {
         departmentDTO.setName(name);
 
         mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
                 .andExpect(status().isBadRequest())
@@ -123,7 +123,7 @@ public class DepartmentIntegrationTest {
         departmentDTO.setName(expected);
 
         mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(expected))
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
@@ -135,7 +135,7 @@ public class DepartmentIntegrationTest {
         departmentDTO.setName(name);
 
         mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
                 .andExpect(status().isBadRequest())
@@ -156,7 +156,7 @@ public class DepartmentIntegrationTest {
         departmentDTO.setName(expected);
 
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(expected))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
@@ -171,7 +171,7 @@ public class DepartmentIntegrationTest {
         departmentDTO.setName(name);
 
         MvcResult result = mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         departmentDTO = toObject(result.getResponse().getContentAsString());
@@ -179,7 +179,7 @@ public class DepartmentIntegrationTest {
         UUID expectedId = departmentDTO.getId();
 
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(expectedId.toString()))
                 .andExpect(jsonPath("$.name").value(expectedName));
     }
@@ -189,7 +189,7 @@ public class DepartmentIntegrationTest {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         departmentDTO.setName("Test");
         MvcResult result = mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
         departmentDTO = toObject(result.getResponse().getContentAsString());
         UUID id = departmentDTO.getId();

@@ -40,7 +40,7 @@ public class DepartmentController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public DepartmentDTO postDepartment(@RequestBody @Valid DepartmentDTO departmentDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException

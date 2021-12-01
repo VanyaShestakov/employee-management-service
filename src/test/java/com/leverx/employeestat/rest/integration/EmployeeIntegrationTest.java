@@ -53,11 +53,13 @@ public class EmployeeIntegrationTest {
         String expectedUsername = "Vovich";
         String expectedPosition = "Developer";
         String expectedPassword = "123";
+        String role = "ROLE_MANAGER";
         employeeDTO.setFirstName(expectedFirstName);
         employeeDTO.setLastName(expectedLastName);
         employeeDTO.setUsername(expectedUsername);
         employeeDTO.setPosition(expectedPosition);
         employeeDTO.setPassword(expectedPassword);
+        employeeDTO.setRole(role);
     }
 
     @Test
@@ -106,7 +108,7 @@ public class EmployeeIntegrationTest {
     @Test
     public void shouldReturnBadRequestIfUsernameOfEmployeeAlreadyExistsForPosting() throws Exception {
         mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isBadRequest())
@@ -122,7 +124,7 @@ public class EmployeeIntegrationTest {
         String expectedPosition = "Developer";
         String expectedPassword = "123";
         mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName").value(expectedFirstName))
                 .andExpect(jsonPath("$.lastName").value(expectedLastName))
                 .andExpect(jsonPath("$.username").value(expectedUsername))
@@ -139,7 +141,7 @@ public class EmployeeIntegrationTest {
     @Test
     public void shouldReturnBadRequestIfUsernameOfEmployeeAlreadyExistsForPutting() throws Exception {
         mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isBadRequest())
@@ -156,7 +158,7 @@ public class EmployeeIntegrationTest {
         String expectedPassword = "123";
 
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName").value(expectedFirstName))
                 .andExpect(jsonPath("$.lastName").value(expectedLastName))
                 .andExpect(jsonPath("$.username").value(expectedUsername))
@@ -170,7 +172,7 @@ public class EmployeeIntegrationTest {
     @Test
     public void shouldReturnUpdatedEmployeeIfItExistsById() throws Exception {
         MvcResult result = mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         employeeDTO = toObject(result.getResponse().getContentAsString());
@@ -179,7 +181,7 @@ public class EmployeeIntegrationTest {
         UUID expectedId = employeeDTO.getId();
 
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(expectedId.toString()))
                 .andExpect(jsonPath("$.firstName").value(expectedFirstName));
     }
@@ -187,7 +189,7 @@ public class EmployeeIntegrationTest {
     @Test
     public void shouldDeleteEmployeeIfIdIsCorrectAndExists() throws Exception{
         MvcResult result = mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         employeeDTO = toObject(result.getResponse().getContentAsString());

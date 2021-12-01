@@ -7,6 +7,8 @@ import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.DepartmentRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
+import com.leverx.employeestat.rest.repository.RoleRepository;
+import com.leverx.employeestat.rest.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +20,15 @@ public class EmployeeConverter {
 
     private final DepartmentRepository departmentRepository;
     private final ProjectRepository projectRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public EmployeeConverter(DepartmentRepository departmentRepository, ProjectRepository projectRepository) {
+    public EmployeeConverter(DepartmentRepository departmentRepository,
+                             ProjectRepository projectRepository,
+                             RoleRepository roleRepository) {
         this.departmentRepository = departmentRepository;
         this.projectRepository = projectRepository;
+        this.roleRepository = roleRepository;
     }
 
     public Employee toEntity(EmployeeDTO employeeDTO) {
@@ -33,6 +39,10 @@ public class EmployeeConverter {
         employee.setLastName(employeeDTO.getLastName());
         employee.setPassword(employeeDTO.getPassword());
         employee.setPosition(employeeDTO.getPosition());
+        employee.setRole(roleRepository.findByName(employeeDTO.getRole())
+                .orElseThrow(() -> {
+                    throw new NoSuchRecordException("Role with name=" + employeeDTO.getDepartmentId() + " does not exists");
+                }));
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
                     .orElseThrow(() -> {
@@ -60,6 +70,7 @@ public class EmployeeConverter {
         employeeDTO.setLastName(employee.getLastName());
         employeeDTO.setPassword(employee.getPassword());
         employeeDTO.setPosition(employee.getPosition());
+        employeeDTO.setRole(employee.getRole().getName());
         Department department = employee.getDepartment();
         if (department != null) {
             employeeDTO.setDepartmentId(department.getId());

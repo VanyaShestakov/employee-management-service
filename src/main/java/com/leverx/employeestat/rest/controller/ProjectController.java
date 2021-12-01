@@ -40,7 +40,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ProjectDTO postProject(@RequestBody @Valid ProjectDTO projectDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
