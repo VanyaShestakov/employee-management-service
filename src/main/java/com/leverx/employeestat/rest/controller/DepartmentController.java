@@ -50,7 +50,7 @@ public class DepartmentController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public DepartmentDTO putDepartment(@RequestBody @Valid DepartmentDTO departmentDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
