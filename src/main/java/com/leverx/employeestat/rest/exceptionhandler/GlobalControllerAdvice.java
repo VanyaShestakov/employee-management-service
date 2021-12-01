@@ -59,4 +59,13 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
         info.setMessage(exception.getMessage());
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ExceptionInfo> handleInvalidPasswordException(InvalidPasswordException exception) {
+        ExceptionInfo info = new ExceptionInfo();
+        info.setStatus(HttpStatus.UNAUTHORIZED);
+        info.setCode(HttpStatus.UNAUTHORIZED.value());
+        info.setMessage(exception.getMessage());
+        return new ResponseEntity<>(info, HttpStatus.UNAUTHORIZED);
+    }
 }

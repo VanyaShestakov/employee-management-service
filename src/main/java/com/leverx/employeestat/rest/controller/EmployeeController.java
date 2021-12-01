@@ -54,5 +54,4 @@ public class EmployeeController {
     public void deleteEmployee(@PathVariable String id) {
         employeeService.deleteById(getUUIDFromString(id));
     }
-
 }
