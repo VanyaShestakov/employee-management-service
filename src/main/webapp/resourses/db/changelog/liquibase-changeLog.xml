@@ -11,9 +11,43 @@
         <dbms type="postgresql"/>
     </preConditions>
 
-    <changeSet id="3" author="Ivan">
-        <createTable tableName="new">
-           <column name="test" type="varchar(20)"/>
-        </createTable>
+    <changeSet id="4" author="Ivan">
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/create-department-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/create-project-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/create-role-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/create-employee-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/create-project_employee-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 endDelimiter="\n"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/insert-roles.sql"/>
     </changeSet>
 </databaseChangeLog>

@@ -41,7 +41,7 @@ public class EmployeeConverter {
         employee.setPosition(employeeDTO.getPosition());
         employee.setRole(roleRepository.findByName(employeeDTO.getRole())
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException("Role with name=" + employeeDTO.getDepartmentId() + " does not exists");
+                    throw new NoSuchRecordException("Role with name=" + employeeDTO.getRole() + " does not exists");
                 }));
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
