@@ -70,14 +70,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public EmployeeDTO update(EmployeeDTO employeeDTO) {
-        if (employeeDTO.getId() != null && employeeRepository.existsById(employeeDTO.getId())) {
-            return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
-        } else if (!employeeRepository.existsByUsername(employeeDTO.getUsername())) {
-            return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
-        } else {
-            throw new DuplicateRecordException
-                    (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
-        }
+        String password = employeeRepository.findEmployeeById(employeeDTO.getId())
+                .orElseThrow(() -> {
+            throw new NoSuchRecordException(String.format("Employee with id=%s not found", employeeDTO.getId()));
+        }).getPassword();
+        employeeDTO.setPassword(password);
+        return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
     }
 
     @Override

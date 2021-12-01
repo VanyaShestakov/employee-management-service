@@ -3,6 +3,7 @@ package com.leverx.employeestat.rest.controller;
 import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.exception.NotValidRecordException;
+import com.leverx.employeestat.rest.security.request.RegistrationRequest;
 import com.leverx.employeestat.rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,12 +32,12 @@ public class RegistrationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeDTO postEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, BindingResult result) {
+    public EmployeeDTO postEmployee(@RequestBody @Valid RegistrationRequest request, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException("Fields of Employee have errors: " +
                     bindingResultParser.getFieldErrMismatches(result));
         }
-        employeeDTO.setPassword(encoder.encode(employeeDTO.getPassword()));
-        return employeeService.save(employeeDTO);
+        request.setPassword(encoder.encode(request.getPassword()));
+        return employeeService.save(request.toDTO());
     }
 }
