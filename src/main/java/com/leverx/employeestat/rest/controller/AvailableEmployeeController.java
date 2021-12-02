@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/available")
+@RequestMapping("/api/employees/available")
 public class AvailableEmployeeController {
 
     private final AvailableEmployeeService availableEmployeeService;
