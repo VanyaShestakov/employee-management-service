@@ -39,15 +39,11 @@ public class DepartmentIntegrationTest {
     public static final String DEPARTMENTS_ENDPOINT = "/api/departments";
 
     private final WebApplicationContext webAppContext;
-    private final DepartmentService departmentService;
-    private final BindingResultParser parser;
     private MockMvc mvc;
 
     @Autowired
-    public DepartmentIntegrationTest(WebApplicationContext webAppContext, DepartmentService departmentService, BindingResultParser parser) {
+    public DepartmentIntegrationTest(WebApplicationContext webAppContext) {
         this.webAppContext = webAppContext;
-        this.departmentService = departmentService;
-        this.parser = parser;
     }
 
     @BeforeEach
@@ -156,7 +152,7 @@ public class DepartmentIntegrationTest {
         departmentDTO.setName(expected);
 
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(expected))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
@@ -179,7 +175,7 @@ public class DepartmentIntegrationTest {
         UUID expectedId = departmentDTO.getId();
 
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(expectedId.toString()))
                 .andExpect(jsonPath("$.name").value(expectedName));
     }

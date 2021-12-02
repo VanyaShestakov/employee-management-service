@@ -136,7 +136,7 @@ public class EmployeeIntegrationTest {
         String expectedPassword = "123";
 
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value(expectedFirstName))
                 .andExpect(jsonPath("$.lastName").value(expectedLastName))
                 .andExpect(jsonPath("$.username").value(expectedUsername))
@@ -147,7 +147,7 @@ public class EmployeeIntegrationTest {
     @Test
     public void shouldReturnUpdatedEmployeeIfItExistsById() throws Exception {
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(employeeDTO.getId().toString()))
                 .andExpect(jsonPath("$.firstName").value(employeeDTO.getFirstName()));
     }

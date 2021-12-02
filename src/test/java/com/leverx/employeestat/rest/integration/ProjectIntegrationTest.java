@@ -141,7 +141,7 @@ public class ProjectIntegrationTest {
         departmentDTO.setName(expected);
 
         mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(expected))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
@@ -171,7 +171,7 @@ public class ProjectIntegrationTest {
         UUID expectedId = projectDTO.getId();
 
         mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(expectedId.toString()))
                 .andExpect(jsonPath("$.name").value(expectedName));
     }

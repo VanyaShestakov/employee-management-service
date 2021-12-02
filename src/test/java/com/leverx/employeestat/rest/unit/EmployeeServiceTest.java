@@ -146,18 +146,12 @@ public class EmployeeServiceTest {
         employeeDTO.setId(id);
 
         Mockito
-                .when(converter.toEntity(employeeDTO))
-                .thenReturn(employee);
-        Mockito
                 .when(converter.toDTO(employee))
                 .thenReturn(employeeDTO);
 
         Mockito
-                .when(employeeRepository.existsById(id))
-                .thenReturn(true);
-        Mockito
-                .when(employeeRepository.save(employee))
-                .thenReturn(employee);
+                .when(employeeRepository.findEmployeeById(employeeDTO.getId()))
+                .thenReturn(Optional.of(employee));
         Assertions.assertEquals(employeeDTO, employeeService.update(employeeDTO));
     }
 
@@ -192,17 +186,14 @@ public class EmployeeServiceTest {
     }*/
 
     @Test
-    public void shouldThrowExceptionIfEmployeeAlreadyExists() {
+    public void shouldThrowExceptionIfEmployeeNotFound() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(UUID.randomUUID());
         employeeDTO.setUsername("Username");
         Mockito
-                .when(employeeRepository.existsById(employeeDTO.getId()))
-                .thenReturn(false);
-        Mockito
-                .when(employeeRepository.existsByUsername(employeeDTO.getUsername()))
-                .thenReturn(true);
-        Assertions.assertThrows(DuplicateRecordException.class,
+                .when(employeeRepository.findEmployeeById(employeeDTO.getId()))
+                .thenReturn(Optional.ofNullable(null));
+        Assertions.assertThrows(NoSuchRecordException.class,
                 () -> employeeService.update(employeeDTO));
     }
 
