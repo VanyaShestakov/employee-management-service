@@ -2,6 +2,7 @@ package com.leverx.employeestat.rest.integration.config;
 
 import com.leverx.employeestat.rest.configuration.Config;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
@@ -32,5 +33,10 @@ public class TestConfig extends Config {
             e.printStackTrace();
         }
         return dataSource;
+    }
+
+    @Override
+    public SpringLiquibase liquibase() {
+        return null;
     }
 }

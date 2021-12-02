@@ -52,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findEmployeeByUsername(username)
                 .orElseThrow(() -> {
                     throw new NoSuchRecordException
-                            (String.format("Employee with username=%s not found for deleting", username));
+                            (String.format("Employee with username=%s not found", username));
                 });
         return converter.toDTO(employee);
     }
@@ -70,12 +70,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public EmployeeDTO update(EmployeeDTO employeeDTO) {
-        String password = employeeRepository.findEmployeeById(employeeDTO.getId())
+        Employee employee = employeeRepository.findEmployeeById(employeeDTO.getId())
                 .orElseThrow(() -> {
             throw new NoSuchRecordException(String.format("Employee with id=%s not found", employeeDTO.getId()));
-        }).getPassword();
-        employeeDTO.setPassword(password);
-        return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
+        });
+        converter.updateEmployeeFields(employeeDTO, employee);
+        return converter.toDTO(employee);
     }
 
     @Override

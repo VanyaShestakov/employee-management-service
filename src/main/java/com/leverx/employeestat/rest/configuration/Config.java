@@ -1,6 +1,7 @@
 package com.leverx.employeestat.rest.configuration;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,6 +58,7 @@ public class Config {
         Properties props = new Properties();
         props.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
         props.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
+        props.put("hibernate.ddl-auto", env.getRequiredProperty("hibernate.ddl-auto"));
         factory.setJpaProperties(props);
         return factory;
     }
@@ -72,4 +74,14 @@ public class Config {
     public HibernateJpaVendorAdapter hibernateJpaVendorAdapter() {
         return new HibernateJpaVendorAdapter();
     }
+
+    @Bean
+    public SpringLiquibase liquibase() {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setChangeLog("classpath:db/changelog/liquibase-changeLog.xml");
+        liquibase.setDataSource(dataSource());
+        return liquibase;
+    }
+
+
 }
