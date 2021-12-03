@@ -109,7 +109,7 @@ public class AvailableEmployeeIntegrationTest {
 
     @Test
     public void shouldReturnTwoAvailableEmployeesNow() throws Exception {
-        mvc.perform(get(AVAILABLE_EMPLOYEES_ENDPOINT + "/now"))
+        mvc.perform(get(AVAILABLE_EMPLOYEES_ENDPOINT))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andDo(print())
                 .andExpect(jsonPath("$[0].id").value(firstEmployeeId))
@@ -118,7 +118,7 @@ public class AvailableEmployeeIntegrationTest {
 
     @Test
     public void shouldReturnOneAvailableEmployeeWithinMonth() throws Exception {
-        mvc.perform(get(AVAILABLE_EMPLOYEES_ENDPOINT + "/month"))
+        mvc.perform(get(AVAILABLE_EMPLOYEES_ENDPOINT + "/20"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andDo(print())
                 .andExpect(jsonPath("$[0].id").value(secondEmployeeId));

@@ -34,15 +34,17 @@ public class AvailableEmployeeServiceImpl implements AvailableEmployeeService {
         return workRepository.findAllAvailableNow()
                 .stream()
                 .map(work -> converter.toDTO(work.getId().getEmployee()))
+                .distinct()
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<EmployeeDTO> getAvailableEmployeesWithinMonth() {
-        return workRepository.findAllAvailableWithinMonth()
+    public List<EmployeeDTO> getAvailableEmployeesNext(int days) {
+        return workRepository.findAllAvailableNext(days)
                 .stream()
                 .map(work -> converter.toDTO(work.getId().getEmployee()))
+                .distinct()
                 .collect(Collectors.toList());
     }
 }

@@ -6,19 +6,13 @@ import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.InvalidPasswordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
-import com.leverx.employeestat.rest.exception.NotValidRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
-import com.leverx.employeestat.rest.security.request.RegistrationRequest;
-import com.leverx.employeestat.rest.security.request.ResetPasswordRequest;
+import com.leverx.employeestat.rest.model.ResetPasswordRequest;
 import com.leverx.employeestat.rest.service.AuthorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.Valid;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {

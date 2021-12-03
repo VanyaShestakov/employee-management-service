@@ -10,5 +10,5 @@ public interface AvailableEmployeeService {
     
     List<EmployeeDTO> getAvailableEmployeesNow();
 
-    List<EmployeeDTO> getAvailableEmployeesWithinMonth();
+    List<EmployeeDTO> getAvailableEmployeesNext(int days);
 }

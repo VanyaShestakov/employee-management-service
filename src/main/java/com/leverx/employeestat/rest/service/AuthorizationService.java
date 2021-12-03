@@ -1,7 +1,7 @@
 package com.leverx.employeestat.rest.service;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
-import com.leverx.employeestat.rest.security.request.ResetPasswordRequest;
+import com.leverx.employeestat.rest.model.ResetPasswordRequest;
 
 public interface AuthorizationService {
 

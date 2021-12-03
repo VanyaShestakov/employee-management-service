@@ -4,10 +4,7 @@ import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.service.AvailableEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,14 +20,14 @@ public class AvailableEmployeeController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/now")
+    @GetMapping
     public List<EmployeeDTO> getAvailableEmployeesNow() {
         return availableEmployeeService.getAvailableEmployeesNow();
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/month")
-    public List<EmployeeDTO> getAvailableEmployeesWithinMonth() {
-        return availableEmployeeService.getAvailableEmployeesWithinMonth();
+    @GetMapping("/{days}")
+    public List<EmployeeDTO> getAvailableEmployeesNext(@PathVariable("days") int days) {
+        return availableEmployeeService.getAvailableEmployeesNext(days);
     }
 }

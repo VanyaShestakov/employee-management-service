@@ -27,6 +27,7 @@ public interface WorkRepository extends JpaRepository<Work, WorkId> {
     @Query(nativeQuery = true, value =
             "SELECT * FROM project_employee " +
             "WHERE position_start_date < current_date and position_end_date < current_date " +
-            "or position_start_date > current_date + 30 and position_end_date > current_date + 30")
-    List<Work> findAllAvailableWithinMonth();
+            "or position_start_date > current_date + ?1 and position_end_date > current_date + ?1")
+    List<Work> findAllAvailableNext(int days);
+
 }
