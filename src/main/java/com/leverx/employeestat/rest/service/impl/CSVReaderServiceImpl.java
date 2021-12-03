@@ -1,6 +1,8 @@
 package com.leverx.employeestat.rest.service.impl;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
+import com.leverx.employeestat.rest.exception.CSVReadingException;
+import com.leverx.employeestat.rest.service.CSVReaderService;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CSVReaderService {
+public class CSVReaderServiceImpl implements CSVReaderService {
 
     private final static int FIRST_NAME_COLUMN = 0;
     private final static int LAST_NAME_COLUMN = 1;
@@ -41,7 +43,7 @@ public class CSVReaderService {
                 employees.add(employee);
             }
         } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
+            throw new CSVReadingException(e.getMessage(), e);
         }
         return employees;
     }

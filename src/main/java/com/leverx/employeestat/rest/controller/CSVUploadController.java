@@ -1,8 +1,9 @@
 package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
+import com.leverx.employeestat.rest.service.CSVReaderService;
 import com.leverx.employeestat.rest.service.EmployeeService;
-import com.leverx.employeestat.rest.service.impl.CSVReaderService;
+import com.leverx.employeestat.rest.service.impl.CSVReaderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
