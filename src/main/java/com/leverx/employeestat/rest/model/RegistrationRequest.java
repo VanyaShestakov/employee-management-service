@@ -1,4 +1,4 @@
-package com.leverx.employeestat.rest.security.request;
+package com.leverx.employeestat.rest.model;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 

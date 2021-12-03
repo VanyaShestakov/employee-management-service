@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EmployeeDTO {
@@ -125,5 +126,18 @@ public class EmployeeDTO {
                 ", departmentId=" + departmentId +
                 ", projectsIds=" + projectIds +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeDTO that = (EmployeeDTO) o;
+        return Objects.equals(id, that.id) && firstName.equals(that.firstName) && lastName.equals(that.lastName) && username.equals(that.username) && password.equals(that.password) && position.equals(that.position) && role.equals(that.role) && Objects.equals(departmentId, that.departmentId) && Objects.equals(projectIds, that.projectIds);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, username, password, position, role, departmentId, projectIds);
     }
 }
