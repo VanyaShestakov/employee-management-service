@@ -15,6 +15,8 @@ public interface EmployeeService {
 
     public EmployeeDTO save(EmployeeDTO employeeDTO);
 
+    public List<EmployeeDTO> saveAll(List<EmployeeDTO> employeeDTOs);
+
     public EmployeeDTO update(EmployeeDTO employeeDTO);
 
     public void deleteById(UUID id);

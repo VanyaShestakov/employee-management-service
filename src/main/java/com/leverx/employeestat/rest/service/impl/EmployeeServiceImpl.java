@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -65,6 +66,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                     (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
         }
         return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
+    }
+
+    @Override
+    @Transactional
+    public List<EmployeeDTO> saveAll(List<EmployeeDTO> employeeDTOs) {
+        List<EmployeeDTO> saved = new ArrayList<>();
+        for (EmployeeDTO employeeDTO : employeeDTOs) {
+            saved.add(save(employeeDTO));
+        }
+        return saved;
     }
 
     @Override

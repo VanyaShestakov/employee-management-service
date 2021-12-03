@@ -45,7 +45,7 @@ public class Employee {
     private Department department;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.PERSIST})
     @JoinTable(name = "project_employee",
                joinColumns = @JoinColumn(name = "employee_id"),
                inverseJoinColumns = @JoinColumn(name = "project_id"))

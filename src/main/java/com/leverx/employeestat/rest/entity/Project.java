@@ -32,7 +32,7 @@ public class Project {
     private LocalDate end;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST})
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.PERSIST})
     @JoinTable(name = "project_employee",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
