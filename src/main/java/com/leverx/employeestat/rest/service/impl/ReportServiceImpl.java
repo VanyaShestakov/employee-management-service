@@ -1,6 +1,8 @@
 package com.leverx.employeestat.rest.service.impl;
 
+import com.leverx.employeestat.rest.entity.Department;
 import com.leverx.employeestat.rest.entity.Employee;
+import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.entity.Work;
 import com.leverx.employeestat.rest.repository.WorkRepository;
 import com.leverx.employeestat.rest.service.ReportService;
@@ -34,6 +36,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void export(HttpServletResponse response) {
         createHeaders();
+        fillTable();
         try (ServletOutputStream outputStream = response.getOutputStream()) {
             workbook.write(outputStream);
         } catch (IOException e) {
@@ -41,20 +44,24 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
-
     private void fillTable() {
         List<Work> works = workRepository.findAll();
         for (int i = 0; i < works.size(); i++) {
-            Employee employee = works.get(i).getId().getEmployee();
-            Row row = sheet.createRow(i+1);
+            Work work = works.get(i);
+            Employee employee = work.getId().getEmployee();
+            Project project = work.getId().getProject();
+
+            Row row = sheet.createRow(i + 1);
+
             Cell name = row.createCell(0);
             name.setCellValue(String.format("%s %s", employee.getFirstName(), employee.getLastName()));
 
-            Cell department = row.createCell(1);
-            department.setCellValue(employee.getDepartment().getName());
+            Cell departmentName = row.createCell(1);
+            Department department = employee.getDepartment();
+            departmentName.setCellValue(department == null ? null : department.getName());
 
             Cell occupation = row.createCell(2);
-            occupation.setCellValue("Project - occupation");
+            occupation.setCellValue(String.format("%s - (%s - %s)", project.getName(), work.getPositionStartDate(), work.getPositionEndDate()));
         }
     }
 
