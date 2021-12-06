@@ -17,6 +17,13 @@ public class ExceptionInfo {
     @JsonProperty
     private HttpStatus status;
 
+    public ExceptionInfo(String message, HttpStatus status) {
+        this.code = status.value();
+        this.message = message;
+        this.status = status;
+        this.timestamp = LocalDateTime.now();
+    }
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
 

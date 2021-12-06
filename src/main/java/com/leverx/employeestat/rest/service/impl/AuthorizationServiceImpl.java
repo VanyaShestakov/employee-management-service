@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
 
@@ -28,6 +31,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         this.encoder = encoder;
     }
 
+    @Override
     @Transactional
     public EmployeeDTO registerEmployee(EmployeeDTO employeeDTO) {
         if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
@@ -38,6 +42,17 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
     }
 
+    @Override
+    @Transactional
+    public List<EmployeeDTO> registerAll(List<EmployeeDTO> employeeDTOs) {
+        List<EmployeeDTO> saved = new ArrayList<>();
+        for (EmployeeDTO employeeDTO : employeeDTOs) {
+            saved.add(registerEmployee(employeeDTO));
+        }
+        return saved;
+    }
+
+    @Override
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
         Employee employee = employeeRepository.findEmployeeByUsername(request.getUsername())

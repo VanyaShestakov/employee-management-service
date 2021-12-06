@@ -17,55 +17,43 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchRecordException.class)
     public ResponseEntity<ExceptionInfo> handleNoSuchRecordException(NoSuchRecordException exception) {
-        ExceptionInfo info = new ExceptionInfo();
-        info.setStatus(HttpStatus.NOT_FOUND);
-        info.setCode(HttpStatus.NOT_FOUND.value());
-        info.setMessage(exception.getMessage());
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(info, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DuplicateRecordException.class)
     public ResponseEntity<ExceptionInfo> handleDuplicateRecordException(DuplicateRecordException exception) {
-        ExceptionInfo info = new ExceptionInfo();
-        info.setStatus(HttpStatus.BAD_REQUEST);
-        info.setCode(HttpStatus.BAD_REQUEST.value());
-        info.setMessage(exception.getMessage());
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EntityConversionException.class)
     public ResponseEntity<ExceptionInfo> handleEntityConversionException(EntityConversionException exception) {
-        ExceptionInfo info = new ExceptionInfo();
-        info.setStatus(HttpStatus.BAD_REQUEST);
-        info.setCode(HttpStatus.BAD_REQUEST.value());
-        info.setMessage(exception.getMessage());
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotValidRecordException.class)
     public ResponseEntity<ExceptionInfo> handleNotValidRecordException(NotValidRecordException exception) {
-        ExceptionInfo info = new ExceptionInfo();
-        info.setStatus(HttpStatus.BAD_REQUEST);
-        info.setCode(HttpStatus.BAD_REQUEST.value());
-        info.setMessage(exception.getMessage());
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotValidUUIDException.class)
     public ResponseEntity<ExceptionInfo> handleNotValidUUIDException(NotValidUUIDException exception) {
-        ExceptionInfo info = new ExceptionInfo();
-        info.setStatus(HttpStatus.BAD_REQUEST);
-        info.setCode(HttpStatus.BAD_REQUEST.value());
-        info.setMessage(exception.getMessage());
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ExceptionInfo> handleInvalidPasswordException(InvalidPasswordException exception) {
-        ExceptionInfo info = new ExceptionInfo();
-        info.setStatus(HttpStatus.UNAUTHORIZED);
-        info.setCode(HttpStatus.UNAUTHORIZED.value());
-        info.setMessage(exception.getMessage());
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(info, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(CSVReadingException.class)
+    public ResponseEntity<ExceptionInfo> handleCSVReadingException(CSVReadingException exception) {
+        ExceptionInfo info = new ExceptionInfo(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(info, HttpStatus.BAD_REQUEST);
     }
 }

@@ -35,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AvailableEmployeeIntegrationTest {
 
     public static final String AVAILABLE_EMPLOYEES_ENDPOINT = "/api/employees/available";
-    private static final LocalDate NOW = LocalDate.of(2021, 12, 2);
 
     private final WebApplicationContext webAppContext;
     private MockMvc mvc;
