@@ -1,6 +1,7 @@
 package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
+import com.leverx.employeestat.rest.service.AuthorizationService;
 import com.leverx.employeestat.rest.service.CSVReaderService;
 import com.leverx.employeestat.rest.service.EmployeeService;
 import com.leverx.employeestat.rest.service.impl.CSVReaderServiceImpl;
@@ -17,23 +18,18 @@ import java.util.List;
 public class CSVUploadController {
 
     private final CSVReaderService readerService;
-    private final EmployeeService employeeService;
-    private final PasswordEncoder encoder;
+    private final AuthorizationService authorizationService;
 
     @Autowired
-    public CSVUploadController(CSVReaderService readerService,
-                               EmployeeService employeeService,
-                               PasswordEncoder encoder) {
+    public CSVUploadController(CSVReaderService readerService, AuthorizationService authorizationService) {
         this.readerService = readerService;
-        this.employeeService = employeeService;
-        this.encoder = encoder;
+        this.authorizationService = authorizationService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public List<EmployeeDTO> uploadEmployees(@RequestParam("file") MultipartFile file) {
         List<EmployeeDTO> employees = readerService.getEmployeesFromFile(file);
-        employees.stream().forEach(e -> e.setPassword(encoder.encode(e.getPassword())));
-        return employeeService.saveAll(employees);
+        return authorizationService.registerAll(employees);
     }
 }
