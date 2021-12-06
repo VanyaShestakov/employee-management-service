@@ -4,5 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ReportService {
 
-    void export(HttpServletResponse response);
+    void exportOccupationReport(HttpServletResponse response);
+
+    void generateAvailableEmployeesReport();
 }

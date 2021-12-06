@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -28,7 +29,9 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = "com.leverx.employeestat.rest.repository*")
 @PropertySource({
         "classpath:properties/db.properties",
-        "classpath:properties/session-factory.properties"})
+        "classpath:properties/session-factory.properties",
+        "classpath:properties/application.properties"})
+@EnableScheduling
 public class Config {
 
     private final Environment env;

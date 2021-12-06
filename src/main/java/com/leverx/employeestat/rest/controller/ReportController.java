@@ -26,6 +26,6 @@ public class ReportController {
     public void exportEmployees(HttpServletResponse response) {
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=employees.xlsx");
-        reportService.export(response);
+        reportService.exportOccupationReport(response);
     }
 }
