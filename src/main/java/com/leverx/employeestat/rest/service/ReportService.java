@@ -6,5 +6,7 @@ public interface ReportService {
 
     void exportOccupationReport(HttpServletResponse response);
 
+    void exportLastGeneratedReport(HttpServletResponse response);
+
     void generateAvailableEmployeesReport();
 }

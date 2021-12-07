@@ -24,8 +24,15 @@ public class ReportController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public void exportEmployees(HttpServletResponse response) {
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=employees.xlsx");
         reportService.exportOccupationReport(response);
     }
+
+    @GetMapping("/last")
+    @ResponseStatus(HttpStatus.OK)
+    public void exportLastGeneratedReport(HttpServletResponse response) {
+        reportService.exportLastGeneratedReport(response);
+    }
 }
+
+
+
