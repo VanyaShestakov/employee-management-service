@@ -1,6 +1,6 @@
 package com.leverx.employeestat.rest.exception;
 
-public class NotValidUUIDException extends RuntimeException{
+public class NotValidUUIDException extends RuntimeException {
     public NotValidUUIDException() {
         super();
     }
