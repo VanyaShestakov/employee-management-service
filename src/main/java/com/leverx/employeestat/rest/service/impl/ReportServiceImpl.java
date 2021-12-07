@@ -49,7 +49,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    @Scheduled(cron = "0 0 0 1 * *")
+    @Scheduled(cron = "${reports-generating-cron}")
     @Transactional
     public void generateAvailableEmployeesReport() {
         createTableHeaders(FIRST_NAME_COL, LAST_NAME_COL, DEPARTMENT_COL);

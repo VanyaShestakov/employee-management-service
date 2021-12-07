@@ -1,6 +1,6 @@
 package com.leverx.employeestat.rest.exception;
 
-public class NoSuchReportException extends RuntimeException{
+public class NoSuchReportException extends RuntimeException {
     public NoSuchReportException() {
     }
 
