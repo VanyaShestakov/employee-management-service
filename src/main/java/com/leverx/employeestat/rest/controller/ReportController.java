@@ -33,11 +33,7 @@ public class ReportController {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employees.xlsx");
         XSSFWorkbook workbook = reportService.exportOccupationReport();
-        try (ServletOutputStream outputStream = response.getOutputStream()) {
-            workbook.write(outputStream);
-        } catch (IOException e) {
-            throw new ReportWritingException("Failed to write report", e);
-        }
+        writeToResponse(workbook, response);
     }
 
     @GetMapping("/last")
@@ -46,6 +42,10 @@ public class ReportController {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employees-Last.xlsx");
         XSSFWorkbook workbook = reportService.exportLastGeneratedReport();
+        writeToResponse(workbook, response);
+    }
+
+    private void writeToResponse(XSSFWorkbook workbook, HttpServletResponse response) {
         try (ServletOutputStream outputStream = response.getOutputStream()) {
             workbook.write(outputStream);
         } catch (IOException e) {

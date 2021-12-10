@@ -14,11 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
@@ -37,24 +38,24 @@ public class ProjectServiceTest {
         UUID id = UUID.randomUUID();
         Project project = new Project();
         ProjectDTO projectDTO = new ProjectDTO();
-        Mockito
-                .when(converter.toDTO(project))
-                .thenReturn(projectDTO);
-        Mockito
-                .when(projectRepository.findProjectById(id))
-                .thenReturn(Optional.of(project));
+
+        when(converter.toDTO(project)).thenReturn(projectDTO);
+        when(projectRepository.findProjectById(id)).thenReturn(Optional.of(project));
 
         Assertions.assertNotNull(projectService.getById(id));
+
+        verify(converter).toDTO(project);
+        verify(projectRepository).findProjectById(id);
     }
 
     @Test
     public void shouldThrowExceptionIfProjectDoesNotExistsById() {
         UUID id = UUID.randomUUID();
-        Mockito
-                .when(projectRepository.findProjectById(id))
-                .thenReturn(Optional.ofNullable(null));
+        when(projectRepository.findProjectById(id)).thenReturn(Optional.ofNullable(null));
 
         Assertions.assertThrows(NoSuchRecordException.class, () -> projectService.getById(id));
+
+        verify(projectRepository).findProjectById(id);
     }
 
     @Test
@@ -64,40 +65,43 @@ public class ProjectServiceTest {
         ProjectDTO projectDTO = new ProjectDTO();
         project.setName(name);
         projectDTO.setName(name);
-        Mockito
-                .when(converter.toDTO(project))
-                .thenReturn(projectDTO);
-        Mockito
-                .when(projectRepository.findProjectByName(name))
-                .thenReturn(Optional.of(project));
+
+        when(converter.toDTO(project)).thenReturn(projectDTO);
+        when(projectRepository.findProjectByName(name)).thenReturn(Optional.of(project));
 
         Assertions.assertNotNull(projectService.getByName(name));
+
+        verify(converter).toDTO(project);
+        verify(projectRepository).findProjectByName(name);
     }
 
     @Test
     public void shouldThrowExceptionIfProjectDoesNotExistsByName() {
         String name = "project";
-        Mockito
-                .when(projectRepository.findProjectByName(name))
-                .thenReturn(Optional.ofNullable(null));
+
+        when(projectRepository.findProjectByName(name)).thenReturn(Optional.ofNullable(null));
 
         Assertions.assertThrows(NoSuchRecordException.class, () -> projectService.getByName(name));
+
+        verify(projectRepository).findProjectByName(name);
     }
 
     @Test
     public void shouldReturnEmptyListIfDbTableIsEmpty() {
-        Mockito
-                .when(projectRepository.findAll())
-                .thenReturn(new ArrayList<Project>());
+        when(projectRepository.findAll()).thenReturn(new ArrayList<Project>());
+
         Assertions.assertTrue(projectService.getAll().isEmpty());
+
+        verify(projectRepository).findAll();
     }
 
     @Test
     public void shouldReturnNotEmptyListIfDbTableIsNotEmpty() {
-        Mockito
-                .when(projectRepository.findAll())
-                .thenReturn(List.of(new Project(), new Project()));
+        when(projectRepository.findAll()).thenReturn(Arrays.asList( new Project[] {new Project(), new Project()}));
+
         Assertions.assertFalse(projectService.getAll().isEmpty());
+
+        verify(projectRepository).findAll();
     }
 
     @Test
@@ -107,19 +111,18 @@ public class ProjectServiceTest {
         project.setName(name);
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setName(name);
-        Mockito
-                .when(converter.toEntity(projectDTO))
-                .thenReturn(project);
-        Mockito
-                .when(converter.toDTO(project))
-                .thenReturn(projectDTO);
-        Mockito
-                .when(projectRepository.existsByName(name))
-                .thenReturn(false);
-        Mockito
-                .when(projectRepository.save(project))
-                .thenReturn(project);
+
+        when(converter.toEntity(projectDTO)).thenReturn(project);
+        when(converter.toDTO(project)).thenReturn(projectDTO);
+        when(projectRepository.existsByName(name)).thenReturn(false);
+        when(projectRepository.save(project)).thenReturn(project);
+
         Assertions.assertEquals(projectService.save(projectDTO), projectDTO);
+
+        verify(converter).toEntity(projectDTO);
+        verify(converter).toDTO(project);
+        verify(projectRepository).existsByName(name);
+        verify(projectRepository).save(project);
     }
 
     @Test
@@ -127,10 +130,12 @@ public class ProjectServiceTest {
         String name = "Project name";
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setName(name);
-        Mockito
-                .when(projectRepository.existsByName(name))
-                .thenReturn(true);
+
+        when(projectRepository.existsByName(name)).thenReturn(true);
+
         Assertions.assertThrows(DuplicateRecordException.class, () -> projectService.save(projectDTO));
+
+        verify(projectRepository).existsByName(name);
     }
 
     @Test
@@ -140,100 +145,70 @@ public class ProjectServiceTest {
         project.setId(id);
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(id);
-        Mockito
-                .when(converter.toEntity(projectDTO))
-                .thenReturn(project);
-        Mockito
-                .when(converter.toDTO(project))
-                .thenReturn(projectDTO);
-        Mockito
-                .when(projectRepository.existsById(id))
-                .thenReturn(true);
-        Mockito
-                .when(projectRepository.save(project))
-                .thenReturn(project);
+
+        when(converter.toEntity(projectDTO)).thenReturn(project);
+        when(converter.toDTO(project)).thenReturn(projectDTO);
+        when(projectRepository.existsById(id)).thenReturn(true);
+        when(projectRepository.save(project)).thenReturn(project);
+
         Assertions.assertEquals(projectDTO, projectService.update(projectDTO));
+
+        verify(converter).toEntity(projectDTO);
+        verify(converter).toDTO(project);
+        verify(projectRepository).existsById(id);
+        verify(projectRepository).save(project);
     }
-
-    //TODO Rewrite test
-    /*
-    @Test
-    public void shouldReturnSavedProjectIfItDoesNotExistsByName() {
-        UUID id  = UUID.randomUUID();
-        String name = "ProjectName";
-        Project expected = new Project();
-        Project saved = new Project();
-        saved.setName(name);
-        expected.setName(name);
-        expected.setId(id);
-
-        Mockito
-                .when(projectRepository.existsByName(name))
-                .thenReturn(false);
-        Mockito
-                .when(projectRepository.save(saved))
-                .thenReturn(expected);
-
-        Project result = projectService.update(saved);
-
-        Assertions.assertEquals(expected, result);
-        Assertions.assertNotEquals(expected, saved);
-        Assertions.assertNotEquals(result, saved);
-        Assertions.assertNull(saved.getId());
-        Assertions.assertNotNull(result.getId());
-        Assertions.assertEquals(result.getId(), expected.getId());
-    }*/
 
     @Test
     public void shouldThrowExceptionIfProjectAlreadyExists() {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(UUID.randomUUID());
         projectDTO.setName("Project");
-        Mockito
-                .when(projectRepository.existsById(projectDTO.getId()))
-                .thenReturn(false);
-        Mockito
-                .when(projectRepository.existsByName(projectDTO.getName()))
-                .thenReturn(true);
-        Assertions.assertThrows(DuplicateRecordException.class,
-                () -> projectService.update(projectDTO));
+
+        when(projectRepository.existsById(projectDTO.getId())).thenReturn(false);
+        when(projectRepository.existsByName(projectDTO.getName())).thenReturn(true);
+
+        Assertions.assertThrows(DuplicateRecordException.class, () -> projectService.update(projectDTO));
+
+        verify(projectRepository).existsById(projectDTO.getId());
+        verify(projectRepository).existsByName(projectDTO.getName());
     }
 
     @Test
     public void shouldReturnTrueIfProjectExistsById() {
-        Mockito
-                .when(projectRepository.existsById(any()))
-                .thenReturn(true);
+        when(projectRepository.existsById(any())).thenReturn(true);
 
         Assertions.assertTrue(projectService.existsById(UUID.randomUUID()));
+
+        verify(projectRepository).existsById(any());
     }
 
     @Test
     public void shouldReturnFalseIfProjectExistsById() {
-        Mockito
-                .when(projectRepository.existsById(any()))
-                .thenReturn(false);
+        when(projectRepository.existsById(any())).thenReturn(false);
 
         Assertions.assertFalse(projectService.existsById(UUID.randomUUID()));
+
+        verify(projectRepository).existsById(any());
     }
 
     @Test
     public void shouldReturnTrueIfProjectExistsByName() {
         String name = "Project name";
-        Mockito
-                .when(projectRepository.existsByName(any()))
-                .thenReturn(true);
+        when(projectRepository.existsByName(any())).thenReturn(true);
 
         Assertions.assertTrue(projectService.existsByName(name));
+
+        verify(projectRepository).existsByName(any());
     }
 
     @Test
     public void shouldReturnFalseIfProjectExistsByName() {
         String name = "Project name";
-        Mockito
-                .when(projectRepository.existsByName(any()))
-                .thenReturn(false);
+        when(projectRepository.existsByName(any())).thenReturn(false);
 
         Assertions.assertFalse(projectService.existsByName(name));
+
+        verify(projectRepository).existsByName(any());
     }
 }

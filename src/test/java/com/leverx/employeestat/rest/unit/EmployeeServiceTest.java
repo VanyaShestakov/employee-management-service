@@ -14,11 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
@@ -40,24 +41,23 @@ public class EmployeeServiceTest {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(id);
 
-        Mockito
-                .when(converter.toDTO(employee))
-                .thenReturn(employeeDTO);
-        Mockito
-                .when(employeeRepository.findEmployeeById(id))
-                .thenReturn(Optional.of(employee));
+        when(converter.toDTO(employee)).thenReturn(employeeDTO);
+        when(employeeRepository.findEmployeeById(id)).thenReturn(Optional.of(employee));
 
         Assertions.assertNotNull(employeeService.getById(id));
+
+        verify(converter).toDTO(employee);
+        verify(employeeRepository).findEmployeeById(id);
     }
 
     @Test
     public void shouldThrowExceptionIfEmployeeDoesNotExistsById() {
         UUID id = UUID.randomUUID();
-        Mockito
-                .when(employeeRepository.findEmployeeById(id))
-                .thenReturn(Optional.ofNullable(null));
+        when(employeeRepository.findEmployeeById(id)).thenReturn(Optional.ofNullable(null));
 
         Assertions.assertThrows(NoSuchRecordException.class, () -> employeeService.getById(id));
+
+        verify(employeeRepository).findEmployeeById(id);
     }
 
     @Test
@@ -68,40 +68,41 @@ public class EmployeeServiceTest {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setUsername(name);
 
-        Mockito
-                .when(converter.toDTO(employee))
-                .thenReturn(employeeDTO);
-        Mockito
-                .when(employeeRepository.findEmployeeByUsername(name))
-                .thenReturn(Optional.of(employee));
+        when(converter.toDTO(employee)).thenReturn(employeeDTO);
+        when(employeeRepository.findEmployeeByUsername(name)).thenReturn(Optional.of(employee));
 
         Assertions.assertNotNull(employeeService.getByUsername(name));
+
+        verify(converter).toDTO(employee);
+        verify(employeeRepository).findEmployeeByUsername(name);
     }
 
     @Test
     public void shouldThrowExceptionIfEmployeeDoesNotExistsByUsername() {
         String name = "employee";
-        Mockito
-                .when(employeeRepository.findEmployeeByUsername(name))
-                .thenReturn(Optional.ofNullable(null));
+        when(employeeRepository.findEmployeeByUsername(name)).thenReturn(Optional.ofNullable(null));
 
         Assertions.assertThrows(NoSuchRecordException.class, () -> employeeService.getByUsername(name));
+
+        verify(employeeRepository).findEmployeeByUsername(name);
     }
 
     @Test
     public void shouldReturnEmptyListIfDbTableIsEmpty() {
-        Mockito
-                .when(employeeRepository.findAll())
-                .thenReturn(new ArrayList<Employee>());
+        when(employeeRepository.findAll()).thenReturn(new ArrayList<Employee>());
+
         Assertions.assertTrue(employeeService.getAll().isEmpty());
+
+        verify(employeeRepository).findAll();
     }
 
     @Test
     public void shouldReturnNotEmptyListIfDbTableIsNotEmpty() {
-        Mockito
-                .when(employeeRepository.findAll())
-                .thenReturn(List.of(new Employee(), new Employee()));
+        when(employeeRepository.findAll()).thenReturn(Arrays.asList(new Employee[] {new Employee(), new Employee()}));
+
         Assertions.assertFalse(employeeService.getAll().isEmpty());
+
+        verify(employeeRepository).findAll();
     }
 
     @Test
@@ -111,19 +112,18 @@ public class EmployeeServiceTest {
         employee.setUsername(name);
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setUsername(name);
-        Mockito
-                .when(converter.toEntity(employeeDTO))
-                .thenReturn(employee);
-        Mockito
-                .when(converter.toDTO(employee))
-                .thenReturn(employeeDTO);
-        Mockito
-                .when(employeeRepository.existsByUsername(name))
-                .thenReturn(false);
-        Mockito
-                .when(employeeRepository.save(employee))
-                .thenReturn(employee);
+
+        when(converter.toEntity(employeeDTO)).thenReturn(employee);
+        when(converter.toDTO(employee)).thenReturn(employeeDTO);
+        when(employeeRepository.existsByUsername(name)).thenReturn(false);
+        when(employeeRepository.save(employee)).thenReturn(employee);
+
         Assertions.assertEquals(employeeService.save(employeeDTO), employeeDTO);
+
+        verify(converter).toEntity(employeeDTO);
+        verify(converter).toDTO(employee);
+        verify(employeeRepository).existsByUsername(name);
+        verify(employeeRepository).save(employee);
     }
 
     @Test
@@ -131,10 +131,12 @@ public class EmployeeServiceTest {
         String name = "Employee name";
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setUsername(name);
-        Mockito
-                .when(employeeRepository.existsByUsername(name))
-                .thenReturn(true);
+
+        when(employeeRepository.existsByUsername(name)).thenReturn(true);
+
         Assertions.assertThrows(DuplicateRecordException.class, () -> employeeService.save(employeeDTO));
+
+        verify(employeeRepository).existsByUsername(name);
     }
 
     @Test
@@ -145,73 +147,43 @@ public class EmployeeServiceTest {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(id);
 
-        Mockito
-                .when(converter.toDTO(employee))
-                .thenReturn(employeeDTO);
+        when(converter.toDTO(employee)).thenReturn(employeeDTO);
+        when(employeeRepository.findEmployeeById(employeeDTO.getId())).thenReturn(Optional.of(employee));
 
-        Mockito
-                .when(employeeRepository.findEmployeeById(employeeDTO.getId()))
-                .thenReturn(Optional.of(employee));
         Assertions.assertEquals(employeeDTO, employeeService.update(employeeDTO));
+
+        verify(converter).toDTO(employee);
+        verify(employeeRepository).findEmployeeById(employeeDTO.getId());
     }
-
-    // TODO Rewrite test
-    /*
-    @Test
-    public void shouldReturnSavedEmployeeIfItDoesNotExistsByUsername() {
-        UUID id  = UUID.randomUUID();
-        String name = "Employee name";
-        Employee expected = new Employee();
-        Employee saved = new Employee();
-        saved.setUsername(name);
-        expected.setUsername(name);
-        expected.setId(id);
-
-
-        Mockito
-                .when(employeeRepository.existsByUsername(name))
-                .thenReturn(false);
-        Mockito
-                .when(employeeRepository.save(saved))
-                .thenReturn(expected);
-
-        Employee result = employeeService.update(saved);
-
-        Assertions.assertEquals(expected, result);
-        Assertions.assertNotEquals(expected, saved);
-        Assertions.assertNotEquals(result, saved);
-        Assertions.assertNull(saved.getId());
-        Assertions.assertNotNull(result.getId());
-        Assertions.assertEquals(result.getId(), expected.getId());
-    }*/
 
     @Test
     public void shouldThrowExceptionIfEmployeeNotFound() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(UUID.randomUUID());
         employeeDTO.setUsername("Username");
-        Mockito
-                .when(employeeRepository.findEmployeeById(employeeDTO.getId()))
-                .thenReturn(Optional.ofNullable(null));
-        Assertions.assertThrows(NoSuchRecordException.class,
-                () -> employeeService.update(employeeDTO));
+
+        when(employeeRepository.findEmployeeById(employeeDTO.getId())).thenReturn(Optional.ofNullable(null));
+
+        Assertions.assertThrows(NoSuchRecordException.class, () -> employeeService.update(employeeDTO));
+
+        verify(employeeRepository).findEmployeeById(employeeDTO.getId());
     }
 
     @Test
     public void shouldReturnTrueIfEmployeeExistsById() {
-        Mockito
-                .when(employeeRepository.existsById(any()))
-                .thenReturn(true);
+        when(employeeRepository.existsById(any())).thenReturn(true);
 
         Assertions.assertTrue(employeeService.existsById(UUID.randomUUID()));
+
+        verify(employeeRepository).existsById(any());
     }
 
     @Test
     public void shouldReturnFalseIfEmployeeExistsById() {
-        Mockito
-                .when(employeeRepository.existsById(any()))
-                .thenReturn(false);
+        when(employeeRepository.existsById(any())).thenReturn(false);
 
         Assertions.assertFalse(employeeService.existsById(UUID.randomUUID()));
+
+        verify(employeeRepository).existsById(any());
     }
 }

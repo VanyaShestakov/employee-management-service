@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,7 @@ public class CSVReaderServiceTest {
         MultipartFile file = new CommonsMultipartFile(new FileItemImpl(CORRECT_FILE));
         List<EmployeeDTO> employees = csvReaderService.getEmployeesFromFile(file);
 
-        List<String> expectedNames = List.of("Vlad", "Artiom", "Kirill", "Aleksander", "Dasha");
+        List<String> expectedNames = Arrays.asList(new String[] { "Vlad", "Artiom", "Kirill", "Aleksander", "Dasha"});
         List<String> actualNames = employees
                 .stream()
                 .map(EmployeeDTO::getFirstName)
@@ -61,7 +62,7 @@ public class CSVReaderServiceTest {
         MultipartFile file = new CommonsMultipartFile(new FileItemImpl(CORRECT_FILE));
         List<EmployeeDTO> employees = csvReaderService.getEmployeesFromFile(file);
 
-        List<String> expectedLastNames = List.of("Vladov", "Ivanov", "Avtobusov", "Sosiskin", "Glavnaya");
+        List<String> expectedLastNames = Arrays.asList(new String[] {"Vladov", "Ivanov", "Avtobusov", "Sosiskin", "Glavnaya"});
         List<String> actualLastNames = employees
                 .stream()
                 .map(EmployeeDTO::getLastName)
@@ -75,7 +76,7 @@ public class CSVReaderServiceTest {
         MultipartFile file = new CommonsMultipartFile(new FileItemImpl(CORRECT_FILE));
         List<EmployeeDTO> employees = csvReaderService.getEmployeesFromFile(file);
 
-        List<String> expectedUsernames = List.of("Turbo3000", "Tema", "Kiruha", "Sanek1000", "Dashka");
+        List<String> expectedUsernames = Arrays.asList(new String[] {"Turbo3000", "Tema", "Kiruha", "Sanek1000", "Dashka"});
         List<String> actualUsernames = employees
                 .stream()
                 .map(EmployeeDTO::getUsername)
@@ -89,7 +90,7 @@ public class CSVReaderServiceTest {
         MultipartFile file = new CommonsMultipartFile(new FileItemImpl(CORRECT_FILE));
         List<EmployeeDTO> employees = csvReaderService.getEmployeesFromFile(file);
 
-        List<String> expectedPositions = List.of("Java Developer", "JS Developer", ".NET Developer", "HR", "Boss");
+        List<String> expectedPositions = Arrays.asList(new String[] {"Java Developer", "JS Developer", ".NET Developer", "HR", "Boss"});
         List<String> actualPositions = employees
                 .stream()
                 .map(EmployeeDTO::getPosition)

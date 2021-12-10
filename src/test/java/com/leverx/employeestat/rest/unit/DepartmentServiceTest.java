@@ -15,11 +15,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
@@ -39,40 +39,42 @@ public class DepartmentServiceTest {
         UUID id = UUID.randomUUID();
         Department department = new Department();
         DepartmentDTO departmentDTO = new DepartmentDTO();
-        Mockito
-                .when(converter.toDTO(department))
-                .thenReturn(departmentDTO);
-        Mockito
-                .when(departmentRepository.findById(id))
-                .thenReturn(Optional.of(department));
+
+        when(converter.toDTO(department)).thenReturn(departmentDTO);
+        when(departmentRepository.findById(id)).thenReturn(Optional.of(department));
 
         Assertions.assertNotNull(departmentService.getById(id));
+
+        verify(converter).toDTO(department);
+        verify(departmentRepository).findById(id);
     }
 
     @Test
     public void shouldThrowExceptionIfDepartmentDoesNotExistsById() {
         UUID id = UUID.randomUUID();
-        Mockito
-                .when(departmentRepository.findById(id))
-                .thenReturn(Optional.ofNullable(null));
+        when(departmentRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
         Assertions.assertThrows(NoSuchRecordException.class, () -> departmentService.getById(id));
+
+        verify(departmentRepository).findById(id);
     }
 
     @Test
     public void shouldReturnEmptyListIfDbTableIsEmpty() {
-        Mockito
-                .when(departmentRepository.findAll())
-                .thenReturn(new ArrayList<Department>());
+        when(departmentRepository.findAll()).thenReturn(new ArrayList<Department>());
+
         Assertions.assertTrue(departmentService.getAll().isEmpty());
+
+        verify(departmentRepository).findAll();
     }
 
     @Test
     public void shouldReturnNotEmptyListIfDbTableIsNotEmpty() {
-        Mockito
-                .when(departmentRepository.findAll())
-                .thenReturn(List.of(new Department(), new Department()));
+        when(departmentRepository.findAll()).thenReturn(Arrays.asList(new Department[] {new Department(), new Department()}));
+
         Assertions.assertFalse(departmentService.getAll().isEmpty());
+
+        verify(departmentRepository).findAll();
     }
 
     @Test
@@ -82,19 +84,18 @@ public class DepartmentServiceTest {
         departmentDTO.setName(name);
         Department department = new Department();
         department.setName(name);
-        Mockito
-                .when(converter.toEntity(departmentDTO))
-                .thenReturn(department);
-        Mockito
-                .when(converter.toDTO(department))
-                .thenReturn(departmentDTO);
-        Mockito
-                .when(departmentRepository.existsByName(name))
-                .thenReturn(false);
-        Mockito
-                .when(departmentRepository.save(department))
-                .thenReturn(department);
+
+        when(converter.toEntity(departmentDTO)).thenReturn(department);
+        when(converter.toDTO(department)).thenReturn(departmentDTO);
+        when(departmentRepository.existsByName(name)).thenReturn(false);
+        when(departmentRepository.save(department)).thenReturn(department);
+
         Assertions.assertEquals(departmentService.save(departmentDTO), departmentDTO);
+
+        verify(converter).toEntity(departmentDTO);
+        verify(converter).toDTO(department);
+        verify(departmentRepository).existsByName(name);
+        verify(departmentRepository).save(department);
     }
 
     @Test
@@ -102,10 +103,12 @@ public class DepartmentServiceTest {
         String name = "Department name";
         DepartmentDTO departmentDTO = new DepartmentDTO();
         departmentDTO.setName(name);
-        Mockito
-                .when(departmentRepository.existsByName(name))
-                .thenReturn(true);
+
+        when(departmentRepository.existsByName(name)).thenReturn(true);
+
         Assertions.assertThrows(DuplicateRecordException.class, () -> departmentService.save(departmentDTO));
+
+        verify(departmentRepository).existsByName(name);
     }
 
     @Test
@@ -115,64 +118,19 @@ public class DepartmentServiceTest {
         departmentDTO.setId(id);
         Department department = new Department();
         department.setId(id);
-        Mockito
-                .when(converter.toEntity(departmentDTO))
-                .thenReturn(department);
-        Mockito
-                .when(converter.toDTO(department))
-                .thenReturn(departmentDTO);
-        Mockito
-                .when(departmentRepository.existsById(id))
-                .thenReturn(true);
-        Mockito
-                .when(departmentRepository.save(department))
-                .thenReturn(department);
+
+        when(converter.toEntity(departmentDTO)).thenReturn(department);
+        when(converter.toDTO(department)).thenReturn(departmentDTO);
+        when(departmentRepository.existsById(id)).thenReturn(true);
+        when(departmentRepository.save(department)).thenReturn(department);
+
         Assertions.assertEquals(departmentDTO, departmentService.update(departmentDTO));
+
+        verify(converter).toEntity(departmentDTO);
+        verify(converter).toDTO(department);
+        verify(departmentRepository).existsById(id);
+        verify(departmentRepository).save(department);
     }
-
-    // TODO Rewrite test
-    /*
-    @Test
-    public void shouldReturnSavedDepartmentIfItDoesNotExistsByName() {
-        UUID id  = UUID.randomUUID();
-        String name = "Department name";
-
-        DepartmentDTO expected = new DepartmentDTO();
-        DepartmentDTO saved = new DepartmentDTO();
-        saved.setName(name);
-        expected.setName(name);
-        expected.setId(id);
-
-        Department savedDepartment = new Department();
-        savedDepartment.setName(name);
-
-        Department expectedDepartment = new Department();
-        expectedDepartment.setName(name);
-        expectedDepartment.setId(id);
-
-        Mockito
-                .when(converter.toEntity(saved))
-                .thenReturn(savedDepartment);
-        Mockito
-                .when(converter.toDTO(expectedDepartment))
-                .thenReturn(expected);
-        Mockito
-                .when(departmentRepository.existsByName(name))
-                .thenReturn(false);
-        Mockito
-                .when(departmentRepository.save(savedDepartment))
-                .thenReturn(expectedDepartment);
-
-        DepartmentDTO result = departmentService.update(saved);
-
-        Assertions.assertEquals(expected, result);
-        Assertions.assertNotEquals(expected, saved);
-        Assertions.assertNotEquals(result, saved);
-        Assertions.assertNull(saved.getId());
-        Assertions.assertNotNull(result.getId());
-        Assertions.assertEquals(result.getId(), expected.getId());
-    }
-     */
 
     @Test
     public void shouldThrowExceptionIfDepartmentAlreadyExists() {
@@ -183,51 +141,50 @@ public class DepartmentServiceTest {
         departmentDTO.setId(id);
         departmentDTO.setName(name);
 
-        Mockito
-                .when(departmentRepository.existsById(departmentDTO.getId()))
-                .thenReturn(false);
-        Mockito
-                .when(departmentRepository.existsByName(departmentDTO.getName()))
-                .thenReturn(true);
+        when(departmentRepository.existsById(departmentDTO.getId())).thenReturn(false);
+        when(departmentRepository.existsByName(departmentDTO.getName())).thenReturn(true);
         Assertions.assertThrows(DuplicateRecordException.class,
                 () -> departmentService.update(departmentDTO));
+
+        verify(departmentRepository).existsByName(departmentDTO.getName());
+        verify(departmentRepository).existsById(departmentDTO.getId());
     }
 
     @Test
     public void shouldReturnTrueIfDepartmentExistsById() {
-        Mockito
-                .when(departmentRepository.existsById(any()))
-                .thenReturn(true);
+        when(departmentRepository.existsById(any())).thenReturn(true);
 
         Assertions.assertTrue(departmentService.existsById(UUID.randomUUID()));
+
+        verify(departmentRepository).existsById(any());
     }
 
     @Test
     public void shouldReturnFalseIfDepartmentExistsById() {
-        Mockito
-                .when(departmentRepository.existsById(any()))
-                .thenReturn(false);
+        when(departmentRepository.existsById(any())).thenReturn(false);
 
         Assertions.assertFalse(departmentService.existsById(UUID.randomUUID()));
+
+        verify(departmentRepository).existsById(any());
     }
 
     @Test
     public void shouldReturnTrueIfDepartmentExistsByName() {
         String name = "Department name";
-        Mockito
-                .when(departmentRepository.existsByName(any()))
-                .thenReturn(true);
+        when(departmentRepository.existsByName(any())).thenReturn(true);
 
         Assertions.assertTrue(departmentService.existsByName(name));
+
+        verify(departmentRepository).existsByName(any());
     }
 
     @Test
     public void shouldReturnFalseIfDepartmentExistsByName() {
         String name = "Department name";
-        Mockito
-                .when(departmentRepository.existsByName(any()))
-                .thenReturn(false);
+        when(departmentRepository.existsByName(any())).thenReturn(false);
 
         Assertions.assertFalse(departmentService.existsByName(name));
+
+        verify(departmentRepository).existsByName(any());
     }
 }
