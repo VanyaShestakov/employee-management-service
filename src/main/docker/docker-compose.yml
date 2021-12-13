@@ -1,0 +1,23 @@
+services:
+
+  app-web:
+    build: app
+    container_name: application
+    ports:
+      - "8089:8080"
+    links:
+      - app-db
+
+  app-db:
+    build: db
+    container_name: db
+    expose:
+      - "5433"
+    volumes_from:
+      - app-db-data
+
+  app-db-data:
+    image: cogniteev/echo
+    command: echo 'Data Container for PostgreSQL'
+    volumes:
+      - /var/lib/postgresql/data
