@@ -41,7 +41,7 @@ public class DepartmentController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get department by id")
-    public DepartmentDTO getDepartment(@ApiParam(value = "Id of reсeiving department")
+    public DepartmentDTO getDepartment(@ApiParam(value = "Id of reсeiving department (UUID)")
                                        @PathVariable("id") String id) {
         return departmentService.getById(getUUIDFromString(id));
     }
@@ -75,7 +75,7 @@ public class DepartmentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete department")
-    public void deleteDepartment(@ApiParam(value = "Id of deleting department")
+    public void deleteDepartment(@ApiParam(value = "Id of deleting department (UUID)")
                                  @PathVariable("id") String id) {
         departmentService.deleteById(getUUIDFromString(id));
     }
