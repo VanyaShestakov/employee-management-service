@@ -3,3 +3,6 @@
 
 # Database scheme
 ![alt text](db.png)
+
+# Endpoints
+![alt text](endpoints.png)
