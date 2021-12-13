@@ -1,6 +1,9 @@
 package com.leverx.employeestat.rest.configuration;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -95,4 +98,12 @@ public class Config {
         resolver.setMaxUploadSize(10000000L);
         return resolver;
     }
+
+//    @Bean
+//    public OpenAPI customOpenAPI() {
+//        return new OpenAPI()
+//                .components(new Components())
+//                .info(new Info().title("Contact Application API").description(
+//                        "This is a sample Spring Boot RESTful service using springdoc-openapi and OpenAPI 3."));
+//    }
 }

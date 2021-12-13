@@ -14,10 +14,10 @@
     <changeSet id="4" author="Ivan">
         <sqlFile dbms="postgresql"
                  encoding="UTF-8"
-                 relativeToChangelogFile="true"
+                 relativeToChangelogFile="false"
                  splitStatements="true"
                  stripComments="true"
-                 path="sql-scripts/create-department-table.sql"/>
+                 path="db/changelog/sql-scripts/create-department-table.sql"/>
         <sqlFile dbms="postgresql"
                  encoding="UTF-8"
                  relativeToChangelogFile="true"
