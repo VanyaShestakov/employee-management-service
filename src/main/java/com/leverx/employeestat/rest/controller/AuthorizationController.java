@@ -2,13 +2,11 @@ package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
-import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.exception.NotValidRecordException;
 import com.leverx.employeestat.rest.model.RegistrationRequest;
 import com.leverx.employeestat.rest.model.ResetPasswordRequest;
 import com.leverx.employeestat.rest.service.AuthorizationService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
