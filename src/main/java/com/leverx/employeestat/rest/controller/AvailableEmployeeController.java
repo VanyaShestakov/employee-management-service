@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees/available")
-@Api("API for retrieving available employees")
+@Api(tags = {"API for retrieving available employees"})
 public class AvailableEmployeeController {
 
     private final AvailableEmployeeService availableEmployeeService;
