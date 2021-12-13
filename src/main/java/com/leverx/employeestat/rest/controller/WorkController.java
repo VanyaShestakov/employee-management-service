@@ -2,6 +2,9 @@ package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.dto.WorkDTO;
 import com.leverx.employeestat.rest.service.WorkService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,7 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 
 @RestController
 @RequestMapping("/api/works")
+@Api(tags = "Work CRUD operations")
 public class WorkController {
 
     private final WorkService workService;
@@ -24,25 +28,36 @@ public class WorkController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get list of all works")
     public List<WorkDTO> getWorks() {
         return workService.getAll();
     }
 
     @GetMapping("/empId={empId}/projId={projId}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkDTO getWork(@PathVariable("empId") UUID employeeId, @PathVariable("projId") UUID projectId) {
+    @ApiOperation(value = "Get work by employee id and project id")
+    public WorkDTO getWork(@ApiParam(value = "Employee id (UUID)")
+                           @PathVariable("empId") UUID employeeId,
+                           @ApiParam(value = "Project id (UUID)")
+                           @PathVariable("projId") UUID projectId) {
         return workService.getByIds(employeeId, projectId);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public WorkDTO putWork(@RequestBody WorkDTO workDTO) {
+    @ApiOperation(value = "Update work")
+    public WorkDTO putWork(@ApiParam(value = "Contains all information of employee work with changed fields", name = "Work")
+                           @RequestBody WorkDTO workDTO) {
         return workService.update(workDTO);
     }
 
     @DeleteMapping("/empId={empId}/projId={projId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteWork(@PathVariable("empId") String employeeId, @PathVariable("projId") String projectId) {
+    @ApiOperation(value = "Get work by employee id and project id")
+    public void deleteWork(@ApiParam(value = "Employee id (UUID)")
+                           @PathVariable("empId") String employeeId,
+                           @ApiParam(value = "Project id (UUID)")
+                           @PathVariable("projId") String projectId) {
         workService.deleteByIds(getUUIDFromString(employeeId), getUUIDFromString(projectId));
     }
 }

@@ -2,6 +2,8 @@ package com.leverx.employeestat.rest.controller;
 
 import com.leverx.employeestat.rest.exception.ReportWritingException;
 import com.leverx.employeestat.rest.service.ReportService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("api/employees/export")
+@Api(tags = "API for exporting workload reports of employees")
 public class ReportController {
 
     private final ReportService reportService;
@@ -29,6 +32,7 @@ public class ReportController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Export occupation-report of employees")
     public void exportEmployees(HttpServletResponse response) {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employees.xlsx");
@@ -38,6 +42,7 @@ public class ReportController {
 
     @GetMapping("/last")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Export last generated report of available employees for the next month")
     public void exportLastGeneratedReport(HttpServletResponse response) {
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employees-Last.xlsx");
