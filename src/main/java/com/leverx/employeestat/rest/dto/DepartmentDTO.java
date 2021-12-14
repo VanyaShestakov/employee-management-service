@@ -1,10 +1,13 @@
 package com.leverx.employeestat.rest.dto;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@ApiModel(value = "Department", description = "Contains all information about department and its employees(ids)")
 public class DepartmentDTO {
 
     private UUID id;

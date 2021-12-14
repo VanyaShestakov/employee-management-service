@@ -5,6 +5,9 @@ import com.leverx.employeestat.rest.service.AuthorizationService;
 import com.leverx.employeestat.rest.service.CSVReaderService;
 import com.leverx.employeestat.rest.service.EmployeeService;
 import com.leverx.employeestat.rest.service.impl.CSVReaderServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/employees/upload")
+@Api(tags = {"API for uploading employees from CSV file"})
 public class CSVUploadController {
 
     private final CSVReaderService readerService;
@@ -28,7 +32,9 @@ public class CSVUploadController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public List<EmployeeDTO> uploadEmployees(@RequestParam("file") MultipartFile file) {
+    @ApiOperation("Upload employees")
+    public List<EmployeeDTO> uploadEmployees(@ApiParam(value = "File with .csv extension, that contains table with employees")
+                                             @RequestParam("file") MultipartFile file) {
         List<EmployeeDTO> employees = readerService.getEmployeesFromFile(file);
         return authorizationService.registerAll(employees);
     }

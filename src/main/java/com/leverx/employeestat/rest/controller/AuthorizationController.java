@@ -6,6 +6,9 @@ import com.leverx.employeestat.rest.exception.NotValidRecordException;
 import com.leverx.employeestat.rest.model.RegistrationRequest;
 import com.leverx.employeestat.rest.model.ResetPasswordRequest;
 import com.leverx.employeestat.rest.service.AuthorizationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -13,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
 @RestController
 @RequestMapping("/api")
+@Api(tags = {"Authorization"})
 public class AuthorizationController {
 
     private final AuthorizationService authorizationService;
@@ -26,9 +31,13 @@ public class AuthorizationController {
         this.bindingResultParser = bindingResultParser;
     }
 
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeDTO registerEmployee(@RequestBody @Valid RegistrationRequest request, BindingResult result) {
+    @ApiOperation(value = "Register employee", response = EmployeeDTO.class)
+    public EmployeeDTO registerEmployee(@ApiParam(name = "Registration request", value = "Contains mandatory fields for registration of employee")
+                                        @RequestBody
+                                        @Valid RegistrationRequest request, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException("Fields of Employee have errors: " +
                     bindingResultParser.getFieldErrMismatches(result));
@@ -38,7 +47,10 @@ public class AuthorizationController {
 
     @PostMapping("/reset-password")
     @ResponseStatus(HttpStatus.OK)
-    public void resetPassword(@RequestBody @Valid ResetPasswordRequest request, BindingResult result) {
+    @ApiOperation(value = "Reset password of employee")
+    public void resetPassword(@ApiParam(name = "Reset password request", value = "Contains username, old and new password of employee")
+                              @RequestBody
+                              @Valid ResetPasswordRequest request, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException("Fields have errors: " +
                     bindingResultParser.getFieldErrMismatches(result));

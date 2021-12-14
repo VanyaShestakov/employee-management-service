@@ -4,6 +4,9 @@ import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.exception.NotValidRecordException;
 import com.leverx.employeestat.rest.service.DepartmentService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 
 @RestController
 @RequestMapping("/api/departments")
+@Api(tags = "Department CRUD operations")
 public class DepartmentController {
 
     private final DepartmentService departmentService;
@@ -29,19 +33,25 @@ public class DepartmentController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get list of all departments")
     public List<DepartmentDTO> getAllDepartments() {
         return departmentService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public DepartmentDTO getDepartment(@PathVariable("id") String id) {
+    @ApiOperation(value = "Get department by id")
+    public DepartmentDTO getDepartment(@ApiParam(value = "Id of reсeiving department (UUID)")
+                                       @PathVariable("id") String id) {
         return departmentService.getById(getUUIDFromString(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DepartmentDTO postDepartment(@RequestBody @Valid DepartmentDTO departmentDTO, BindingResult result) {
+    @ApiOperation(value = "Create department")
+    public DepartmentDTO postDepartment(@ApiParam(value = "Contains mandatory information of department", name = "Department")
+                                        @RequestBody
+                                        @Valid DepartmentDTO departmentDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
                     (String.format("Fields of Department have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
@@ -51,7 +61,10 @@ public class DepartmentController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public DepartmentDTO putDepartment(@RequestBody @Valid DepartmentDTO departmentDTO, BindingResult result) {
+    @ApiOperation(value = "Update department")
+    public DepartmentDTO putDepartment(@ApiParam(value = "Contains all information of department with changed fields", name = "Department")
+                                       @RequestBody
+                                       @Valid DepartmentDTO departmentDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
                     (String.format("Fields of Department have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
@@ -61,7 +74,9 @@ public class DepartmentController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteDepartment(@PathVariable("id") String id) {
+    @ApiOperation(value = "Delete department")
+    public void deleteDepartment(@ApiParam(value = "Id of deleting department (UUID)")
+                                 @PathVariable("id") String id) {
         departmentService.deleteById(getUUIDFromString(id));
     }
 }

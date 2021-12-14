@@ -4,6 +4,9 @@ import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.exception.NotValidRecordException;
 import com.leverx.employeestat.rest.service.ProjectService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 
 @RestController
 @RequestMapping("/api/projects")
+@Api(tags = "Project CRUD operations")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -29,19 +33,25 @@ public class ProjectController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get list of all projects")
     public List<ProjectDTO> getAllProjects() {
         return projectService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProjectDTO getProject(@PathVariable String id) {
+    @ApiOperation(value = "Get project by id")
+    public ProjectDTO getProject(@ApiParam(value = "Id of reсeiving project (UUID)")
+                                 @PathVariable String id) {
         return projectService.getById(getUUIDFromString(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectDTO postProject(@RequestBody @Valid ProjectDTO projectDTO, BindingResult result) {
+    @ApiOperation(value = "Create project")
+    public ProjectDTO postProject(@ApiParam(value = "Contains mandatory information of project", name = "Project")
+                                  @RequestBody
+                                  @Valid ProjectDTO projectDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
                     (String.format("Fields of Project have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
@@ -51,7 +61,10 @@ public class ProjectController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ProjectDTO putProject(@RequestBody @Valid ProjectDTO projectDTO, BindingResult result) {
+    @ApiOperation(value = "Update project")
+    public ProjectDTO putProject(@ApiParam(value = "Contains all information of project with changed fields", name = "Project")
+                                 @RequestBody
+                                 @Valid ProjectDTO projectDTO, BindingResult result) {
         if (result.hasErrors()) {
             throw new NotValidRecordException
                     (String.format("Fields of Project have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
@@ -61,7 +74,9 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteProject(@PathVariable String id) {
+    @ApiOperation(value = "Delete project")
+    public void deleteProject(@ApiParam(value = "Id of deleting project (UUID)")
+                              @PathVariable String id) {
         projectService.deleteById(getUUIDFromString(id));
     }
 
