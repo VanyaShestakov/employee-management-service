@@ -14,11 +14,11 @@
 
 # Endpoints
 
-#### API for exporting workload reports of employees
+### API for exporting workload reports of employees
 **GET** ```/api/employees/available``` - Get available employees at the current moment   
 **GET** ```/api/employees/available/{days}``` -  Get available employees for the next amount of days
 
-#### API for uploading employees from CSV file
+### API for uploading employees from CSV file
 **GET** ```/api/employees/upload``` - Upload employees
 
 # Swagger Documentation
