@@ -1,7 +1,10 @@
 package com.leverx.employeestat.rest.model;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.validation.constraints.NotBlank;
 
+@ApiModel(value = "Reset password request", description = "Contains username, old and new password of employee")
 public class ResetPasswordRequest {
 
     @NotBlank

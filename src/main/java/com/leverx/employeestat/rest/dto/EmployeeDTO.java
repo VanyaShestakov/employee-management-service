@@ -1,6 +1,7 @@
 package com.leverx.employeestat.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@ApiModel(value = "Employee", description = "Contains all information about employee and its projects(ids) and department(id)")
 public class EmployeeDTO {
 
     private UUID id;

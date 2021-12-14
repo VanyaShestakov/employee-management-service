@@ -35,7 +35,7 @@ public class AuthorizationController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Register employee", response = EmployeeDTO.class)
-    public EmployeeDTO registerEmployee(@ApiParam(name = "Registration request", value = "Contains mandatory of employee")
+    public EmployeeDTO registerEmployee(@ApiParam(name = "Registration request", value = "Contains mandatory fields for registration of employee")
                                         @RequestBody
                                         @Valid RegistrationRequest request, BindingResult result) {
         if (result.hasErrors()) {

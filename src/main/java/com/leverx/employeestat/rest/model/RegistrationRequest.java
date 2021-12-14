@@ -1,10 +1,11 @@
 package com.leverx.employeestat.rest.model;
 
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
+import io.swagger.annotations.ApiModel;
 
 import javax.validation.constraints.NotBlank;
-import java.util.UUID;
 
+@ApiModel(value = "Registration request", description = "Contains mandatory fields for registration of employee")
 public class RegistrationRequest {
 
     @NotBlank
