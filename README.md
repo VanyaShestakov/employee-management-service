@@ -12,6 +12,9 @@
 -  **Open the command prompt and go to the directory:** ```employeestat/src/main/docker```
 -  **Enter the command:** ```docker-compose up```
 
+# Swagger Documentation
+**To open the swagger documentation go to URL:** ```http://localhost:8085/swagger-ui.htm```
+
 # Database scheme
 ![alt text](db.png)
 
