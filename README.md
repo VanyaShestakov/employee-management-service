@@ -12,11 +12,18 @@
 -  **Open the command prompt and go to the directory:** ```employeestat/src/main/docker```
 -  **Enter the command:** ```docker-compose up```
 
+# Endpoints
+
+#### API for exporting workload reports of employees
+**GET** ```/api/employees/available``` - Get available employees at the current moment
+**GET** ```/api/employees/available/{days}``` -  Get available employees for the next amount of days
+
+#### API for uploading employees from CSV file
+**GET** ```/api/employees/upload``` - Upload employees
+
 # Swagger Documentation
 **To open the swagger documentation go to URL:** ```http://localhost:8085/swagger-ui.htm```
 
 # Database scheme
 ![alt text](db.png)
 
-# Endpoints
-![alt text](endpoints.png)
