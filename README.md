@@ -21,6 +21,36 @@
 ### API for uploading employees from CSV file
 **GET** ```/api/employees/upload``` - Upload employees
 
+### Authorization
+**POST** ```/api/register``` - Register employee    
+**POST** ```/api/reset-password``` - Reset password of employee   
+
+### Department CRUD operations
+**GET** ```/api/departments``` - Get list of all departments    
+**GET** ```/api/departments{id}``` - Get department by id    
+**POST** ```/api/departments``` - Create department   
+**PUT** ```/api/departments``` - Update department    
+**DELETE** ```/api/departments``` - Delete department    
+
+### Employee CRUD operations
+**GET** ```/api/employees``` - Get list of all employees    
+**GET** ```/api/employees{id}``` - Get employee by id    
+**PUT** ```/api/employees``` - Update employee    
+**DELETE** ```/api/employees``` - Delete employee    
+
+### Project CRUD operations
+**GET** ```/api/projects``` - Get list of all projects    
+**GET** ```/api/projects{id}``` - Get project by id    
+**POST** ```/api/projects``` - Create project   
+**PUT** ```/api/projects``` - Update project    
+**DELETE** ```/api/projects``` - Delete project    
+
+### Work CRUD operations
+**GET** ```/api/works``` - Get list of all works    
+**GET** ```/api/works/empId={empId}/projId={projId}``` - Get work by employee id and project id        
+**PUT** ```/api/works``` - Update work    
+**DELETE** ```/api/works/empId={empId}/projId={projId}``` - Delete work    
+
 # Swagger Documentation
 **To open the swagger documentation go to URL:** ```http://localhost:8085/swagger-ui.htm```
 
