@@ -62,7 +62,9 @@ public class ReportController {
         try (ServletOutputStream outputStream = response.getOutputStream()) {
             workbook.write(outputStream);
         } catch (IOException e) {
-            throw new ReportWritingException("Failed to write report", e);
+            ReportWritingException ex = new ReportWritingException("Failed to write report", e);
+            log.error("Thrown exception", ex);
+            throw ex;
         }
     }
 }

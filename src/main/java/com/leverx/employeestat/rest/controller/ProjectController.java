@@ -7,6 +7,8 @@ import com.leverx.employeestat.rest.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,8 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 @Api(tags = "Project CRUD operations")
 public class ProjectController {
 
+    private final Logger log = LogManager.getLogger(ProjectController.class);
+
     private final ProjectService projectService;
     private final BindingResultParser bindingResultParser;
 
@@ -35,6 +39,7 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get list of all projects")
     public List<ProjectDTO> getAllProjects() {
+        log.info("executing getAllProjects() method");
         return projectService.getAll();
     }
 
@@ -43,6 +48,7 @@ public class ProjectController {
     @ApiOperation(value = "Get project by id")
     public ProjectDTO getProject(@ApiParam(value = "Id of reсeiving project (UUID)")
                                  @PathVariable String id) {
+        log.info("executing getProject() method");
         return projectService.getById(getUUIDFromString(id));
     }
 
@@ -52,9 +58,11 @@ public class ProjectController {
     public ProjectDTO postProject(@ApiParam(value = "Contains mandatory information of project", name = "Project")
                                   @RequestBody
                                   @Valid ProjectDTO projectDTO, BindingResult result) {
+        log.info("executing postProject() method");
         if (result.hasErrors()) {
-            throw new NotValidRecordException
-                    (String.format("Fields of Project have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
+            NotValidRecordException e =  new NotValidRecordException("Fields of Project have errors: " + bindingResultParser.getFieldErrMismatches(result));
+            log.error("Thrown exception", e);
+            throw e;
         }
         return projectService.save(projectDTO);
     }
@@ -65,9 +73,11 @@ public class ProjectController {
     public ProjectDTO putProject(@ApiParam(value = "Contains all information of project with changed fields", name = "Project")
                                  @RequestBody
                                  @Valid ProjectDTO projectDTO, BindingResult result) {
+        log.info("executing putProject() method");
         if (result.hasErrors()) {
-            throw new NotValidRecordException
-                    (String.format("Fields of Project have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
+            NotValidRecordException e =  new NotValidRecordException("Fields of Project have errors: " + bindingResultParser.getFieldErrMismatches(result));
+            log.error("Thrown exception", e);
+            throw e;
         }
         return projectService.update(projectDTO);
     }
@@ -77,6 +87,7 @@ public class ProjectController {
     @ApiOperation(value = "Delete project")
     public void deleteProject(@ApiParam(value = "Id of deleting project (UUID)")
                               @PathVariable String id) {
+        log.info("executing putProject() method");
         projectService.deleteById(getUUIDFromString(id));
     }
 

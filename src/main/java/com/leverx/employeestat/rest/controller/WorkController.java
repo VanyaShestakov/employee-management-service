@@ -5,6 +5,8 @@ import com.leverx.employeestat.rest.service.WorkService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 @Api(tags = "Work CRUD operations")
 public class WorkController {
 
+    private final Logger log = LogManager.getLogger(WorkController.class);
+
     private final WorkService workService;
 
     @Autowired
@@ -29,7 +33,8 @@ public class WorkController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get list of all works")
-    public List<WorkDTO> getWorks() {
+    public List<WorkDTO> getAllWorks() {
+        log.info("executing getAllWorks() method");
         return workService.getAll();
     }
 
@@ -40,6 +45,7 @@ public class WorkController {
                            @PathVariable("empId") UUID employeeId,
                            @ApiParam(value = "Project id (UUID)")
                            @PathVariable("projId") UUID projectId) {
+        log.info("executing getWork() method");
         return workService.getByIds(employeeId, projectId);
     }
 
@@ -48,6 +54,7 @@ public class WorkController {
     @ApiOperation(value = "Update work")
     public WorkDTO putWork(@ApiParam(value = "Contains all information of employee work with changed fields", name = "Work")
                            @RequestBody WorkDTO workDTO) {
+        log.info("executing putWork() method");
         return workService.update(workDTO);
     }
 
@@ -58,6 +65,7 @@ public class WorkController {
                            @PathVariable("empId") String employeeId,
                            @ApiParam(value = "Project id (UUID)")
                            @PathVariable("projId") String projectId) {
+        log.info("executing deleteWork() method");
         workService.deleteByIds(getUUIDFromString(employeeId), getUUIDFromString(projectId));
     }
 }
