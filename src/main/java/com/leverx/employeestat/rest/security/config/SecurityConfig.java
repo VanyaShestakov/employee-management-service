@@ -43,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder builder)
-            throws Exception {
+    public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.userDetailsService(employeeDetailsService);
     }
 }
