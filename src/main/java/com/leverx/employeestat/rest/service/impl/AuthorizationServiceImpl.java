@@ -1,5 +1,6 @@
 package com.leverx.employeestat.rest.service.impl;
 
+import com.leverx.employeestat.rest.controller.AvailableEmployeeController;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.dto.converter.EmployeeConverter;
 import com.leverx.employeestat.rest.entity.Employee;
@@ -9,6 +10,8 @@ import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.model.ResetPasswordRequest;
 import com.leverx.employeestat.rest.service.AuthorizationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ import java.util.List;
 
 @Service
 public class AuthorizationServiceImpl implements AuthorizationService {
+
+    private final Logger log = LogManager.getLogger(AuthorizationServiceImpl.class);
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeConverter converter;
@@ -35,8 +40,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Transactional
     public EmployeeDTO registerEmployee(EmployeeDTO employeeDTO) {
         if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
-            throw new DuplicateRecordException
+            DuplicateRecordException e =  new DuplicateRecordException
                     (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
+            log.error("Thrown exception", e);
+            throw e;
         }
         employeeDTO.setPassword(encoder.encode(employeeDTO.getPassword()));
         return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
@@ -57,13 +64,17 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     public void resetPassword(ResetPasswordRequest request) {
         Employee employee = employeeRepository.findEmployeeByUsername(request.getUsername())
                 .orElseThrow(() -> {
-                    throw new NoSuchRecordException
+                    NoSuchRecordException e = new NoSuchRecordException
                             (String.format("Employee with username=%s not found", request.getUsername()));
+                    log.error("Thrown exception", e);
+                    throw e;
                 });
         if (encoder.matches(request.getOldPassword(), employee.getPassword())) {
             employee.setPassword(encoder.encode(request.getNewPassword()));
         } else {
-            throw new InvalidPasswordException("You entered incorrect old password");
+            InvalidPasswordException e = new InvalidPasswordException("You entered incorrect old password");
+            log.error("Thrown exception", e);
+            throw e;
         }
     }
 }

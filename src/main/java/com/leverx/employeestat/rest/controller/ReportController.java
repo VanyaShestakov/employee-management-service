@@ -40,7 +40,7 @@ public class ReportController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Export occupation-report of employees")
     public void exportEmployees(HttpServletResponse response) {
-        log.info("executing exportEmployees method");
+        log.info("executing exportEmployees() method");
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employees.xlsx");
         XSSFWorkbook workbook = reportService.exportOccupationReport();
@@ -51,7 +51,7 @@ public class ReportController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Export last generated report of available employees for the next month")
     public void exportLastGeneratedReport(HttpServletResponse response) {
-        log.info("executing exportLastGeneratedReport method");
+        log.info("executing exportLastGeneratedReport() method");
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employees-Last.xlsx");
         XSSFWorkbook workbook = reportService.exportLastGeneratedReport();

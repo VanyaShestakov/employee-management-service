@@ -2,6 +2,7 @@ package com.leverx.employeestat.rest.security.config;
 
 import com.leverx.employeestat.rest.security.employeedetails.EmployeeDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.OAuth2AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -5,6 +5,7 @@ import com.leverx.employeestat.rest.exception.NotValidUUIDException;
 import java.util.UUID;
 
 public class UUIDUtils {
+
     public static UUID getUUIDFromString(String id) {
         UUID uuid = null;
         try {
