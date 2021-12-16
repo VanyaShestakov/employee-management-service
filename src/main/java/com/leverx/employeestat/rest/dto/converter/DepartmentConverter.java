@@ -5,6 +5,8 @@ import com.leverx.employeestat.rest.entity.Department;
 import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 @Component
 public class DepartmentConverter {
+
+    private final Logger log = LogManager.getLogger(DepartmentConverter.class);
 
     private final EmployeeRepository employeeRepository;
 
@@ -29,7 +33,10 @@ public class DepartmentConverter {
             for (UUID id : departmentDTO.getEmployeeIds()) {
                 department.addEmployee(employeeRepository.findEmployeeById(id)
                         .orElseThrow(() -> {
-                            throw new NoSuchRecordException(String.format("Employee with id=%s not found", id));
+                            NoSuchRecordException e = new NoSuchRecordException
+                                    (String.format("Employee with id=%s not found", id));
+                            log.error("Thrown exception", e);
+                            throw e;
                         }));
             }
         }
