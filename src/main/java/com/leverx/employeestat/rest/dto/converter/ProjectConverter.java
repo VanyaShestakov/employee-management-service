@@ -16,8 +16,6 @@ import java.util.UUID;
 @Component
 public class ProjectConverter {
 
-    private final Logger log = LogManager.getLogger(ProjectConverter.class);
-
     private final EmployeeRepository employeeRepository;
 
     @Autowired
@@ -35,10 +33,8 @@ public class ProjectConverter {
             for (UUID id : projectDTO.getEmployeeIds()) {
                 project.addEmployee(employeeRepository.findEmployeeById(id)
                         .orElseThrow(() -> {
-                            NoSuchRecordException e = new NoSuchRecordException
+                            throw new NoSuchRecordException
                                     (String.format("Employee with id=%s not found", id));
-                            log.error("Thrown exception", e);
-                            throw e;
                         }));
             }
         }

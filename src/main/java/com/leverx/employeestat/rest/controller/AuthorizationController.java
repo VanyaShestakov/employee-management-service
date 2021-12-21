@@ -45,9 +45,7 @@ public class AuthorizationController {
                                         @Valid RegistrationRequest request, BindingResult result) {
         log.info("executing registerEmployee() method");
         if (result.hasErrors()) {
-            NotValidRecordException e =  new NotValidRecordException("Fields of Employee have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields of Employee have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         return authorizationService.registerEmployee(request.toDTO());
     }
@@ -60,9 +58,7 @@ public class AuthorizationController {
                               @Valid ResetPasswordRequest request, BindingResult result) {
         log.info("executing resetPassword() method");
         if (result.hasErrors()) {
-            NotValidRecordException e = new NotValidRecordException("Fields have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         authorizationService.resetPassword(request);
     }

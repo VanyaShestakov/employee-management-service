@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    private final Logger log = LogManager.getLogger(ProjectServiceImpl.class);
-
     private final ProjectRepository projectRepository;
     private final ProjectConverter converter;
 
@@ -36,10 +34,8 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getById(UUID id) {
         Project project = projectRepository.findProjectById(id)
                 .orElseThrow(() -> {
-                    NoSuchRecordException e = new NoSuchRecordException
+                    throw new NoSuchRecordException
                             (String.format("Project with id=%s not found", id));
-                    log.error("Thrown exception", e);
-                    throw e;
                 });
         return converter.toDTO(project);
     }
@@ -49,10 +45,8 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO getByName(String name) {
         Project project = projectRepository.findProjectByName(name).
                 orElseThrow(() -> {
-                    NoSuchRecordException e = new NoSuchRecordException
+                    throw new NoSuchRecordException
                             (String.format("Project with name=%s not found", name));
-                    log.error("Thrown exception", e);
-                    throw e;
                 });
         return converter.toDTO(project);
     }
@@ -69,10 +63,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO save(ProjectDTO projectDTO) {
         if (projectRepository.existsByName(projectDTO.getName())) {
-            DuplicateRecordException e = new DuplicateRecordException
+            throw new DuplicateRecordException
                     (String.format("Project with name=%s already exists", projectDTO.getName()));
-            log.error("Thrown exception", e);
-            throw e;
         }
         return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
     }
@@ -85,10 +77,8 @@ public class ProjectServiceImpl implements ProjectService {
         } else if (!projectRepository.existsByName(projectDTO.getName())) {
             return converter.toDTO(projectRepository.save(converter.toEntity(projectDTO)));
         } else {
-            DuplicateRecordException e = new DuplicateRecordException
+            throw new DuplicateRecordException
                     (String.format("Project with name=%s already exists", projectDTO.getName()));
-            log.error("Thrown exception", e);
-            throw e;
         }
     }
 
@@ -96,10 +86,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void deleteById(UUID id) {
         if (!projectRepository.existsById(id)) {
-            NoSuchRecordException e = new NoSuchRecordException
+            throw new NoSuchRecordException
                     (String.format("Department with id=%s not found for deleting", id));
-            log.error("Thrown exception", e);
-            throw e;
         }
         projectRepository.deleteById(id);
     }

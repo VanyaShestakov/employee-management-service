@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private final Logger log = LogManager.getLogger(DepartmentServiceImpl.class);
-
     private final DepartmentRepository departmentRepository;
     private final DepartmentConverter converter;
 
@@ -36,10 +34,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public DepartmentDTO save(DepartmentDTO departmentDTO) {
         if (departmentRepository.existsByName(departmentDTO.getName())) {
-            DuplicateRecordException e = new DuplicateRecordException
+            throw new DuplicateRecordException
                     (String.format("Department with name=%s already exists", departmentDTO.getName()));
-            log.error("Thrown exception", e);
-            throw e;
         }
         return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
     }
@@ -48,10 +44,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public void deleteById(UUID id) {
         if (!departmentRepository.existsById(id)) {
-            NoSuchRecordException e = new NoSuchRecordException
+            throw new NoSuchRecordException
                     (String.format("Department with id=%s not found for deleting", id));
-            log.error("Thrown exception", e);
-            throw e;
         }
         departmentRepository.deleteById(id);
     }
@@ -64,10 +58,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         } else if (!departmentRepository.existsByName(departmentDTO.getName())) {
             return converter.toDTO(departmentRepository.save(converter.toEntity(departmentDTO)));
         } else {
-            DuplicateRecordException e = new DuplicateRecordException
+            throw new DuplicateRecordException
                     (String.format("Department with name=%s already exists", departmentDTO.getName()));
-            log.error("Thrown exception", e);
-            throw e;
         }
     }
 
@@ -85,9 +77,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO getById(UUID id) {
         Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> {
-                    NoSuchRecordException e = new NoSuchRecordException(String.format("Department with id=%s not found", id));
-                    log.error("Thrown exception", e);
-                    throw e;
+                    throw new NoSuchRecordException(String.format("Department with id=%s not found", id));
                 });
         return converter.toDTO(department);
     }

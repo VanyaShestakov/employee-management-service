@@ -48,9 +48,7 @@ public class CSVReaderServiceImpl implements CSVReaderService {
                 employees.add(employee);
             }
         } catch (IOException | CsvValidationException e) {
-            CSVReadingException ex = new CSVReadingException(e.getMessage(), e);
-            log.error("Thrown exception", ex);
-            throw ex;
+            throw new CSVReadingException(e.getMessage(), e);
         }
         log.info("Multipart file (CSV) read successfully");
         return employees;

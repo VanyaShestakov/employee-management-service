@@ -60,9 +60,7 @@ public class ProjectController {
                                   @Valid ProjectDTO projectDTO, BindingResult result) {
         log.info("executing postProject() method");
         if (result.hasErrors()) {
-            NotValidRecordException e =  new NotValidRecordException("Fields of Project have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields of Project have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         return projectService.save(projectDTO);
     }
@@ -75,9 +73,7 @@ public class ProjectController {
                                  @Valid ProjectDTO projectDTO, BindingResult result) {
         log.info("executing putProject() method");
         if (result.hasErrors()) {
-            NotValidRecordException e =  new NotValidRecordException("Fields of Project have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields of Project have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         return projectService.update(projectDTO);
     }

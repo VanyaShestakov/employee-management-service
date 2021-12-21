@@ -60,9 +60,7 @@ public class EmployeeController {
                                    @Valid EmployeeDTO employeeDTO, BindingResult result) {
         log.info("executing putEmployee() method");
         if (result.hasErrors()) {
-            NotValidRecordException e =  new NotValidRecordException("Fields of Employee have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields of Employee have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         return employeeService.update(employeeDTO);
     }

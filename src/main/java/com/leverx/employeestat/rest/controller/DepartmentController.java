@@ -60,9 +60,7 @@ public class DepartmentController {
                                         @Valid DepartmentDTO departmentDTO, BindingResult result) {
         log.info("executing postDepartment() method");
         if (result.hasErrors()) {
-            NotValidRecordException e =  new NotValidRecordException("Fields of Department have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields of Department have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         return departmentService.save(departmentDTO);
     }
@@ -75,9 +73,7 @@ public class DepartmentController {
                                        @Valid DepartmentDTO departmentDTO, BindingResult result) {
         log.info("executing postDepartment() method");
         if (result.hasErrors()) {
-            NotValidRecordException e =  new NotValidRecordException("Fields of Department have errors: " + bindingResultParser.getFieldErrMismatches(result));
-            log.error("Thrown exception", e);
-            throw e;
+            throw new NotValidRecordException("Fields of Department have errors: " + bindingResultParser.getFieldErrMismatches(result));
         }
         return departmentService.update(departmentDTO);
     }

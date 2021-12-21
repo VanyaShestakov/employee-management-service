@@ -81,9 +81,7 @@ public class ReportServiceImpl implements ReportService {
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             workbook.write(outputStream);
         } catch (IOException e) {
-            ReportWritingException ex = new ReportWritingException("Failed to write report", e);
-            log.error("Thrown exception", ex);
-            throw ex;
+            throw new ReportWritingException("Failed to write report", e);
         }
         log.info("Report generated successfully (every month report)");
     }
@@ -124,9 +122,7 @@ public class ReportServiceImpl implements ReportService {
         try {
             return new XSSFWorkbook(latestReport);
         } catch (IOException | InvalidFormatException e) {
-            ReportWritingException ex = new ReportWritingException("Failed to write report", e);
-            log.error("Thrown exception", ex);
-            throw ex;
+            throw new ReportWritingException("Failed to write report", e);
         }
     }
 
@@ -140,17 +136,13 @@ public class ReportServiceImpl implements ReportService {
                         attr1 = Files.readAttributes(f1.toPath(), BasicFileAttributes.class);
                         attr2 = Files.readAttributes(f2.toPath(), BasicFileAttributes.class);
                     } catch (IOException e) {
-                        AttributesReadingException ex = new AttributesReadingException("Failed to read file attributes", e);
-                        log.error("Thrown  exception", ex);
-                        throw ex;
+                        throw new AttributesReadingException("Failed to read file attributes", e);
                     }
                     return (-1) * attr1.creationTime().compareTo(attr2.creationTime());
                 })
                 .findFirst()
                 .orElseThrow(() -> {
-                    NoSuchReportException e = new NoSuchReportException("No reports found");
-                    log.error("Thrown  exception", e);
-                    throw e;
+                    throw new NoSuchReportException("No reports found");
         });
     }
 

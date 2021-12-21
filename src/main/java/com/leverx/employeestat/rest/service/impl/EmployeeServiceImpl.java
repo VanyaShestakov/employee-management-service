@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final Logger log = LogManager.getLogger(EmployeeServiceImpl.class);
-
     private final EmployeeRepository employeeRepository;
     private final EmployeeConverter converter;
 
@@ -47,10 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO getById(UUID id) {
         Employee employee = employeeRepository.findEmployeeById(id)
                 .orElseThrow(() -> {
-                    NoSuchRecordException e = new NoSuchRecordException
+                    throw new NoSuchRecordException
                             (String.format("Employee with id=%s not found", id));
-                    log.error("Thrown exception", e);
-                    throw e;
                 });
         return converter.toDTO(employee);
     }
@@ -60,10 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO getByUsername(String username) {
         Employee employee = employeeRepository.findEmployeeByUsername(username)
                 .orElseThrow(() -> {
-                    NoSuchRecordException e = new NoSuchRecordException
+                    throw new NoSuchRecordException
                             (String.format("Employee with username=%s not found", username));
-                    log.error("Thrown exception", e);
-                    throw e;
                 });
         return converter.toDTO(employee);
     }
@@ -72,10 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeDTO save(EmployeeDTO employeeDTO) {
         if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
-            DuplicateRecordException e = new DuplicateRecordException
+            throw new DuplicateRecordException
                     (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
-            log.error("Thrown exception", e);
-            throw e;
         }
         return converter.toDTO(employeeRepository.save(converter.toEntity(employeeDTO)));
     }
@@ -95,10 +87,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO update(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findEmployeeById(employeeDTO.getId())
                 .orElseThrow(() -> {
-            NoSuchRecordException e = new NoSuchRecordException
+            throw new NoSuchRecordException
                     (String.format("Employee with id=%s not found", employeeDTO.getId()));
-            log.error("Thrown exception", e);
-            throw e;
         });
         converter.updateEmployeeFields(employeeDTO, employee);
         return converter.toDTO(employee);
@@ -108,10 +98,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public void deleteById(UUID id) {
         if (!employeeRepository.existsById(id)) {
-            NoSuchRecordException e = new NoSuchRecordException
+            throw new NoSuchRecordException
                     (String.format("Department with id=%s not found for deleting", id));
-            log.error("Thrown exception", e);
-            throw e;
         }
         employeeRepository.deleteById(id);
     }
