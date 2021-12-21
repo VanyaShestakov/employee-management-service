@@ -1,11 +1,14 @@
 package com.leverx.employeestat.rest.service.impl;
 
+import com.leverx.employeestat.rest.controller.AvailableEmployeeController;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.exception.CSVReadingException;
 import com.leverx.employeestat.rest.service.CSVReaderService;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +21,8 @@ import java.util.UUID;
 
 @Service
 public class CSVReaderServiceImpl implements CSVReaderService {
+
+    private final Logger log = LogManager.getLogger(CSVReaderServiceImpl.class);
 
     private final static int FIRST_NAME_COLUMN = 0;
     private final static int LAST_NAME_COLUMN = 1;
@@ -43,8 +48,11 @@ public class CSVReaderServiceImpl implements CSVReaderService {
                 employees.add(employee);
             }
         } catch (IOException | CsvValidationException e) {
-            throw new CSVReadingException(e.getMessage(), e);
+            CSVReadingException ex = new CSVReadingException(e.getMessage(), e);
+            log.error("Thrown exception", ex);
+            throw ex;
         }
+        log.info("Multipart file (CSV) read successfully");
         return employees;
     }
 }

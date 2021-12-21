@@ -3,9 +3,10 @@ package com.leverx.employeestat.rest.dto.converter;
 import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
-import com.leverx.employeestat.rest.exception.EntityConversionException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,8 @@ import java.util.UUID;
 
 @Component
 public class ProjectConverter {
+
+    private final Logger log = LogManager.getLogger(ProjectConverter.class);
 
     private final EmployeeRepository employeeRepository;
 
@@ -32,7 +35,10 @@ public class ProjectConverter {
             for (UUID id : projectDTO.getEmployeeIds()) {
                 project.addEmployee(employeeRepository.findEmployeeById(id)
                         .orElseThrow(() -> {
-                            throw new NoSuchRecordException(String.format("Employee with id=%s not found", id));
+                            NoSuchRecordException e = new NoSuchRecordException
+                                    (String.format("Employee with id=%s not found", id));
+                            log.error("Thrown exception", e);
+                            throw e;
                         }));
             }
         }
@@ -49,11 +55,7 @@ public class ProjectConverter {
         List<Employee> employees = project.getEmployees();
         if (employees != null) {
             for (Employee employee : employees) {
-                try {
-                    projectDTO.addEmployeeId(employee.getId());
-                } catch (NoSuchRecordException e) {
-                    throw new EntityConversionException(e.getMessage(), e);
-                }
+                projectDTO.addEmployeeId(employee.getId());
             }
         }
         return projectDTO;

@@ -6,6 +6,8 @@ import com.leverx.employeestat.rest.exception.NoSuchReportException;
 import com.leverx.employeestat.rest.exception.ReportWritingException;
 import com.leverx.employeestat.rest.repository.WorkRepository;
 import com.leverx.employeestat.rest.service.ReportService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService {
+
+    private final Logger log = LogManager.getLogger(ReportServiceImpl.class);
 
     private final static String FIRST_NAME_COL = "First Name";
     private final static String LAST_NAME_COL = "Last Name";
@@ -77,8 +81,11 @@ public class ReportServiceImpl implements ReportService {
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             workbook.write(outputStream);
         } catch (IOException e) {
-            throw new ReportWritingException("Failed to write report", e);
+            ReportWritingException ex = new ReportWritingException("Failed to write report", e);
+            log.error("Thrown exception", ex);
+            throw ex;
         }
+        log.info("Report generated successfully (every month report)");
     }
 
     @Override
@@ -106,16 +113,20 @@ public class ReportServiceImpl implements ReportService {
             Cell occupation = row.createCell(3);
             occupation.setCellValue(String.format("%s - (%s - %s)", project.getName(), work.getPositionStartDate(), work.getPositionEndDate()));
         }
+        log.info("Occupation report created successfully");
         return workbook;
     }
 
     @Override
     public XSSFWorkbook exportLastGeneratedReport() {
         File latestReport = getLatestReport();
+        log.info("Latest report retrieved successfully");
         try {
             return new XSSFWorkbook(latestReport);
         } catch (IOException | InvalidFormatException e) {
-            throw new ReportWritingException("Failed to write report", e);
+            ReportWritingException ex = new ReportWritingException("Failed to write report", e);
+            log.error("Thrown exception", ex);
+            throw ex;
         }
     }
 
@@ -129,13 +140,17 @@ public class ReportServiceImpl implements ReportService {
                         attr1 = Files.readAttributes(f1.toPath(), BasicFileAttributes.class);
                         attr2 = Files.readAttributes(f2.toPath(), BasicFileAttributes.class);
                     } catch (IOException e) {
-                        throw new AttributesReadingException("Failed to read file attributes", e);
+                        AttributesReadingException ex = new AttributesReadingException("Failed to read file attributes", e);
+                        log.error("Thrown  exception", ex);
+                        throw ex;
                     }
                     return (-1) * attr1.creationTime().compareTo(attr2.creationTime());
                 })
                 .findFirst()
                 .orElseThrow(() -> {
-                    throw new NoSuchReportException("No reports found");
+                    NoSuchReportException e = new NoSuchReportException("No reports found");
+                    log.error("Thrown  exception", e);
+                    throw e;
         });
     }
 
