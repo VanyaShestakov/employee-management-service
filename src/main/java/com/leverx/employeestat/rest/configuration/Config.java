@@ -3,19 +3,29 @@ package com.leverx.employeestat.rest.configuration;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -26,9 +36,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @Configuration
 @ComponentScan("com.leverx.employeestat.rest*")
@@ -39,15 +51,38 @@ import java.util.Properties;
 @PropertySource({
         "classpath:properties/db.properties",
         "classpath:properties/session-factory.properties",
-        "classpath:properties/application.properties"})
+        "classpath:application.properties"})
 @EnableScheduling
 public class Config implements WebMvcConfigurer {
+
+    private static List<String> clients = Arrays.asList("google", "facebook");
+    private static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
 
     private final Environment env;
 
     @Autowired
     public Config(Environment env) {
         this.env = env;
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        List<ClientRegistration> registrations = clients.stream()
+                .map(c -> getRegistration(c))
+                .filter(registration -> registration != null)
+                .collect(Collectors.toList());
+
+        return new InMemoryClientRegistrationRepository(registrations);
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -135,5 +170,27 @@ public class Config implements WebMvcConfigurer {
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    private ClientRegistration getRegistration(String client) {
+        String clientId = env.getProperty(
+                CLIENT_PROPERTY_KEY + client + ".client-id");
+
+        if (clientId == null) {
+            return null;
+        }
+
+        String clientSecret = env.getProperty(
+                CLIENT_PROPERTY_KEY + client + ".client-secret");
+
+        if (client.equals("google")) {
+            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
+                    .clientId(clientId).clientSecret(clientSecret).build();
+        }
+        if (client.equals("facebook")) {
+            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
+                    .clientId(clientId).clientSecret(clientSecret).build();
+        }
+        return null;
     }
 }
