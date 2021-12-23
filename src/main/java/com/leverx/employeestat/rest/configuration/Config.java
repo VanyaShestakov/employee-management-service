@@ -36,10 +36,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -55,8 +52,8 @@ import java.util.stream.Collectors;
 @EnableScheduling
 public class Config implements WebMvcConfigurer {
 
-    private static List<String> clients = Arrays.asList("google", "facebook");
-    private static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
+    private final static List<String> clients = Arrays.asList("google");
+    private final static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
 
     private final Environment env;
 
@@ -68,8 +65,8 @@ public class Config implements WebMvcConfigurer {
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
         List<ClientRegistration> registrations = clients.stream()
-                .map(c -> getRegistration(c))
-                .filter(registration -> registration != null)
+                .map(this::getRegistration)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return new InMemoryClientRegistrationRepository(registrations);
@@ -173,23 +170,20 @@ public class Config implements WebMvcConfigurer {
     }
 
     private ClientRegistration getRegistration(String client) {
-        String clientId = env.getProperty(
-                CLIENT_PROPERTY_KEY + client + ".client-id");
+        String clientId = env.getProperty(CLIENT_PROPERTY_KEY + client + ".client-id");
 
         if (clientId == null) {
             return null;
         }
 
-        String clientSecret = env.getProperty(
-                CLIENT_PROPERTY_KEY + client + ".client-secret");
+        String clientSecret = env.getProperty(CLIENT_PROPERTY_KEY + client + ".client-secret");
 
         if (client.equals("google")) {
-            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
-                    .clientId(clientId).clientSecret(clientSecret).build();
-        }
-        if (client.equals("facebook")) {
-            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
-                    .clientId(clientId).clientSecret(clientSecret).build();
+            return CommonOAuth2Provider.GOOGLE
+                    .getBuilder(client)
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
+                    .build();
         }
         return null;
     }
