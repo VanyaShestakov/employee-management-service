@@ -33,10 +33,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(readOnly = true)
     public ProjectDTO getById(UUID id) {
         Project project = projectRepository.findProjectById(id)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Project with id=%s not found", id));
-                });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Project with id=%s not found", id))
+                );
         return converter.toDTO(project);
     }
 
@@ -44,10 +43,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(readOnly = true)
     public ProjectDTO getByName(String name) {
         Project project = projectRepository.findProjectByName(name).
-                orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Project with name=%s not found", name));
-                });
+                orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Project with name=%s not found", name))
+                );
         return converter.toDTO(project);
     }
 

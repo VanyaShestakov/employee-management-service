@@ -141,9 +141,7 @@ public class ReportServiceImpl implements ReportService {
                     return (-1) * attr1.creationTime().compareTo(attr2.creationTime());
                 })
                 .findFirst()
-                .orElseThrow(() -> {
-                    throw new NoSuchReportException("No reports found");
-        });
+                .orElseThrow(() -> new NoSuchReportException("No reports found"));
     }
 
     private void createTableHeaders(String ... names) {

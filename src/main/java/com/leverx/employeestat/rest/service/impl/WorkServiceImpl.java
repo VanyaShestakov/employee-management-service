@@ -52,10 +52,9 @@ public class WorkServiceImpl implements WorkService {
     public WorkDTO getByIds(UUID employeeId, UUID projectId) {
         WorkId workId = createWorkId(employeeId, projectId);
         Work work = workRepository.findWorkById(workId)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Work with id=%s not found", workId));
-                });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Work with id=%s not found", workId))
+                );
         return converter.toDTO(work);
     }
 
@@ -64,10 +63,9 @@ public class WorkServiceImpl implements WorkService {
     public WorkDTO update(WorkDTO workDTO) {
         WorkId workId = createWorkId(workDTO.getEmployeeId(), workDTO.getProjectId());
         Work work = workRepository.findWorkById(workId)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Work with id=%s not found", workId));
-                });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Work with id=%s not found", workId))
+                );
 
         work.setPositionEndDate(workDTO.getPositionEndDate());
         work.setPositionStartDate(workDTO.getPositionStartDate());
@@ -89,15 +87,13 @@ public class WorkServiceImpl implements WorkService {
     private WorkId createWorkId(UUID employeeId, UUID projectId) {
         WorkId workId = new WorkId();
         workId.setEmployee(employeeRepository.findEmployeeById(employeeId)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Employee with id=%s not found", employeeId));
-                }));
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Employee with id=%s not found", employeeId)))
+        );
         workId.setProject(projectRepository.findProjectById(projectId)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Project with id=%s not found", projectId));
-                }));
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Project with id=%s not found", projectId)))
+        );
         return workId;
     }
 }

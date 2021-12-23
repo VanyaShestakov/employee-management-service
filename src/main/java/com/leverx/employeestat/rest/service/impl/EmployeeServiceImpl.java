@@ -44,10 +44,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public EmployeeDTO getById(UUID id) {
         Employee employee = employeeRepository.findEmployeeById(id)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Employee with id=%s not found", id));
-                });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Employee with id=%s not found", id))
+                );
         return converter.toDTO(employee);
     }
 
@@ -55,10 +54,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional(readOnly = true)
     public EmployeeDTO getByUsername(String username) {
         Employee employee = employeeRepository.findEmployeeByUsername(username)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Employee with username=%s not found", username));
-                });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Employee with username=%s not found", username))
+                );
         return converter.toDTO(employee);
     }
 
@@ -86,10 +84,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeDTO update(EmployeeDTO employeeDTO) {
         Employee employee = employeeRepository.findEmployeeById(employeeDTO.getId())
-                .orElseThrow(() -> {
-            throw new NoSuchRecordException
-                    (String.format("Employee with id=%s not found", employeeDTO.getId()));
-        });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Employee with id=%s not found", employeeDTO.getId()))
+                );
         converter.updateEmployeeFields(employeeDTO, employee);
         return converter.toDTO(employee);
     }

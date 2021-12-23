@@ -59,10 +59,9 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Transactional
     public void resetPassword(ResetPasswordRequest request) {
         Employee employee = employeeRepository.findEmployeeByUsername(request.getUsername())
-                .orElseThrow(() -> {
-                    throw  new NoSuchRecordException
-                            (String.format("Employee with username=%s not found", request.getUsername()));
-                });
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Employee with username=%s not found", request.getUsername()))
+                );
         if (encoder.matches(request.getOldPassword(), employee.getPassword())) {
             employee.setPassword(encoder.encode(request.getNewPassword()));
         } else {

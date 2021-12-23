@@ -31,15 +31,13 @@ public class WorkConverter {
         UUID projectId = workDTO.getProjectId();
         WorkId workId = new WorkId();
         workId.setEmployee(employeeRepository.findEmployeeById(employeeId)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Employee with id=%s not found", employeeId));
-                }));
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Employee with id=%s not found", employeeId)))
+        );
         workId.setProject(projectRepository.findProjectById(projectId)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            (String.format("Project with id=%s not found", projectId));
-                }));
+                .orElseThrow(() -> new NoSuchRecordException
+                        (String.format("Project with id=%s not found", projectId)))
+        );
         work.setId(workId);
         work.setPositionStartDate(workDTO.getPositionStartDate());
         work.setPositionEndDate(workDTO.getPositionEndDate());

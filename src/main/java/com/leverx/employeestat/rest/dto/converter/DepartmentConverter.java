@@ -30,10 +30,9 @@ public class DepartmentConverter {
         if (departmentDTO.getEmployeeIds() != null) {
             for (UUID id : departmentDTO.getEmployeeIds()) {
                 department.addEmployee(employeeRepository.findEmployeeById(id)
-                        .orElseThrow(() -> {
-                            throw new NoSuchRecordException
-                                    (String.format("Employee with id=%s not found", id));
-                        }));
+                        .orElseThrow(() -> new NoSuchRecordException
+                                (String.format("Employee with id=%s not found", id)))
+                );
             }
         }
         return department;

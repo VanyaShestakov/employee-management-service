@@ -41,25 +41,23 @@ public class EmployeeConverter {
         employee.setPassword(employeeDTO.getPassword());
         employee.setPosition(employeeDTO.getPosition());
         employee.setRole(roleRepository.findByName(employeeDTO.getRole())
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            ("Role with name=" + employeeDTO.getRole() + " does not exists");
-                }));
+                .orElseThrow(() -> new NoSuchRecordException
+                        ("Role with name=" + employeeDTO.getRole() + " does not exists"))
+        );
+
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-                    .orElseThrow(() -> {
-                        throw new NoSuchRecordException
-                                (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()));
-                    });
+                    .orElseThrow(() -> new NoSuchRecordException
+                            (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()))
+                    );
             employee.setDepartment(department);
         }
         if (employeeDTO.getProjectIds() != null) {
             for (UUID id : employeeDTO.getProjectIds()) {
                 Project project = projectRepository.findProjectById(id)
-                        .orElseThrow(() -> {
-                            throw new NoSuchRecordException
-                                    (String.format("Project with id=%s not found", id));
-                        });
+                        .orElseThrow(() -> new NoSuchRecordException
+                                (String.format("Project with id=%s not found", id))
+                        );
                 employee.addProject(project);
             }
         }
@@ -73,17 +71,15 @@ public class EmployeeConverter {
         employee.setPosition(employeeDTO.getPosition());
 
         employee.setRole(roleRepository.findByName(employeeDTO.getRole())
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException
-                            ("Role with name=" + employeeDTO.getRole() + " does not exists");
-                }));
+                .orElseThrow(() -> new NoSuchRecordException
+                        ("Role with name=" + employeeDTO.getRole() + " does not exists"))
+        );
 
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-                    .orElseThrow(() -> {
-                        throw new NoSuchRecordException
-                                (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()));
-                    });
+                    .orElseThrow(() -> new NoSuchRecordException
+                            (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()))
+                    );
             employee.setDepartment(department);
         } else {
             employee.setDepartment(null);
@@ -93,10 +89,9 @@ public class EmployeeConverter {
             employee.setProjects(null);
             for (UUID id : employeeDTO.getProjectIds()) {
                 Project project = projectRepository.findProjectById(id)
-                        .orElseThrow(() -> {
-                            throw new NoSuchRecordException
-                                    (String.format("Project with id=%s not found", id));
-                        });
+                        .orElseThrow(() -> new NoSuchRecordException
+                                (String.format("Project with id=%s not found", id))
+                        );
                 employee.addProject(project);
             }
         } else {

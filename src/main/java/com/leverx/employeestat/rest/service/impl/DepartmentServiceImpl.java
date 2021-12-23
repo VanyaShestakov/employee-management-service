@@ -76,9 +76,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional(readOnly = true)
     public DepartmentDTO getById(UUID id) {
         Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new NoSuchRecordException(String.format("Department with id=%s not found", id));
-                });
+                .orElseThrow(() ->
+                    new NoSuchRecordException(String.format("Department with id=%s not found", id))
+                );
         return converter.toDTO(department);
     }
 
