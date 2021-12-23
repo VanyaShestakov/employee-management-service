@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 @PropertySource({
         "classpath:properties/db.properties",
         "classpath:properties/session-factory.properties",
-        "classpath:application.properties"})
+        "classpath:security/google-security.properties"})
 @EnableScheduling
 public class Config implements WebMvcConfigurer {
 
