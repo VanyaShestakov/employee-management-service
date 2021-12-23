@@ -3,7 +3,6 @@ package com.leverx.employeestat.rest.controller;
 import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.exception.NotValidRecordException;
-import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.model.RegistrationRequest;
 import com.leverx.employeestat.rest.model.ResetPasswordRequest;
 import com.leverx.employeestat.rest.service.AuthorizationService;
