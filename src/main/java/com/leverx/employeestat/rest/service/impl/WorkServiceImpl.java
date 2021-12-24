@@ -9,8 +9,6 @@ import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.repository.WorkRepository;
 import com.leverx.employeestat.rest.service.WorkService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
