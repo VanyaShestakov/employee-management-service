@@ -1,17 +1,14 @@
 package com.leverx.employeestat.rest.service.impl;
 
-import com.leverx.employeestat.rest.controller.AvailableEmployeeController;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.dto.converter.EmployeeConverter;
 import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.InvalidPasswordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
-import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.model.ResetPasswordRequest;
+import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.AuthorizationService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +35,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     @Transactional
     public EmployeeDTO registerEmployee(EmployeeDTO employeeDTO) {
         if (employeeRepository.existsByUsername(employeeDTO.getUsername())) {
-            throw  new DuplicateRecordException
+            throw new DuplicateRecordException
                     (String.format("Employee with username=%s already exists", employeeDTO.getUsername()));
         }
         employeeDTO.setPassword(encoder.encode(employeeDTO.getPassword()));
