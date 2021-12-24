@@ -272,7 +272,6 @@
           <executable>C:\Program Files\Java\jdk1.8.0_301\bin\javac</executable>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 </project>
