@@ -12,12 +12,14 @@
     </preConditions>
 
     <changeSet id="4" author="Ivan">
-        <sqlFile dbms="postgresql"
-                 encoding="UTF-8"
-                 relativeToChangelogFile="true"
-                 splitStatements="true"
-                 stripComments="true"
-                 path="sql-scripts/create-db.sql"/>
+<!--        <sqlFile dbms="postgresql"-->
+<!--                 encoding="UTF-8"-->
+<!--                 relativeToChangelogFile="true"-->
+<!--                 splitStatements="true"-->
+<!--                 stripComments="true"-->
+<!--                 path="sql-scripts/create-db.sql"/>-->
+
+        <sql dbms="postgresql" endDelimiter=";">CREATE SCHEMA employee_db_test</sql>
         <sqlFile dbms="postgresql"
                  encoding="UTF-8"
                  relativeToChangelogFile="true"

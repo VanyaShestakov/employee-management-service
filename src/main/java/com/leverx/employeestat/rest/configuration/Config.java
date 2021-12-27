@@ -84,6 +84,14 @@ public class Config implements WebMvcConfigurer {
     }
 
     @Bean
+    public SpringLiquibase liquibase() {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setChangeLog("classpath:db/changelog/liquibase-changeLog.xml");
+        liquibase.setDataSource(dataSource());
+        return liquibase;
+    }
+
+    @Bean
     public DataSource dataSource() {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         try {
@@ -121,14 +129,6 @@ public class Config implements WebMvcConfigurer {
     @Bean
     public HibernateJpaVendorAdapter hibernateJpaVendorAdapter() {
         return new HibernateJpaVendorAdapter();
-    }
-
-    @Bean
-    public SpringLiquibase liquibase() {
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setChangeLog("classpath:db/changelog/liquibase-changeLog.xml");
-        liquibase.setDataSource(dataSource());
-        return liquibase;
     }
 
     @Bean

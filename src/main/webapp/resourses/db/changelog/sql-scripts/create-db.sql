@@ -1,1 +1,0 @@
-create database employee_db_liquibase;
