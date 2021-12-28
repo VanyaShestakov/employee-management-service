@@ -10,11 +10,13 @@
 - Security: Basic Authorization, OAuth2
 - Logging: log4j2
 - Documentation: Swagger 2.9.2
+- Project builder: Maven
 - Server: Tomcat 9.0.55
 - Containers: Docker
 - VCS: git
 - Cloud: Heroku
-- Other: Jackson, AspectJ, poi, opencsv
+- IDE: IntelliJ IDEA Ultimate
+- Others: Jackson, AspectJ, poi, opencsv
 
 # Installation
 - **Download the project**
