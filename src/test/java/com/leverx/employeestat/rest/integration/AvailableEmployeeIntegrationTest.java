@@ -53,6 +53,7 @@ public class AvailableEmployeeIntegrationTest {
         RoleRepository roleRepository = webAppContext.getBean(RoleRepository.class);
         WorkRepository workRepository = webAppContext.getBean(WorkRepository.class);
 
+
         Role role = roleRepository.findByName("ROLE_EMPLOYEE").get();
 
         Employee firstEmployee = new Employee();

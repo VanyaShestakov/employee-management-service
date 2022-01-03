@@ -35,8 +35,12 @@ public class TestConfig extends Config {
         return dataSource;
     }
 
+    @Bean
     @Override
     public SpringLiquibase liquibase() {
-        return null;
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setChangeLog("classpath:db/changelog/liquibase-changeLog-test.xml");
+        liquibase.setDataSource(dataSource());
+        return liquibase;
     }
 }
