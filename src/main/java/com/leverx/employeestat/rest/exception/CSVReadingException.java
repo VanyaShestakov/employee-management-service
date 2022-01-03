@@ -1,6 +1,7 @@
 package com.leverx.employeestat.rest.exception;
 
 public class CSVReadingException extends RuntimeException {
+
     public CSVReadingException() {
         super();
     }

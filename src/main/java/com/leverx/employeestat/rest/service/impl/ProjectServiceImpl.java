@@ -7,8 +7,6 @@ import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.ProjectRepository;
 import com.leverx.employeestat.rest.service.ProjectService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

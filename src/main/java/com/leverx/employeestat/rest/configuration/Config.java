@@ -56,11 +56,15 @@ public class Config implements WebMvcConfigurer {
     private final static List<String> clients = Arrays.asList("google");
     private final static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
 
-    private final Environment env;
+    private Environment env;
 
     @Autowired
     public Config(Environment env) {
         this.env = env;
+    }
+    
+    public Config() {
+
     }
 
     @Bean

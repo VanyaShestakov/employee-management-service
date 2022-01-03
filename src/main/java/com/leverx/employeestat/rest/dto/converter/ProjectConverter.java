@@ -5,8 +5,6 @@ import com.leverx.employeestat.rest.entity.Employee;
 import com.leverx.employeestat.rest.entity.Project;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

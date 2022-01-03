@@ -1,6 +1,5 @@
 package com.leverx.employeestat.rest.exceptionhandler;
 
-import com.leverx.employeestat.rest.controller.ReportController;
 import com.leverx.employeestat.rest.exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

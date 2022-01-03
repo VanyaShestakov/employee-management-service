@@ -1,6 +1,5 @@
 package com.leverx.employeestat.rest.service.impl;
 
-import com.leverx.employeestat.rest.controller.AvailableEmployeeController;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.dto.converter.EmployeeConverter;
 import com.leverx.employeestat.rest.entity.Employee;
@@ -8,8 +7,6 @@ import com.leverx.employeestat.rest.exception.DuplicateRecordException;
 import com.leverx.employeestat.rest.exception.NoSuchRecordException;
 import com.leverx.employeestat.rest.repository.EmployeeRepository;
 import com.leverx.employeestat.rest.service.EmployeeService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

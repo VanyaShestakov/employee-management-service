@@ -1,10 +1,8 @@
 package com.leverx.employeestat.rest.service.impl;
 
-import com.leverx.employeestat.rest.controller.AvailableEmployeeController;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.exception.CSVReadingException;
 import com.leverx.employeestat.rest.service.CSVReaderService;
-import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
