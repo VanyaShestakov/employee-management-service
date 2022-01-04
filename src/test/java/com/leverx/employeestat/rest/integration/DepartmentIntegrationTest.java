@@ -66,9 +66,9 @@ public class DepartmentIntegrationTest {
 
     @Test
     public void shouldReturnCorrectJsonIfGetRequestById() throws Exception {
-        mvc.perform(get(DEPARTMENTS_ENDPOINT + "/{id}", "319e97aa-6991-4b10-84b3-6b90ab594a77"))
+        mvc.perform(get(DEPARTMENTS_ENDPOINT + "/{id}", "edf939d2-dbc2-4473-80a1-4bb3826e666e"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("hr"));
+                .andExpect(jsonPath("$.name").value("HR"));
     }
 
     @Test
@@ -92,13 +92,13 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPosting() throws Exception {
+    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPost() throws Exception {
         mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPosting() throws Exception {
+    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPost() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String name = "Department";
         departmentDTO.setName(name);
@@ -113,7 +113,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnOkStatusIfJsonIsCorrectForPosting() throws Exception {
+    public void shouldReturnOkStatusIfJsonIsCorrectForPost() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String expected = "Test";
         departmentDTO.setName(expected);
@@ -125,7 +125,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPutting() throws Exception {
+    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPut() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String name = "Department";
         departmentDTO.setName(name);
@@ -140,13 +140,13 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPutting() throws Exception {
+    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPut() throws Exception {
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPutting() throws Exception{
+    public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPut() throws Exception{
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String expected = "Test";
         departmentDTO.setName(expected);
@@ -195,7 +195,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnMethodNotAllowedIfUUIDIsEmptyForDeleting() throws Exception {
+    public void shouldReturnMethodNotAllowedIfUUIDIsEmptyForDelete() throws Exception {
         mvc.perform(delete(DEPARTMENTS_ENDPOINT + "/{id}", ""))
                 .andExpect(status().isMethodNotAllowed());
     }

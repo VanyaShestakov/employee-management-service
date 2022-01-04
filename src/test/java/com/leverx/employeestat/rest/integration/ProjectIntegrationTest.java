@@ -76,11 +76,11 @@ public class ProjectIntegrationTest {
 
     @Test
     public void shouldReturnCorrectJsonIfGetRequestById() throws Exception {
-        String expectedName = "Windows project";
-        String expectedBeginDate = "2021-09-11";
-        String expectedEndDate = "2021-11-20";
+        String expectedName = "Bank system";
+        String expectedBeginDate = "2020-10-08";
+        String expectedEndDate = "2020-12-16";
 
-        mvc.perform(get(PROJECTS_ENDPOINT + "/{id}", "a805fe08-33c6-4be6-98a5-15ff95b0a19d"))
+        mvc.perform(get(PROJECTS_ENDPOINT + "/{id}", "7c8697b8-530d-4a00-ba00-3dfec6b1bb79"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(expectedName))
@@ -136,16 +136,19 @@ public class ProjectIntegrationTest {
 
     @Test
     public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPutting() throws Exception {
-        DepartmentDTO departmentDTO = new DepartmentDTO();
-        String expected = "Test";
-        departmentDTO.setName(expected);
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setName("expected");
+        projectDTO.setEnd(LocalDate.of(2021, 5, 11));
+        projectDTO.setBegin(LocalDate.of(2021, 2, 11));
 
-        mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
+        mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(expected))
+                .andExpect(jsonPath("$.name").value(projectDTO.getName()))
+                .andExpect(jsonPath("$.begin").value(projectDTO.getBegin().toString()))
+                .andExpect(jsonPath("$.end").value(projectDTO.getEnd().toString()))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
-        assertNull(departmentDTO.getId());
+        assertNull(projectDTO.getId());
     }
 
     @Test

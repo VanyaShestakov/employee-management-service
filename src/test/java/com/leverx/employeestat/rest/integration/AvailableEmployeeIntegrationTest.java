@@ -53,10 +53,10 @@ public class AvailableEmployeeIntegrationTest {
         RoleRepository roleRepository = webAppContext.getBean(RoleRepository.class);
         WorkRepository workRepository = webAppContext.getBean(WorkRepository.class);
 
-
         Role role = roleRepository.findByName("ROLE_EMPLOYEE").get();
 
         Employee firstEmployee = new Employee();
+        firstEmployee.setPassword("init");
         firstEmployee.setFirstName("Ivan");
         firstEmployee.setLastName("Ivanov");
         firstEmployee.setUsername("Ivanov");
@@ -64,6 +64,7 @@ public class AvailableEmployeeIntegrationTest {
         firstEmployee.setRole(role);
 
         Employee secondEmployee = new Employee();
+        secondEmployee.setPassword("init");
         secondEmployee.setFirstName("Vova");
         secondEmployee.setLastName("Vovanov");
         secondEmployee.setUsername("Vovanov");
@@ -72,6 +73,8 @@ public class AvailableEmployeeIntegrationTest {
 
         Project project = new Project();
         project.setName("Test");
+        project.setBegin(LocalDate.of(2018, 1, 1));
+        project.setEnd(LocalDate.of(2022, 1, 1));
 
         firstEmployee.addProject(project);
         secondEmployee.addProject(project);
