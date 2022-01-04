@@ -42,12 +42,34 @@
                  splitStatements="true"
                  stripComments="true"
                  path="sql-scripts/create-project_employee-table.sql"/>
+
         <sqlFile dbms="postgresql"
                  encoding="UTF-8"
                  endDelimiter="\n"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="sql-scripts/insert-roles.sql"/>
+                 path="sql-scripts/init-role-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 endDelimiter="\n"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/init-department-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 endDelimiter="\n"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/init-project-table.sql"/>
+        <sqlFile dbms="postgresql"
+                 encoding="UTF-8"
+                 endDelimiter="\n"
+                 relativeToChangelogFile="true"
+                 splitStatements="true"
+                 stripComments="true"
+                 path="sql-scripts/init-employee-table.sql"/>
     </changeSet>
 </databaseChangeLog>

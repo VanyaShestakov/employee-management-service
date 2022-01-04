@@ -47,12 +47,16 @@ public class EmployeeIntegrationTest {
     @BeforeEach
     public void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
+    }
+
+    @BeforeEach
+    public void init() {
         employeeDTO = new EmployeeDTO();
-        String id = "50c69208-76c4-4f5f-b617-677cda476b64";
-        String expectedFirstName = "Vova";
-        String expectedLastName = "Vovanov";
-        String expectedUsername = "Vovich";
-        String expectedPosition = "Developer";
+        String id = "c7fa1cd3-b281-47b1-b72f-92b9391fc5c7";
+        String expectedFirstName = "Ivan";
+        String expectedLastName = "Shestakov";
+        String expectedUsername = "Vanechka";
+        String expectedPosition = "Java Developer";
         String role = "ROLE_MANAGER";
         employeeDTO.setFirstName(expectedFirstName);
         employeeDTO.setLastName(expectedLastName);
@@ -77,17 +81,12 @@ public class EmployeeIntegrationTest {
 
     @Test
     public void shouldReturnCorrectJsonIfGetRequestById() throws Exception {
-        String expectedFirstName = "Ivan";
-        String expectedLastName = "Shestakov";
-        String expectedUsername = "anechka";
-        String expectedPosition = "Java Developer";
-
-        mvc.perform(get(EMPLOYEES_ENDPOINT + "/{id}", "ea66da14-8f15-434c-931f-6ff237429904"))
+        mvc.perform(get(EMPLOYEES_ENDPOINT + "/{id}", employeeDTO.getId().toString()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.firstName").value(expectedFirstName))
-                .andExpect(jsonPath("$.lastName").value(expectedLastName))
-                .andExpect(jsonPath("$.username").value(expectedUsername))
-                .andExpect(jsonPath("$.position").value(expectedPosition));
+                .andExpect(jsonPath("$.firstName").value(employeeDTO.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(employeeDTO.getLastName()))
+                .andExpect(jsonPath("$.username").value(employeeDTO.getUsername()))
+                .andExpect(jsonPath("$.position").value(employeeDTO.getPosition()));
     }
 
     @Test
@@ -100,48 +99,35 @@ public class EmployeeIntegrationTest {
     }
 
     @Test
-    public void shouldReturnMethodNotAllowedForPosting() throws Exception {
+    public void shouldReturnMethodNotAllowedForPost() throws Exception {
         mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isMethodNotAllowed());
     }
 
-//    @Test
-//    public void shouldReturnOkStatusIfJsonIsCorrectForPosting() throws Exception{
-//        String expectedFirstName = "Vova";
-//        String expectedLastName = "Vovanov";
-//        String expectedUsername = "Vovich";
-//        String expectedPosition = "Developer";
-//        String expectedPassword = "123";
-//        mvc.perform(post(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.firstName").value(expectedFirstName))
-//                .andExpect(jsonPath("$.lastName").value(expectedLastName))
-//                .andExpect(jsonPath("$.username").value(expectedUsername))
-//                .andExpect(jsonPath("$.position").value(expectedPosition))
-//                .andExpect(jsonPath("$.password").value(expectedPassword));
-//    }
-
     @Test
-    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPutting() throws Exception {
+    public void shouldReturnBadRequestStatusIfJsonIsEmptyForPut() throws Exception {
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPutting() throws Exception {
-        String expectedFirstName = "Vova";
-        String expectedLastName = "Vovanov";
-        String expectedUsername = "Vovich";
-        String expectedPosition = "Developer";
-        String expectedPassword = "123";
+    public void shouldReturnBadRequestIfJsonIsNotCorrectForPut() throws Exception {
+        employeeDTO.setPosition("");
+        employeeDTO.setUsername("");
+        //employeeDTO.setRole("");
+        mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
+                .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void shouldReturnOkStatusIfJsonIsCorrectForPut() throws Exception {
         mvc.perform(put(EMPLOYEES_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(employeeDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value(expectedFirstName))
-                .andExpect(jsonPath("$.lastName").value(expectedLastName))
-                .andExpect(jsonPath("$.username").value(expectedUsername))
-                .andExpect(jsonPath("$.position").value(expectedPosition))
-                .andExpect(jsonPath("$.id").isNotEmpty());
+                .andExpect(jsonPath("$.firstName").value(employeeDTO.getFirstName()))
+                .andExpect(jsonPath("$.lastName").value(employeeDTO.getLastName()))
+                .andExpect(jsonPath("$.username").value(employeeDTO.getUsername()))
+                .andExpect(jsonPath("$.position").value(employeeDTO.getPosition()))
+                .andExpect(jsonPath("$.id").value(employeeDTO.getId().toString()));
     }
 
     @Test
@@ -154,12 +140,12 @@ public class EmployeeIntegrationTest {
 
     @Test
     public void shouldDeleteEmployeeIfIdIsCorrectAndExists() throws Exception{
-        mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", "ea66da14-8f15-434c-931f-6ff237429904"))
+        mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", "c7fa1cd3-b281-47b1-b72f-92b9391fc5c7"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldReturnMethodNotAllowedIfUUIDIsEmptyForDeleting() throws Exception {
+    public void shouldReturnMethodNotAllowedIfUUIDIsEmptyForDelete() throws Exception {
         mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", ""))
                 .andExpect(status().isMethodNotAllowed());
     }

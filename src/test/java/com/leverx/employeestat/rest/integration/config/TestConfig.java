@@ -6,6 +6,7 @@ import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
@@ -43,4 +44,11 @@ public class TestConfig extends Config {
         liquibase.setDataSource(dataSource());
         return liquibase;
     }
+
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+        return new MethodValidationPostProcessor();
+    }
+
+
 }
