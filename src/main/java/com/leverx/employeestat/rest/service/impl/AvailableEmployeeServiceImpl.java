@@ -15,13 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class AvailableEmployeeServiceImpl implements AvailableEmployeeService {
 
-    private final EmployeeRepository employeeRepository;
     private final WorkRepository workRepository;
     private final EmployeeConverter converter;
 
     @Autowired
-    public AvailableEmployeeServiceImpl(EmployeeRepository employeeRepository, WorkRepository workRepository, EmployeeConverter converter) {
-        this.employeeRepository = employeeRepository;
+    public AvailableEmployeeServiceImpl(WorkRepository workRepository, EmployeeConverter converter) {
         this.workRepository = workRepository;
         this.converter = converter;
     }

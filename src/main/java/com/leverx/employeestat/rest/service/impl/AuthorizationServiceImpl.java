@@ -54,15 +54,15 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     @Override
     @Transactional
-    public void resetPassword(ResetPasswordRequest request) {
+    public EmployeeDTO resetPassword(ResetPasswordRequest request) {
         Employee employee = employeeRepository.findEmployeeByUsername(request.getUsername())
                 .orElseThrow(() -> new NoSuchRecordException
                         (String.format("Employee with username=%s not found", request.getUsername()))
                 );
-        if (encoder.matches(request.getOldPassword(), employee.getPassword())) {
-            employee.setPassword(encoder.encode(request.getNewPassword()));
-        } else {
-            throw  new InvalidPasswordException("You entered incorrect old password");
+        if (!encoder.matches(request.getOldPassword(), employee.getPassword())) {
+            throw new InvalidPasswordException("You entered incorrect old password");
         }
+        employee.setPassword(encoder.encode(request.getNewPassword()));
+        return converter.toDTO(employee);
     }
 }
