@@ -10,6 +10,7 @@ import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
+import com.leverx.employeestat.rest.integration.util.JsonUtils;
 import com.leverx.employeestat.rest.service.DepartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import java.util.UUID;
+
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toJson;
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toObject;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class DepartmentIntegrationTest {
 
-    public static final String DEPARTMENTS_ENDPOINT = "/api/departments";
+    private static final String DEPARTMENTS_ENDPOINT = "/api/departments";
 
     private final WebApplicationContext webAppContext;
     private MockMvc mvc;
@@ -170,7 +174,7 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        departmentDTO = toObject(result.getResponse().getContentAsString());
+        departmentDTO = toObject(result.getResponse().getContentAsString(), DepartmentDTO.class);
         departmentDTO.setName(expectedName);
         UUID expectedId = departmentDTO.getId();
 
@@ -187,7 +191,7 @@ public class DepartmentIntegrationTest {
         MvcResult result = mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        departmentDTO = toObject(result.getResponse().getContentAsString());
+        departmentDTO = toObject(result.getResponse().getContentAsString(), DepartmentDTO.class);
         UUID id = departmentDTO.getId();
 
         mvc.perform(delete(DEPARTMENTS_ENDPOINT + "/{id}", id.toString()))
@@ -207,16 +211,5 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.code").value(400));
-    }
-
-    private String toJson(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
-    }
-
-    private DepartmentDTO toObject(String jsonString) throws JsonProcessingException {
-        return new ObjectMapper().readValue(jsonString, DepartmentDTO.class);
     }
 }

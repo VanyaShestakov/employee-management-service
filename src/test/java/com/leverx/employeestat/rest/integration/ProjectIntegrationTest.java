@@ -25,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toJson;
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toObject;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -169,7 +172,7 @@ public class ProjectIntegrationTest {
                 .andReturn();
 
         String expectedName = "New";
-        projectDTO = toObject(result.getResponse().getContentAsString());
+        projectDTO = toObject(result.getResponse().getContentAsString(), ProjectDTO.class);
         projectDTO.setName(expectedName);
         UUID expectedId = projectDTO.getId();
 
@@ -185,7 +188,7 @@ public class ProjectIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        projectDTO = toObject(result.getResponse().getContentAsString());
+        projectDTO = toObject(result.getResponse().getContentAsString(), ProjectDTO.class);
         UUID id = projectDTO.getId();
 
         mvc.perform(delete(PROJECTS_ENDPOINT + "/{id}", id.toString()))
@@ -205,18 +208,5 @@ public class ProjectIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.code").value(400));
-    }
-
-    private String toJson(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
-    }
-
-    private ProjectDTO toObject(String jsonString) throws JsonProcessingException {
-        return new ObjectMapper().registerModule(new JavaTimeModule())
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-                .readValue(jsonString, ProjectDTO.class);
     }
 }

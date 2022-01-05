@@ -34,7 +34,6 @@ public class AuthorizationController {
         this.bindingResultParser = bindingResultParser;
     }
 
-
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Register employee", response = EmployeeDTO.class)

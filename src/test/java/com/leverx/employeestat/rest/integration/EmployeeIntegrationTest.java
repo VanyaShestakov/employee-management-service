@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toJson;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -163,16 +164,5 @@ public class EmployeeIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.code").value(400));
-    }
-
-    private String toJson(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
-    }
-
-    private EmployeeDTO toObject(String jsonString) throws JsonProcessingException {
-        return new ObjectMapper().readValue(jsonString, EmployeeDTO.class);
     }
 }
