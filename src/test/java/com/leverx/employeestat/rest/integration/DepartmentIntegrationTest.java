@@ -1,17 +1,9 @@
 package com.leverx.employeestat.rest.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.leverx.employeestat.rest.configuration.WebInitializer;
-import com.leverx.employeestat.rest.controller.DepartmentController;
-import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
-import com.leverx.employeestat.rest.integration.util.JsonUtils;
-import com.leverx.employeestat.rest.service.DepartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
 import java.util.UUID;
 
 import static com.leverx.employeestat.rest.integration.util.JsonUtils.toJson;

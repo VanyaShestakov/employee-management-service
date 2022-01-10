@@ -1,9 +1,5 @@
 package com.leverx.employeestat.rest.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.leverx.employeestat.rest.configuration.WebInitializer;
 import com.leverx.employeestat.rest.dto.EmployeeDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;

@@ -1,7 +1,6 @@
 package com.leverx.employeestat.rest.integration;
 
 import com.leverx.employeestat.rest.configuration.WebInitializer;
-import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
 import com.leverx.employeestat.rest.model.RegistrationRequest;

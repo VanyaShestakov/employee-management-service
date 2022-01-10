@@ -1,13 +1,7 @@
 package com.leverx.employeestat.rest.integration;
 
 import com.leverx.employeestat.rest.configuration.WebInitializer;
-import com.leverx.employeestat.rest.entity.*;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
-import com.leverx.employeestat.rest.repository.EmployeeRepository;
-import com.leverx.employeestat.rest.repository.RoleRepository;
-import com.leverx.employeestat.rest.repository.WorkRepository;
-import net.bytebuddy.asm.Advice;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -48,82 +39,30 @@ public class AvailableEmployeeIntegrationTest {
     }
 
     @BeforeEach
-    public void initRepository() {
-        EmployeeRepository repository = webAppContext.getBean(EmployeeRepository.class);
-        RoleRepository roleRepository = webAppContext.getBean(RoleRepository.class);
-        WorkRepository workRepository = webAppContext.getBean(WorkRepository.class);
-
-        Role role = roleRepository.findByName("ROLE_EMPLOYEE").get();
-
-        Employee firstEmployee = new Employee();
-        firstEmployee.setPassword("init");
-        firstEmployee.setFirstName("Ivan");
-        firstEmployee.setLastName("Ivanov");
-        firstEmployee.setUsername("Ivanov");
-        firstEmployee.setPosition("Position");
-        firstEmployee.setRole(role);
-
-        Employee secondEmployee = new Employee();
-        secondEmployee.setPassword("init");
-        secondEmployee.setFirstName("Vova");
-        secondEmployee.setLastName("Vovanov");
-        secondEmployee.setUsername("Vovanov");
-        secondEmployee.setPosition("Position");
-        secondEmployee.setRole(role);
-
-        Project project = new Project();
-        project.setName("Test");
-        project.setBegin(LocalDate.of(2018, 1, 1));
-        project.setEnd(LocalDate.of(2022, 1, 1));
-
-        firstEmployee.addProject(project);
-        secondEmployee.addProject(project);
-
-        firstEmployee = repository.save(firstEmployee);
-        secondEmployee = repository.save(secondEmployee);
-
-        firstEmployeeId = firstEmployee.getId().toString();
-        secondEmployeeId = secondEmployee.getId().toString();
-
-        WorkId firstWorkId = new WorkId();
-        firstWorkId.setEmployee(firstEmployee);
-        firstWorkId.setProject(project);
-
-        WorkId secondWorkId = new WorkId();
-        secondWorkId.setEmployee(secondEmployee);
-        secondWorkId.setProject(project);
-
-        Work firstWork = workRepository.findWorkById(firstWorkId).get();
-        Work secondWork = workRepository.findWorkById(secondWorkId).get();
-
-        firstWork.setWorkingHours(8);
-        firstWork.setPositionStartDate(LocalDate.now().plusDays(20));
-        firstWork.setPositionEndDate(LocalDate.now().plusDays(40));
-
-        secondWork.setWorkingHours(8);
-        secondWork.setPositionStartDate(LocalDate.now().minusDays(20));
-        secondWork.setPositionEndDate(LocalDate.now().minusDays(10));
-    }
-
-    @BeforeEach
     public void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
     }
 
     @Test
     public void shouldReturnTwoAvailableEmployeesNow() throws Exception {
+        final String firstExpectedId = "c7fa1cd3-b281-47b1-b72f-92b9391fc5c7";
+        final String secondExpectedId = "e9a4e12b-1555-48bd-9275-629856bcdb51";
+        final String thirdExpectedId = "2174c05c-e885-4521-985d-774b1f05cd37";
+
         mvc.perform(get(AVAILABLE_EMPLOYEES_ENDPOINT))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andDo(print())
-                .andExpect(jsonPath("$[0].id").value(firstEmployeeId))
-                .andExpect(jsonPath("$[1].id").value(secondEmployeeId));
+                .andExpect(jsonPath("$[0].id").value(firstExpectedId))
+                .andExpect(jsonPath("$[1].id").value(secondExpectedId))
+                .andExpect(jsonPath("$[2].id").value(thirdExpectedId));
     }
 
     @Test
     public void shouldReturnOneAvailableEmployeeWithinMonth() throws Exception {
+        final String firstExpectedId = "c7fa1cd3-b281-47b1-b72f-92b9391fc5c7";
         mvc.perform(get(AVAILABLE_EMPLOYEES_ENDPOINT + "/20"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andDo(print())
-                .andExpect(jsonPath("$[0].id").value(secondEmployeeId));
+                .andExpect(jsonPath("$[0].id").value(firstExpectedId));
     }
 }
