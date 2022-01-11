@@ -1,12 +1,6 @@
 package com.leverx.employeestat.rest.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.leverx.employeestat.rest.configuration.WebInitializer;
-import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.dto.ProjectDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
@@ -23,14 +17,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toJson;
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toObject;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfig.class, WebInitializer.class})
@@ -76,11 +72,11 @@ public class ProjectIntegrationTest {
 
     @Test
     public void shouldReturnCorrectJsonIfGetRequestById() throws Exception {
-        String expectedName = "Windows project";
-        String expectedBeginDate = "2021-09-11";
-        String expectedEndDate = "2021-11-20";
+        String expectedName = "Bank system";
+        String expectedBeginDate = "2020-10-08";
+        String expectedEndDate = "2020-12-16";
 
-        mvc.perform(get(PROJECTS_ENDPOINT + "/{id}", "a805fe08-33c6-4be6-98a5-15ff95b0a19d"))
+        mvc.perform(get(PROJECTS_ENDPOINT + "/{id}", "7c8697b8-530d-4a00-ba00-3dfec6b1bb79"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(expectedName))
@@ -136,16 +132,19 @@ public class ProjectIntegrationTest {
 
     @Test
     public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPutting() throws Exception {
-        DepartmentDTO departmentDTO = new DepartmentDTO();
-        String expected = "Test";
-        departmentDTO.setName(expected);
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setName("expected");
+        projectDTO.setEnd(LocalDate.of(2021, 5, 11));
+        projectDTO.setBegin(LocalDate.of(2021, 2, 11));
 
-        mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
+        mvc.perform(put(PROJECTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(projectDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(expected))
+                .andExpect(jsonPath("$.name").value(projectDTO.getName()))
+                .andExpect(jsonPath("$.begin").value(projectDTO.getBegin().toString()))
+                .andExpect(jsonPath("$.end").value(projectDTO.getEnd().toString()))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 
-        assertNull(departmentDTO.getId());
+        assertNull(projectDTO.getId());
     }
 
     @Test
@@ -166,7 +165,7 @@ public class ProjectIntegrationTest {
                 .andReturn();
 
         String expectedName = "New";
-        projectDTO = toObject(result.getResponse().getContentAsString());
+        projectDTO = toObject(result.getResponse().getContentAsString(), ProjectDTO.class);
         projectDTO.setName(expectedName);
         UUID expectedId = projectDTO.getId();
 
@@ -182,7 +181,7 @@ public class ProjectIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        projectDTO = toObject(result.getResponse().getContentAsString());
+        projectDTO = toObject(result.getResponse().getContentAsString(), ProjectDTO.class);
         UUID id = projectDTO.getId();
 
         mvc.perform(delete(PROJECTS_ENDPOINT + "/{id}", id.toString()))
@@ -202,18 +201,5 @@ public class ProjectIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.code").value(400));
-    }
-
-    private String toJson(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
-    }
-
-    private ProjectDTO toObject(String jsonString) throws JsonProcessingException {
-        return new ObjectMapper().registerModule(new JavaTimeModule())
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-                .readValue(jsonString, ProjectDTO.class);
     }
 }

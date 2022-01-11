@@ -12,10 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -97,8 +99,8 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void shouldReturnNotEmptyListIfDbTableIsNotEmpty() {
-        when(employeeRepository.findAll()).thenReturn(Arrays.asList(new Employee[] {new Employee(), new Employee()}));
+    public void shouldReturnNotEmptyListIfRepositoryIsNotEmpty() {
+        when(employeeRepository.findAll()).thenReturn(Arrays.asList(new Employee(), new Employee()));
 
         Assertions.assertFalse(employeeService.getAll().isEmpty());
 

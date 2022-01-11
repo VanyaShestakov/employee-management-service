@@ -1,16 +1,9 @@
 package com.leverx.employeestat.rest.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.leverx.employeestat.rest.configuration.WebInitializer;
-import com.leverx.employeestat.rest.controller.DepartmentController;
-import com.leverx.employeestat.rest.controller.tool.BindingResultParser;
 import com.leverx.employeestat.rest.dto.DepartmentDTO;
 import com.leverx.employeestat.rest.exceptionhandler.GlobalControllerAdvice;
 import com.leverx.employeestat.rest.integration.config.TestConfig;
-import com.leverx.employeestat.rest.service.DepartmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +17,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
 import java.util.UUID;
+
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toJson;
+import static com.leverx.employeestat.rest.integration.util.JsonUtils.toObject;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class DepartmentIntegrationTest {
 
-    public static final String DEPARTMENTS_ENDPOINT = "/api/departments";
+    private static final String DEPARTMENTS_ENDPOINT = "/api/departments";
 
     private final WebApplicationContext webAppContext;
     private MockMvc mvc;
@@ -66,9 +63,9 @@ public class DepartmentIntegrationTest {
 
     @Test
     public void shouldReturnCorrectJsonIfGetRequestById() throws Exception {
-        mvc.perform(get(DEPARTMENTS_ENDPOINT + "/{id}", "319e97aa-6991-4b10-84b3-6b90ab594a77"))
+        mvc.perform(get(DEPARTMENTS_ENDPOINT + "/{id}", "edf939d2-dbc2-4473-80a1-4bb3826e666e"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("hr"));
+                .andExpect(jsonPath("$.name").value("HR"));
     }
 
     @Test
@@ -92,13 +89,13 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPosting() throws Exception {
+    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPost() throws Exception {
         mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPosting() throws Exception {
+    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPost() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String name = "Department";
         departmentDTO.setName(name);
@@ -113,7 +110,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnOkStatusIfJsonIsCorrectForPosting() throws Exception {
+    public void shouldReturnOkStatusIfJsonIsCorrectForPost() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String expected = "Test";
         departmentDTO.setName(expected);
@@ -125,7 +122,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPutting() throws Exception {
+    public void shouldReturnBadRequestIfNameOfDepartmentAlreadyExistsForPut() throws Exception {
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String name = "Department";
         departmentDTO.setName(name);
@@ -140,13 +137,13 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPutting() throws Exception {
+    public void shouldReturnBadRequestStatusIfJsonIsNotCorrectForPut() throws Exception {
         mvc.perform(put(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(""))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPutting() throws Exception{
+    public void shouldReturnOkStatusIfJsonWithoutIdIsCorrectForPut() throws Exception{
         DepartmentDTO departmentDTO = new DepartmentDTO();
         String expected = "Test";
         departmentDTO.setName(expected);
@@ -170,7 +167,7 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        departmentDTO = toObject(result.getResponse().getContentAsString());
+        departmentDTO = toObject(result.getResponse().getContentAsString(), DepartmentDTO.class);
         departmentDTO.setName(expectedName);
         UUID expectedId = departmentDTO.getId();
 
@@ -187,7 +184,7 @@ public class DepartmentIntegrationTest {
         MvcResult result = mvc.perform(post(DEPARTMENTS_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(departmentDTO)))
                 .andExpect(status().isCreated())
                 .andReturn();
-        departmentDTO = toObject(result.getResponse().getContentAsString());
+        departmentDTO = toObject(result.getResponse().getContentAsString(), DepartmentDTO.class);
         UUID id = departmentDTO.getId();
 
         mvc.perform(delete(DEPARTMENTS_ENDPOINT + "/{id}", id.toString()))
@@ -195,7 +192,7 @@ public class DepartmentIntegrationTest {
     }
 
     @Test
-    public void shouldReturnMethodNotAllowedIfUUIDIsEmptyForDeleting() throws Exception {
+    public void shouldReturnMethodNotAllowedIfUUIDIsEmptyForDelete() throws Exception {
         mvc.perform(delete(DEPARTMENTS_ENDPOINT + "/{id}", ""))
                 .andExpect(status().isMethodNotAllowed());
     }
@@ -207,16 +204,5 @@ public class DepartmentIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.code").value(400));
-    }
-
-    private String toJson(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
-    }
-
-    private DepartmentDTO toObject(String jsonString) throws JsonProcessingException {
-        return new ObjectMapper().readValue(jsonString, DepartmentDTO.class);
     }
 }

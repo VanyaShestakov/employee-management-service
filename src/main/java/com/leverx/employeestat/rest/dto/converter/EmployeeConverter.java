@@ -40,7 +40,7 @@ public class EmployeeConverter {
         employee.setPosition(employeeDTO.getPosition());
         employee.setRole(roleRepository.findByName(employeeDTO.getRole())
                 .orElseThrow(() -> new NoSuchRecordException
-                        ("Role with name=" + employeeDTO.getRole() + " does not exists"))
+                        (String.format("Role with name=%s does not exists", employeeDTO.getRole())))
         );
 
         if (employeeDTO.getDepartmentId() != null) {

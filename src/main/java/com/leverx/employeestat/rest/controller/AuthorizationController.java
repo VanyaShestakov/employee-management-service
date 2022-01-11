@@ -34,7 +34,6 @@ public class AuthorizationController {
         this.bindingResultParser = bindingResultParser;
     }
 
-
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Register employee", response = EmployeeDTO.class)
@@ -43,7 +42,8 @@ public class AuthorizationController {
                                         @Valid RegistrationRequest request, BindingResult result) {
         log.info("executing registerEmployee() method");
         if (result.hasErrors()) {
-            throw new NotValidRecordException("Fields of Employee have errors: " + bindingResultParser.getFieldErrMismatches(result));
+            throw new NotValidRecordException
+                    (String.format("Fields of Employee have errors: %s", bindingResultParser.getFieldErrMismatches(result)));
         }
         return authorizationService.registerEmployee(request.toDTO());
     }

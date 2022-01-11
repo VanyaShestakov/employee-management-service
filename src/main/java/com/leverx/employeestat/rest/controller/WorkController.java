@@ -42,11 +42,11 @@ public class WorkController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get work by employee id and project id")
     public WorkDTO getWork(@ApiParam(value = "Employee id (UUID)")
-                           @PathVariable("empId") UUID employeeId,
+                           @PathVariable("empId") String employeeId,
                            @ApiParam(value = "Project id (UUID)")
-                           @PathVariable("projId") UUID projectId) {
+                           @PathVariable("projId") String projectId) {
         log.info("executing getWork() method");
-        return workService.getByIds(employeeId, projectId);
+        return workService.getByIds(getUUIDFromString(employeeId), getUUIDFromString(projectId));
     }
 
     @PutMapping
@@ -59,7 +59,7 @@ public class WorkController {
     }
 
     @DeleteMapping("/empId={empId}/projId={projId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Get work by employee id and project id")
     public void deleteWork(@ApiParam(value = "Employee id (UUID)")
                            @PathVariable("empId") String employeeId,

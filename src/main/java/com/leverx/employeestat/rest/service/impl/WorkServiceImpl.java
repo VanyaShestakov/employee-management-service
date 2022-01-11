@@ -68,7 +68,7 @@ public class WorkServiceImpl implements WorkService {
         work.setPositionEndDate(workDTO.getPositionEndDate());
         work.setPositionStartDate(workDTO.getPositionStartDate());
         work.setWorkingHours(workDTO.getWorkingHours());
-        return converter.toDTO(workRepository.save(work));
+        return converter.toDTO(work);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class WorkServiceImpl implements WorkService {
             throw new NoSuchRecordException
                     (String.format("Work with id=%s not found", workId));
         }
-        workRepository.deleteById(createWorkId(employeeId, projectId));
+        workRepository.deleteById(workId);
     }
 
     private WorkId createWorkId(UUID employeeId, UUID projectId) {

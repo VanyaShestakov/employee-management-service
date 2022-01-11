@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,9 +52,9 @@ public class ReportServiceImpl implements ReportService {
         this.workRepository = workRepository;
     }
 
-//    @Override
-//    @Scheduled(cron = "${reports-generating-cron}")
-//    @Transactional
+    @Override
+    @Scheduled(cron = "${reports-generating-cron}")
+    @Transactional
     public void generateAvailableEmployeesReport() {
         createTableHeaders(FIRST_NAME_COL, LAST_NAME_COL, DEPARTMENT_COL);
         List<Employee> availableEmployees = workRepository.findAllAvailableNext(30)

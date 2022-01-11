@@ -9,7 +9,7 @@ public interface AuthorizationService {
 
     EmployeeDTO registerEmployee(EmployeeDTO employeeDTO);
 
-    void resetPassword(ResetPasswordRequest request);
+    EmployeeDTO resetPassword(ResetPasswordRequest request);
 
     List<EmployeeDTO> registerAll(List<EmployeeDTO> employeeDTOs);
 }
