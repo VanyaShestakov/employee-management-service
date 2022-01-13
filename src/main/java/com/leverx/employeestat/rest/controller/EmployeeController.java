@@ -7,6 +7,7 @@ import com.leverx.employeestat.rest.service.EmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,8 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 @RestController
 @RequestMapping("/api/employees")
 @Api(tags = {"Employee CRUD operations"})
+@Slf4j
 public class EmployeeController {
-
-    private final Logger log = LogManager.getLogger(EmployeeController.class);
 
     private final EmployeeService employeeService;
     private final BindingResultParser bindingResultParser;

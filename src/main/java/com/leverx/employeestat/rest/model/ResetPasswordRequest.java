@@ -1,10 +1,18 @@
 package com.leverx.employeestat.rest.model;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @ApiModel(value = "Reset password request", description = "Contains username, old and new password of employee")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ResetPasswordRequest {
 
     @NotBlank
@@ -16,27 +24,4 @@ public class ResetPasswordRequest {
     @NotBlank
     private String newPassword;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
 }

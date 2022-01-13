@@ -28,7 +28,7 @@ public class TestConfig extends Config {
         try {
             dataSource.setDriverClass(env.getRequiredProperty("driverClass"));
             dataSource.setJdbcUrl(env.getRequiredProperty("testUrl"));
-            dataSource.setUser(env.getRequiredProperty("user"));
+            dataSource.setUser(env.getRequiredProperty("dbuser"));
             dataSource.setPassword(env.getRequiredProperty("password"));
         } catch (PropertyVetoException e) {
             e.printStackTrace();

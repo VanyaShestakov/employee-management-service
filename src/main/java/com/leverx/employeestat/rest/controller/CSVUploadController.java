@@ -6,8 +6,7 @@ import com.leverx.employeestat.rest.service.CSVReaderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("api/employees/upload")
 @Api(tags = {"API for uploading employees from CSV file"})
+@Slf4j
 public class CSVUploadController {
-
-    private final Logger log = LogManager.getLogger(CSVUploadController.class);
 
     private final CSVReaderService readerService;
     private final AuthorizationService authorizationService;

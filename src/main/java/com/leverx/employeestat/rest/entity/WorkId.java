@@ -1,11 +1,17 @@
 package com.leverx.employeestat.rest.entity;
 
+import lombok.*;
+
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class WorkId implements Serializable {
 
     @ManyToOne(targetEntity = Employee.class)
@@ -14,22 +20,7 @@ public class WorkId implements Serializable {
     @ManyToOne(targetEntity = Project.class)
     private Project project;
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
+    @Override
     public String toString(){
         return "(employeeId=" + employee.getId() + "; projectId=" + project.getId() + ")";
     }

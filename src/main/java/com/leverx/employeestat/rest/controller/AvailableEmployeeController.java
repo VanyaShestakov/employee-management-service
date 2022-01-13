@@ -5,6 +5,7 @@ import com.leverx.employeestat.rest.service.AvailableEmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employees/available")
 @Api(tags = {"API for retrieving available employees"})
+@Slf4j
 public class AvailableEmployeeController {
-
-    private final Logger log = LogManager.getLogger(AvailableEmployeeController.class);
 
     private final AvailableEmployeeService availableEmployeeService;
 

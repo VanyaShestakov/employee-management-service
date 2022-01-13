@@ -7,8 +7,7 @@ import com.leverx.employeestat.rest.service.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -22,9 +21,8 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 @RestController
 @RequestMapping("/api/departments")
 @Api(tags = "Department CRUD operations")
+@Slf4j
 public class DepartmentController {
-
-    private final Logger log = LogManager.getLogger(DepartmentController.class);
 
     private final DepartmentService departmentService;
     private final BindingResultParser bindingResultParser;

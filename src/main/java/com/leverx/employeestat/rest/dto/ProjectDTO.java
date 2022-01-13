@@ -7,6 +7,10 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,6 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 @ApiModel(value = "Project", description = "Contains all information about project and its employees(ids)")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProjectDTO {
 
     private UUID id;
@@ -34,46 +42,6 @@ public class ProjectDTO {
     private LocalDate end;
 
     private List<UUID> employeeIds;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getBegin() {
-        return begin;
-    }
-
-    public void setBegin(LocalDate begin) {
-        this.begin = begin;
-    }
-
-    public LocalDate getEnd() {
-        return end;
-    }
-
-    public void setEnd(LocalDate end) {
-        this.end = end;
-    }
-
-    public List<UUID> getEmployeeIds() {
-        return employeeIds;
-    }
-
-    public void setEmployeeIds(List<UUID> employeeIds) {
-        this.employeeIds = employeeIds;
-    }
 
     public void addEmployeeId(UUID id) {
         if (employeeIds == null) {

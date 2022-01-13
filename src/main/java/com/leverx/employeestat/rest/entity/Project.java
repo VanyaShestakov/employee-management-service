@@ -1,5 +1,6 @@
 package com.leverx.employeestat.rest.entity;
 
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,6 +14,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "project")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Project {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -24,11 +29,9 @@ public class Project {
     private String name;
 
     @Column(name = "begin_date")
-   //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate begin;
 
     @Column(name = "end_date")
-    //@Temporal(TemporalType.TIMESTAMP)
     private LocalDate end;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -37,46 +40,6 @@ public class Project {
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private List<Employee> employees;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getBegin() {
-        return begin;
-    }
-
-    public void setBegin(LocalDate begin) {
-        this.begin = begin;
-    }
-
-    public LocalDate getEnd() {
-        return end;
-    }
-
-    public void setEnd(LocalDate end) {
-        this.end = end;
-    }
-
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
 
     public void addEmployee(Employee employee) {
         if (employees == null) {

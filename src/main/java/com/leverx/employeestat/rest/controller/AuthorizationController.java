@@ -9,8 +9,7 @@ import com.leverx.employeestat.rest.service.AuthorizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -21,9 +20,8 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 @Api(tags = {"Authorization"})
+@Slf4j
 public class AuthorizationController {
-
-    private final Logger log = LogManager.getLogger(AuthorizationController.class);
 
     private final AuthorizationService authorizationService;
     private final BindingResultParser bindingResultParser;

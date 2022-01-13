@@ -1,5 +1,6 @@
 package com.leverx.employeestat.rest.entity;
 
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,6 +11,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "department")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Department {
 
     @Id
@@ -24,31 +29,6 @@ public class Department {
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private List<Employee> employees;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
 
     public void addEmployee(Employee employee) {
         if (employees == null) {

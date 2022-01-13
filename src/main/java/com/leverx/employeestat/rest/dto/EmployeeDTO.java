@@ -2,6 +2,10 @@ package com.leverx.employeestat.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -10,6 +14,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @ApiModel(value = "Employee", description = "Contains all information about employee and its projects(ids) and department(id)")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class EmployeeDTO {
 
     private UUID id;
@@ -35,78 +43,6 @@ public class EmployeeDTO {
     private UUID departmentId;
 
     private List<UUID> projectIds;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public UUID getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(UUID departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public List<UUID> getProjectIds() {
-        return projectIds;
-    }
-
-    public void setProjectIds(List<UUID> projectIds) {
-        this.projectIds = projectIds;
-    }
 
     public void addProjectId(UUID id) {
         if (projectIds == null) {

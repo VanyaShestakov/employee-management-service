@@ -2,7 +2,7 @@
 <Configuration status="WARN" monitorInterval="30">
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %m%n</Property>
-        <Property name="APP_LOG_ROOT">C:\Users\ivan.shastakou\IdeaProjects\employeestat\log</Property>
+        <Property name="APP_LOG_ROOT">log</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">

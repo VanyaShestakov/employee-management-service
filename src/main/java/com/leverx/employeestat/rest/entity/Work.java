@@ -1,5 +1,7 @@
 package com.leverx.employeestat.rest.entity;
 
+import lombok.*;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -8,6 +10,10 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "project_employee")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Work {
 
     @EmbeddedId
@@ -22,35 +28,4 @@ public class Work {
     @Column(name = "working_hours")
     private Integer workingHours;
 
-    public WorkId getId() {
-        return id;
-    }
-
-    public void setId(WorkId id) {
-        this.id = id;
-    }
-
-    public LocalDate getPositionStartDate() {
-        return positionStartDate;
-    }
-
-    public void setPositionStartDate(LocalDate positionStartDate) {
-        this.positionStartDate = positionStartDate;
-    }
-
-    public LocalDate getPositionEndDate() {
-        return positionEndDate;
-    }
-
-    public void setPositionEndDate(LocalDate positionEndDate) {
-        this.positionEndDate = positionEndDate;
-    }
-
-    public Integer getWorkingHours() {
-        return workingHours;
-    }
-
-    public void setWorkingHours(Integer workingHours) {
-        this.workingHours = workingHours;
-    }
 }

@@ -2,7 +2,9 @@ package com.leverx.employeestat.rest.configuration;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import liquibase.integration.spring.SpringLiquibase;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -51,10 +53,23 @@ import java.util.stream.Collectors;
         "classpath:security/google-security.properties",
         "classpath:application.properties"})
 @EnableScheduling
+@Slf4j
 public class Config implements WebMvcConfigurer {
 
     private final static List<String> clients = Arrays.asList("google");
     private final static String CLIENT_PROPERTY_KEY = "spring.security.oauth2.client.registration.";
+
+    @Value("${driverClass}")
+    private String driverClass;
+
+    @Value("${dbuser}")
+    private String user;
+
+    @Value("${password}")
+    private String password;
+
+    @Value("${jdbcUrl}")
+    private String jdbcUrl;
 
     private Environment env;
 
@@ -99,10 +114,12 @@ public class Config implements WebMvcConfigurer {
     public DataSource dataSource() {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         try {
-            dataSource.setDriverClass(env.getRequiredProperty("driverClass"));
-            dataSource.setJdbcUrl(env.getRequiredProperty("jdbcUrl"));
-            dataSource.setUser(env.getRequiredProperty("user"));
-            dataSource.setPassword(env.getRequiredProperty("password"));
+            log.info(String.format("Connecting to the datasource (driver=%s, url=%s, user=%s)", driverClass, jdbcUrl, user));
+
+            dataSource.setDriverClass(driverClass);
+            dataSource.setJdbcUrl(jdbcUrl);
+            dataSource.setUser(user);
+            dataSource.setPassword(password);
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }

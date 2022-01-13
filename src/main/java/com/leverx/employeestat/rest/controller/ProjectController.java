@@ -7,6 +7,7 @@ import com.leverx.employeestat.rest.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,8 @@ import static com.leverx.employeestat.rest.controller.tool.UUIDUtils.getUUIDFrom
 @RestController
 @RequestMapping("/api/projects")
 @Api(tags = "Project CRUD operations")
+@Slf4j
 public class ProjectController {
-
-    private final Logger log = LogManager.getLogger(ProjectController.class);
 
     private final ProjectService projectService;
     private final BindingResultParser bindingResultParser;

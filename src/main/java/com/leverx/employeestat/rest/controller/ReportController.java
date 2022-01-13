@@ -4,6 +4,7 @@ import com.leverx.employeestat.rest.exception.ReportWritingException;
 import com.leverx.employeestat.rest.service.ReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,9 +24,8 @@ import java.io.IOException;
 @RestController
 @RequestMapping("api/employees/export")
 @Api(tags = "API for exporting workload reports of employees")
+@Slf4j
 public class ReportController {
-
-    private final Logger log = LogManager.getLogger(ReportController.class);
 
     private final ReportService reportService;
 
