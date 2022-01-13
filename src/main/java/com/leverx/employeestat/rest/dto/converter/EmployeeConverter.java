@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -31,34 +32,38 @@ public class EmployeeConverter {
     }
 
     public Employee toEntity(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        employee.setUsername(employeeDTO.getUsername());
-        employee.setId(employeeDTO.getId());
-        employee.setFirstName(employeeDTO.getFirstName());
-        employee.setLastName(employeeDTO.getLastName());
-        employee.setPassword(employeeDTO.getPassword());
-        employee.setPosition(employeeDTO.getPosition());
+        Employee employee = Employee.builder()
+                .username(employeeDTO.getUsername())
+                .id(employeeDTO.getId())
+                .firstName(employeeDTO.getFirstName())
+                .lastName(employeeDTO.getLastName())
+                .password(employeeDTO.getPassword())
+                .position(employeeDTO.getPosition())
+                .build();
+
         employee.setRole(roleRepository.findByName(employeeDTO.getRole())
                 .orElseThrow(() -> new NoSuchRecordException
                         (String.format("Role with name=%s does not exists", employeeDTO.getRole())))
         );
 
-        if (employeeDTO.getDepartmentId() != null) {
-            Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-                    .orElseThrow(() -> new NoSuchRecordException
-                            (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()))
-                    );
-            employee.setDepartment(department);
-        }
-        if (employeeDTO.getProjectIds() != null) {
-            for (UUID id : employeeDTO.getProjectIds()) {
-                Project project = projectRepository.findProjectById(id)
-                        .orElseThrow(() -> new NoSuchRecordException
-                                (String.format("Project with id=%s not found", id))
-                        );
-                employee.addProject(project);
-            }
-        }
+        Optional.ofNullable(employeeDTO.getDepartmentId())
+                .ifPresent(id -> {
+                    Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
+                            .orElseThrow(() -> new NoSuchRecordException
+                                    (String.format("Department with id=%s not found", employeeDTO.getDepartmentId()))
+                            );
+                    employee.setDepartment(department);
+                });
+
+        Optional.ofNullable(employeeDTO.getProjectIds())
+                .ifPresent(projectIds -> projectIds.forEach(id -> {
+                    Project project = projectRepository.findProjectById(id)
+                            .orElseThrow(() -> new NoSuchRecordException
+                                    (String.format("Project with id=%s not found", id))
+                            );
+                    employee.addProject(project);
+                }));
+
         return employee;
     }
 
@@ -98,24 +103,22 @@ public class EmployeeConverter {
     }
 
     public EmployeeDTO toDTO(Employee employee) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setUsername(employee.getUsername());
-        employeeDTO.setId(employee.getId());
-        employeeDTO.setFirstName(employee.getFirstName());
-        employeeDTO.setLastName(employee.getLastName());
-        employeeDTO.setPassword(employee.getPassword());
-        employeeDTO.setPosition(employee.getPosition());
-        employeeDTO.setRole(employee.getRole().getName());
-        Department department = employee.getDepartment();
-        if (department != null) {
-            employeeDTO.setDepartmentId(department.getId());
-        }
-        List<Project> projects = employee.getProjects();
-        if (projects != null) {
-            for (Project project : projects) {
-                employeeDTO.addProjectId(project.getId());
-            }
-        }
+        EmployeeDTO employeeDTO = EmployeeDTO.builder()
+                .username(employee.getUsername())
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .password(employee.getPassword())
+                .position(employee.getPosition())
+                .role(employee.getRoleName())
+                .build();
+
+        Optional.ofNullable(employee.getDepartment())
+                .ifPresent(department -> employeeDTO.setDepartmentId(department.getId()));
+
+        Optional.ofNullable(employee.getProjects())
+                .ifPresent((projects -> projects.forEach(project -> employeeDTO.addProjectId(project.getId()))));
+
         return employeeDTO;
     }
 }

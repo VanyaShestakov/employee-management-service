@@ -35,13 +35,13 @@ public class RegistrationRequest {
     private String role;
 
     public EmployeeDTO toDTO() {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setFirstName(firstName);
-        employeeDTO.setLastName(lastName);
-        employeeDTO.setPassword(password);
-        employeeDTO.setRole(role);
-        employeeDTO.setPosition(position);
-        employeeDTO.setUsername(username);
-        return employeeDTO;
+        return EmployeeDTO.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .password(password)
+                .role(role)
+                .position(position)
+                .username(username)
+                .build();
     }
 }

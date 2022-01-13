@@ -24,7 +24,6 @@ public class WorkConverter {
     }
 
     public Work toEntity(WorkDTO workDTO) {
-        Work work = new Work();
         UUID employeeId = workDTO.getEmployeeId();
         UUID projectId = workDTO.getProjectId();
         WorkId workId = new WorkId();
@@ -36,20 +35,24 @@ public class WorkConverter {
                 .orElseThrow(() -> new NoSuchRecordException
                         (String.format("Project with id=%s not found", projectId)))
         );
-        work.setId(workId);
-        work.setPositionStartDate(workDTO.getPositionStartDate());
-        work.setPositionEndDate(workDTO.getPositionEndDate());
-        work.setWorkingHours(workDTO.getWorkingHours());
+
+        Work work = Work.builder()
+                .id(workId)
+                .positionEndDate(workDTO.getPositionEndDate())
+                .positionStartDate(workDTO.getPositionStartDate())
+                .workingHours(workDTO.getWorkingHours())
+                .build();
+
         return work;
     }
 
     public WorkDTO toDTO(Work work) {
-        WorkDTO workDTO = new WorkDTO();
-        workDTO.setEmployeeId(work.getId().getEmployee().getId());
-        workDTO.setProjectId(work.getId().getProject().getId());
-        workDTO.setWorkingHours(work.getWorkingHours());
-        workDTO.setPositionStartDate(work.getPositionStartDate());
-        workDTO.setPositionEndDate(work.getPositionEndDate());
-        return workDTO;
+        return WorkDTO.builder()
+                .employeeId(work.getId().getEmployee().getId())
+                .projectId(work.getId().getProject().getId())
+                .workingHours(work.getWorkingHours())
+                .positionEndDate(work.getPositionEndDate())
+                .positionStartDate(work.getPositionStartDate())
+                .build();
     }
 }

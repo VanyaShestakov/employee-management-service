@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -22,30 +23,31 @@ public class DepartmentConverter {
     }
 
     public Department toEntity(DepartmentDTO departmentDTO) {
-        Department department = new Department();
-        department.setName(departmentDTO.getName());
-        department.setId(departmentDTO.getId());
-        if (departmentDTO.getEmployeeIds() != null) {
-            for (UUID id : departmentDTO.getEmployeeIds()) {
-                department.addEmployee(employeeRepository.findEmployeeById(id)
-                        .orElseThrow(() -> new NoSuchRecordException
-                                (String.format("Employee with id=%s not found", id)))
-                );
-            }
-        }
+        Department department = Department.builder()
+                .name(departmentDTO.getName())
+                .id(departmentDTO.getId())
+                .build();
+
+        Optional.ofNullable(departmentDTO.getEmployeeIds())
+                .ifPresent(employeeIds -> employeeIds.forEach(id -> {
+                    department.addEmployee(employeeRepository.findEmployeeById(id)
+                            .orElseThrow(() -> new NoSuchRecordException
+                                    (String.format("Employee with id=%s not found", id)))
+                    );
+                }));
+
         return department;
     }
 
     public DepartmentDTO toDTO(Department department) {
-        DepartmentDTO departmentDTO = new DepartmentDTO();
-        departmentDTO.setName(department.getName());
-        departmentDTO.setId(department.getId());
-        List<Employee> employees = department.getEmployees();
-        if (employees != null) {
-            for (Employee employee : employees) {
-                departmentDTO.addEmployeeId(employee.getId());
-            }
-        }
+        DepartmentDTO departmentDTO = DepartmentDTO.builder()
+                .name(department.getName())
+                .id(department.getId())
+                .build();
+
+        Optional.ofNullable(department.getEmployees())
+                .ifPresent(employees -> employees.forEach(employee -> departmentDTO.addEmployeeId(employee.getId())));
+
         return departmentDTO;
     }
 }

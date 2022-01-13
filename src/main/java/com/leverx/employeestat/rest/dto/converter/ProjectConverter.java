@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -22,35 +23,35 @@ public class ProjectConverter {
     }
 
     public Project toEntity(ProjectDTO projectDTO) {
-        Project project = new Project();
-        project.setId(projectDTO.getId());
-        project.setName(projectDTO.getName());
-        project.setBegin(projectDTO.getBegin());
-        project.setEnd(projectDTO.getEnd());
-        if (projectDTO.getEmployeeIds() != null) {
-            for (UUID id : projectDTO.getEmployeeIds()) {
-                project.addEmployee(employeeRepository.findEmployeeById(id)
-                        .orElseThrow(() -> new NoSuchRecordException
-                                (String.format("Employee with id=%s not found", id)))
-                );
-            }
-        }
+        Project project = Project.builder()
+                .id(projectDTO.getId())
+                .name(projectDTO.getName())
+                .begin(projectDTO.getBegin())
+                .end(projectDTO.getEnd())
+                .build();
+
+        Optional.ofNullable(projectDTO.getEmployeeIds())
+                .ifPresent(employeeIds -> employeeIds.forEach(id -> {
+                    project.addEmployee(employeeRepository.findEmployeeById(id)
+                            .orElseThrow(() -> new NoSuchRecordException
+                                    (String.format("Employee with id=%s not found", id)))
+                    );
+                }));
+
         return project;
     }
 
     public ProjectDTO toDTO(Project project) {
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setName(project.getName());
-        projectDTO.setBegin(project.getBegin());
-        projectDTO.setEnd(project.getEnd());
-        projectDTO.setId(project.getId());
+        ProjectDTO projectDTO = ProjectDTO.builder()
+                .name(project.getName())
+                .begin(project.getBegin())
+                .end(project.getEnd())
+                .id(project.getId())
+                .build();
 
-        List<Employee> employees = project.getEmployees();
-        if (employees != null) {
-            for (Employee employee : employees) {
-                projectDTO.addEmployeeId(employee.getId());
-            }
-        }
+        Optional.ofNullable(project.getEmployees())
+                .ifPresent(employees -> employees.forEach(employee -> projectDTO.addEmployeeId(employee.getId())));
+
         return projectDTO;
     }
 }

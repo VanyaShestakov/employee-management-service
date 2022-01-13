@@ -56,6 +56,10 @@ public class Employee {
                inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
 
+    public String getRoleName() {
+        return role.getName();
+    }
+
     public void addProject(Project project) {
         if (projects == null) {
             projects = new ArrayList<>();
