@@ -115,7 +115,7 @@ public class AuthorizationIntegrationTest {
                 .andExpect(status().isCreated());
 
         mvc.perform(post(RESET_ENDPOINT).contentType(MediaType.APPLICATION_JSON).content(toJson(resetPasswordRequest)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

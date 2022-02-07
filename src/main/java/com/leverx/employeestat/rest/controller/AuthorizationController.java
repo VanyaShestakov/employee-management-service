@@ -47,7 +47,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/reset-password")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Reset password of employee")
     public void resetPassword(@ApiParam(name = "Reset password request", value = "Contains username, old and new password of employee")
                               @RequestBody

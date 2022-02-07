@@ -185,7 +185,7 @@ public class ProjectIntegrationTest {
         UUID id = projectDTO.getId();
 
         mvc.perform(delete(PROJECTS_ENDPOINT + "/{id}", id.toString()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

@@ -38,7 +38,7 @@ public class WorkController {
         return workService.getAll();
     }
 
-    @GetMapping("/empId={empId}/projId={projId}")
+    @GetMapping("/{empId}/{projId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get work by employee id and project id")
     public WorkDTO getWork(@ApiParam(value = "Employee id (UUID)")
@@ -58,7 +58,7 @@ public class WorkController {
         return workService.update(workDTO);
     }
 
-    @DeleteMapping("/empId={empId}/projId={projId}")
+    @DeleteMapping("/{empId}/{projId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Get work by employee id and project id")
     public void deleteWork(@ApiParam(value = "Employee id (UUID)")

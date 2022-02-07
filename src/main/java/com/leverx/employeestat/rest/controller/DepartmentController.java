@@ -77,7 +77,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete department")
     public void deleteDepartment(@ApiParam(value = "Id of deleting department (UUID)")
                                  @PathVariable("id") String id) {

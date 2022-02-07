@@ -79,7 +79,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete project")
     public void deleteProject(@ApiParam(value = "Id of deleting project (UUID)")
                               @PathVariable String id) {

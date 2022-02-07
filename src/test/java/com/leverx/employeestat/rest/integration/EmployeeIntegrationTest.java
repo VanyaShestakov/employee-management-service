@@ -144,7 +144,7 @@ public class EmployeeIntegrationTest {
     @Test
     public void shouldDeleteEmployeeIfIdIsCorrectAndExists() throws Exception{
         mvc.perform(delete(EMPLOYEES_ENDPOINT + "/{id}", "c7fa1cd3-b281-47b1-b72f-92b9391fc5c7"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

@@ -67,7 +67,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete employee")
     public void deleteEmployee(@ApiParam(value = "Id of deleting employee")
                                @PathVariable String id) {

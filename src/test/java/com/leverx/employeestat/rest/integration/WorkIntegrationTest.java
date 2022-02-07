@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class WorkIntegrationTest {
 
     private final static String WORKS_ENDPOINT = "/api/works";
-    private final static String IDS_POSTFIX = "/empId={empId}/projId={projId}";
+    private final static String IDS_POSTFIX = "/{empId}/{projId}";
     private final static String NON_EXISTING_ID = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
     private final WebApplicationContext webAppContext;
     private MockMvc mvc;
