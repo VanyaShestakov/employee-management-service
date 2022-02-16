@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -56,12 +55,15 @@ public class MultipleSecurityConfig {
 
         private final EmployeeDetailsService employeeDetailsService;
         private final CustomBasicAuthenticationEntryPoint authenticationEntryPoint;
+        private final CustomAccessDeniedHandler accessDeniedHandler;
 
         @Autowired
         public BasicAuthorizationConfig(EmployeeDetailsService employeeDetailsService,
-                                        CustomBasicAuthenticationEntryPoint authenticationEntryPoint) {
+                                        CustomBasicAuthenticationEntryPoint authenticationEntryPoint,
+                                        CustomAccessDeniedHandler accessDeniedHandler) {
             this.employeeDetailsService = employeeDetailsService;
             this.authenticationEntryPoint = authenticationEntryPoint;
+            this.accessDeniedHandler = accessDeniedHandler;
         }
 
         @Override
@@ -71,13 +73,15 @@ public class MultipleSecurityConfig {
                     .authorizeRequests()
                     .antMatchers("/api/register").permitAll()
                     .antMatchers("/api/reset-password").permitAll()
+                    .antMatchers("/api/doc").permitAll()
                     .antMatchers(HttpMethod.GET, "/api/**/**/").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/*").hasRole("MANAGER")
                     .antMatchers(HttpMethod.PUT, "/api/*").hasRole("MANAGER")
-                    .antMatchers(HttpMethod.DELETE, "/api/*").hasRole("MANAGER")
+                    .antMatchers(HttpMethod.DELETE, "/api/**/**").hasRole("MANAGER")
                     .anyRequest().authenticated()
                     .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint)
-                    .and().sessionManagement().disable();
+                    .and().sessionManagement().disable()
+                    .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
         }
 
         @Override

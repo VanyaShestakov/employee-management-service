@@ -93,7 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteById(UUID id) {
         if (!employeeRepository.existsById(id)) {
             throw new NoSuchRecordException
-                    (String.format("Department with id=%s not found for deleting", id));
+                    (String.format("Employee with id=%s not found for deleting", id));
         }
         employeeRepository.deleteById(id);
     }
