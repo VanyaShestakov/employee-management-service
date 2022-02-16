@@ -1,7 +1,9 @@
 package com.leverx.employeestat.rest.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,8 @@ public class ExceptionInfo {
         this.timestamp = LocalDateTime.now();
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonIgnore
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
 
     public ExceptionInfo() {

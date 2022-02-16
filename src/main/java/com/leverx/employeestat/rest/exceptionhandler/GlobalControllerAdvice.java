@@ -1,8 +1,7 @@
 package com.leverx.employeestat.rest.exceptionhandler;
 
 import com.leverx.employeestat.rest.exception.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -11,11 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice("com.leverx.employeestat.rest.controller")
 public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
-
-    private final Logger log = LogManager.getLogger(GlobalControllerAdvice.class);
 
     @ExceptionHandler(NoSuchRecordException.class)
     public ResponseEntity<ExceptionInfo> handleNoSuchRecordException(NoSuchRecordException exception) {

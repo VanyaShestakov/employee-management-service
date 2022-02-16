@@ -186,7 +186,6 @@ public class DepartmentIntegrationTest {
                 .andReturn();
         departmentDTO = toObject(result.getResponse().getContentAsString(), DepartmentDTO.class);
         UUID id = departmentDTO.getId();
-
         mvc.perform(delete(DEPARTMENTS_ENDPOINT + "/{id}", id.toString()))
                 .andExpect(status().isNoContent());
     }

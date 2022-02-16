@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -54,10 +55,13 @@ public class MultipleSecurityConfig {
     public static class BasicAuthorizationConfig extends WebSecurityConfigurerAdapter {
 
         private final EmployeeDetailsService employeeDetailsService;
+        private final CustomBasicAuthenticationEntryPoint authenticationEntryPoint;
 
         @Autowired
-        public BasicAuthorizationConfig(EmployeeDetailsService employeeDetailsService) {
+        public BasicAuthorizationConfig(EmployeeDetailsService employeeDetailsService,
+                                        CustomBasicAuthenticationEntryPoint authenticationEntryPoint) {
             this.employeeDetailsService = employeeDetailsService;
+            this.authenticationEntryPoint = authenticationEntryPoint;
         }
 
         @Override
@@ -72,7 +76,7 @@ public class MultipleSecurityConfig {
                     .antMatchers(HttpMethod.PUT, "/api/*").hasRole("MANAGER")
                     .antMatchers(HttpMethod.DELETE, "/api/*").hasRole("MANAGER")
                     .anyRequest().authenticated()
-                    .and().httpBasic()
+                    .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint)
                     .and().sessionManagement().disable();
         }
 
